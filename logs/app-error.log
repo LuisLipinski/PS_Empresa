@@ -1,0 +1,28 @@
+2025-07-25 18:14:26.273 [restartedMain] ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+The bean 'customOpenAPI', defined in class path resource [com/mypetadmin/ps_empresa/config/SwaggerConfig.class], could not be registered. A bean with that name has already been defined in class path resource [com/mypetadmin/ps_empresa/config/OpenApiConfig.class] and overriding is disabled.
+
+Action:
+
+Consider renaming one of the beans or enabling overriding by setting spring.main.allow-bean-definition-overriding=true
+
+2025-07-25 18:34:38.858 [restartedMain] ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+The bean 'customOpenAPI', defined in class path resource [com/mypetadmin/ps_empresa/config/SwaggerConfig.class], could not be registered. A bean with that name has already been defined in class path resource [com/mypetadmin/ps_empresa/config/OpenApiConfig.class] and overriding is disabled.
+
+Action:
+
+Consider renaming one of the beans or enabling overriding by setting spring.main.allow-bean-definition-overriding=true
+

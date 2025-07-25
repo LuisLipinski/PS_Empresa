@@ -26,7 +26,7 @@ public class EmpresaServiceImpl implements EmpresaService {
 
         if (empresaRepository.existsByDocumentNumber(dto.getDocumentNumber())) {
             log.warn("Tentativa de cadastro com CNPJ já existente: {}", dto.getDocumentNumber());
-            throw new EmpresaExistenteException("CNPJ já cadastrado no siatema.");
+            throw new EmpresaExistenteException("CNPJ já cadastrado no sistema.");
         }
         if (!CnpjValidator.isCnpjValid(dto.getDocumentNumber())) {
             log.warn("CNPJ inválido detectado: {}", dto.getDocumentNumber());
