@@ -43,17 +43,21 @@ public class Empresa {
     @Column(name = "telefone", nullable = false)
     private String telefone;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
+
+    @Column(name = "NomeTitular", nullable = false)
+    private String nomeTitular;
 
     @Builder.Default
     @Column(name = "status", nullable = false)
-    private String status = "ATIVO";
+    private String status = "PENDENTE ATIVACAO";
+
+    @Column(name= "data_atualizacao_status")
+    private LocalDateTime dataAtualizacaoStatus;
 
     @Builder.Default
     @Column(name = "data_criacao", nullable = false)
     private LocalDateTime dataCriacao = LocalDateTime.now();
-
-
 
 }

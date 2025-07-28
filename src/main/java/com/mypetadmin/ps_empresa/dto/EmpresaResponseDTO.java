@@ -21,6 +21,7 @@ public class EmpresaResponseDTO {
     private String nomeFantasia;
     private String telefone;
     private String email;
+    private String nomeTitular;
     private String cep;
     private String cidade;
     private String estado;

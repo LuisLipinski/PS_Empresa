@@ -1,5 +1,6 @@
 package com.mypetadmin.ps_empresa.controller;
 
+import com.mypetadmin.ps_empresa.dto.AtualizacaoStatusRequestDTO;
 import com.mypetadmin.ps_empresa.dto.EmpresaRequestDTO;
 import com.mypetadmin.ps_empresa.dto.EmpresaResponseDTO;
 import com.mypetadmin.ps_empresa.service.EmpresaService;
@@ -10,10 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/empresas")
@@ -46,5 +44,16 @@ public class EmpresaController {
             throw e;
         }
 
+    }
+
+    @Operation(summary = "Atualiza o status de uma empresa sem a necessidade de token")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Status atualizado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição invalida")
+    })
+    @PutMapping("/atualizarStatus")
+    public ResponseEntity<String> atualizarStatus(@RequestBody @Valid AtualizacaoStatusRequestDTO atualizacaoStatusRequestDTO) {
+        empresaService.atualizarStatus(atualizacaoStatusRequestDTO.getEmpresaId(), atualizacaoStatusRequestDTO.getNovoStatus());
+        return ResponseEntity.ok("Status atualizado com sucesso");
     }
 }

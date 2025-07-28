@@ -15,6 +15,7 @@ public class EmpresaMapper {
                 .nomeFantasia(dto.getNomeFantasia())
                 .telefone(dto.getTelefone())
                 .email(dto.getEmail())
+                .nomeTitular((dto.getNomeTitular()))
                 .cep(dto.getCep())
                 .endereco(String.format("%s, %s, %s, %s",
                         dto.getRua(),
@@ -33,14 +34,18 @@ public class EmpresaMapper {
 
     public EmpresaResponseDTO toResponseDto(Empresa empresa) {
         return EmpresaResponseDTO.builder()
+                .id(empresa.getId())
                 .documentNumber(empresa.getDocumentNumber())
                 .razaoSocial(empresa.getRazaoSocial())
                 .nomeFantasia(empresa.getNomeFantasia())
                 .telefone(empresa.getTelefone())
                 .email(empresa.getEmail())
+                .nomeTitular(empresa.getNomeTitular())
                 .cep(empresa.getCep())
+                .endereco(empresa.getEndereco())
                 .cidade(empresa.getCidade())
                 .estado(empresa.getEstado())
+                .status(empresa.getStatus())
                 .build();
     }
 }

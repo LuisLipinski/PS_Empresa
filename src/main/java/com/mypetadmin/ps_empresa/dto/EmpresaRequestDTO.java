@@ -8,6 +8,11 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Schema(name = "Empresa", description = "Representação de uma empresa no sistema")
 public class EmpresaRequestDTO {
 
@@ -37,9 +42,19 @@ public class EmpresaRequestDTO {
 
     @NotBlank
     @Email(message = "Formato de e-mail inválido.")
-    @Pattern(regexp = "^[^@]{3,}@[\\w.-]+$", message = "o email deve ter no mínimo 3 caracteres antes do @.")
+    @Pattern(
+            regexp = "^[\\w.%+-]{3,}@[\\w.-]+\\.[a-zA-Z]{2,}$",
+            message = "Email inválido: deve ter ao menos 3 caracteres antes do @ e um domínio válido (ex: .com, .org)"
+    )
     @Schema(description = "Email comercial da empresa", example = "exemplo@empresa.com")
     private String email;
+
+    @NotBlank
+    @Pattern(regexp = "^([A-Za-zÀ-ÿ]{3,}) ([A-Za-zÀ-ÿ]{3,})$", message = "O nome do titular da conta não deve ter numeros " +
+            "ou carcateres especiais, precisa ser nome completo (Nome e sobrenome), " +
+            "e cada palavra não pode ter menos que 3 caracteres")
+    @Schema(description = "Nome completo do titular da conta", example = "João Teste")
+    private String nomeTitular;
 
     @NotBlank
     @Size(min = 3, max = 200)
@@ -80,114 +95,5 @@ public class EmpresaRequestDTO {
     @Schema(description = "CEP onde fica a empresa", example = "99999999")
     private String cep;
 
-    public EmpresaRequestDTO(String documentNumber, String razaoSocial, String nomeFantasia, String telefone, String email, String rua, String numero, String complemento, String bairro, String cidade, String estado, String cep) {
-        this.documentNumber = documentNumber;
-        this.razaoSocial = razaoSocial;
-        this.nomeFantasia = nomeFantasia;
-        this.telefone = telefone;
-        this.email = email;
-        this.rua = rua;
-        this.numero = numero;
-        this.complemento = complemento;
-        this.bairro = bairro;
-        this.cidade = cidade;
-        this.estado = estado;
-        this.cep = cep;
-    }
 
-    public String getDocumentNumber() {
-        return documentNumber;
-    }
-
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
-    }
-
-    public String getRazaoSocial() {
-        return razaoSocial;
-    }
-
-    public void setRazaoSocial(String razaoSocial) {
-        this.razaoSocial = razaoSocial;
-    }
-
-    public String getNomeFantasia() {
-        return nomeFantasia;
-    }
-
-    public void setNomeFantasia(String nomeFantasia) {
-        this.nomeFantasia = nomeFantasia;
-    }
-
-    public String getTelefone() {
-        return telefone;
-    }
-
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getRua() {
-        return rua;
-    }
-
-    public void setRua(String rua) {
-        this.rua = rua;
-    }
-
-    public String getNumero() {
-        return numero;
-    }
-
-    public void setNumero(String numero) {
-        this.numero = numero;
-    }
-
-    public String getComplemento() {
-        return complemento;
-    }
-
-    public void setComplemento(String complemento) {
-        this.complemento = complemento;
-    }
-
-    public String getBairro() {
-        return bairro;
-    }
-
-    public void setBairro(String bairro) {
-        this.bairro = bairro;
-    }
-
-    public String getCidade() {
-        return cidade;
-    }
-
-    public void setCidade(String cidade) {
-        this.cidade = cidade;
-    }
-
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
-
-    public String getCep() {
-        return cep;
-    }
-
-    public void setCep(String cep) {
-        this.cep = cep;
-    }
 }

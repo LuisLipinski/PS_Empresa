@@ -7,4 +7,6 @@ import java.util.UUID;
 
 public interface EmpresaRepository extends JpaRepository<Empresa, UUID> {
     boolean existsByDocumentNumber(String documentNumber);
+
+    boolean existsByEmail(String email);
 }

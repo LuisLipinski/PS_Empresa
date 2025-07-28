@@ -62,7 +62,7 @@ public class EmpresaServiceImplTest {
                 .endereco("Rua exemplo, 123, Bairro Teste")
                 .cidade(requestDTO.getCidade())
                 .estado(requestDTO.getEstado())
-                .status("Ativo")
+                .status("PENDENTE ATVACAO")
                 .build();
         responseDTO = EmpresaResponseDTO.builder()
                 .documentNumber(requestDTO.getDocumentNumber())
@@ -73,7 +73,7 @@ public class EmpresaServiceImplTest {
                 .cep(requestDTO.getCep())
                 .cidade(requestDTO.getCidade())
                 .estado(requestDTO.getEstado())
-                .status("ATIVO")
+                .status("PENDENTE ATIVACAO")
                 .build();
     }
 
