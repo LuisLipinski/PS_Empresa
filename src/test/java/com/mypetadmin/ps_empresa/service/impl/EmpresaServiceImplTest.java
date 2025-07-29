@@ -43,6 +43,7 @@ public class EmpresaServiceImplTest {
                 "Teste Nome Fantasia",
                 "41999999999",
                 "email@teste.com",
+                "Nome Teste",
                 "Rua exemplo",
                 "123",
                 null,

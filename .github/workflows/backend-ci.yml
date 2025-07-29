@@ -1,0 +1,37 @@
+name: Backend CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Permissão para o Maven Wrapper
+        run: chmod +x ./mvnw
+
+      - name: Instalar dependências e rodar testes
+        run: ./mvnw clean verify
+
+      - name: Gerar relatório de cobertura com JaCoCo
+        run: ./mvnw jacoco:report
+
+      - name: Salvar artefatos (opcional)
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: relatorio-cobertura
+          path: target/site/jacoco
