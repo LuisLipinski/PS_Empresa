@@ -10,10 +10,21 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    env:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: mypetadmin
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: mypetadmin
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
       SPRING_DATASOURCE_URL: ${{ secrets.SPRING_DATASOURCE_URL }}
       SPRING_DATASOURCE_USERNAME: ${{ secrets.SPRING_DATASOURCE_USERNAME }}
       SPRING_DATASOURCE_PASSWORD: ${{ secrets.SPRING_DATASOURCE_PASSWORD }}
