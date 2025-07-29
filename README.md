@@ -20,26 +20,26 @@ Este microsserviço faz parte da aplicação **My Pet Admin**, sendo responsáve
 ## 🧱 Estrutura do Projeto
 
 ps_empresa/
+├── config/
+│   └── SwaggerConfig.java
 ├── controller/
-│ └── EmpresaController.java
-├── service/
-│ └── EmpresaServiceImpl.java
-├── model/
-│ └── Empresa.java
+│   └── EmpresaController.java
 ├── dto/
-│ ├── EmpresaRequestDTO.java
-│ └── EmpresaResponseDTO.java
-├── mapper/
-│ └── EmpresaMapper.java
+│   ├── EmpresaRequestDTO.java
+│   └── EmpresaResponseDTO.java
 ├── exception/
-│ ├── EmpresaExistenteException.java
-│ ├── EmpresaNaoEncontradaException.java
-│ ├── EmailExistenteException.java
-│ └── GlobalExceptionHandler.java
-├── util/
-│ └── CnpjValidator.java
-└── config/
-└── SwaggerConfig.java
+│   ├── EmailExistenteException.java
+│   ├── EmpresaExistenteException.java
+│   ├── EmpresaNaoEncontradaException.java
+│   └── GlobalExceptionHandler.java
+├── mapper/
+│   └── EmpresaMapper.java
+├── model/
+│   └── Empresa.java
+├── service/
+│   └── EmpresaServiceImpl.java
+└── util/
+└── CnpjValidator.java
 
 
 ---
