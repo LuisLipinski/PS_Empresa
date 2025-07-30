@@ -12,6 +12,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping("/empresas")
@@ -38,7 +41,12 @@ public class EmpresaController {
             EmpresaResponseDTO empresaCadastrada = empresaService.cadastrarEmpresa(empresaRequestDTO);
             log.info("Empresa cadastrada com sucesso: id={}, CNPJ={}, Status={}",
                     empresaCadastrada.getId(), empresaCadastrada.getDocumentNumber(), empresaCadastrada.getStatus());
-            return ResponseEntity.ok(empresaCadastrada);
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/{id")
+                    .buildAndExpand(empresaCadastrada.getId())
+                    .toUri();
+            return ResponseEntity.created(location).body(empresaCadastrada);
         } catch (Exception e) {
             log.error("Error ao cadastrar empresa: {}", e.getMessage(), e);
             throw e;
