@@ -17,12 +17,12 @@ public class EmpresaMapper {
                 .email(dto.getEmail())
                 .nomeTitular((dto.getNomeTitular()))
                 .cep(dto.getCep())
-                .endereco(String.format("%s, %s, %s, %s",
+                .endereco(String.format("%s, %s%s%s",
                         dto.getRua(),
                         dto.getNumero(),
                         dto.getComplemento() != null && !dto.getComplemento().isEmpty()
-                                ? " (" + dto.getComplemento() + ")"
-                                : "",
+                                ? " - " + dto.getComplemento() + ", "
+                                : ", ",
                         dto.getBairro()
                         )
                 )

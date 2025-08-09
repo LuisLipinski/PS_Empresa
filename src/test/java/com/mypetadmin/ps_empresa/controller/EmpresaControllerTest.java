@@ -51,7 +51,7 @@ public class EmpresaControllerTest {
         EmpresaResponseDTO responseDTO = new EmpresaResponseDTO(
                 UUID.randomUUID(), requestDTO.getDocumentNumber(), requestDTO.getRazaoSocial(), requestDTO.getNomeFantasia(), requestDTO.getTelefone(),
                 requestDTO.getEmail(), requestDTO.getNomeTitular(), requestDTO.getCep(), requestDTO.getCidade(), requestDTO.getEstado(),
-                "Rua A, 123, Bloco B - Bairro Central", "ATIVO"
+                "Rua A, 123, Bloco B - Bairro Central", "PENDENTE ATIVACAO"
         );
 
         when(empresaService.cadastrarEmpresa(requestDTO)).thenReturn(responseDTO);
@@ -63,7 +63,7 @@ public class EmpresaControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.documentNumber").value("17395568000151"))
                 .andExpect(jsonPath("$.razaoSocial").value("Empresa Teste"))
-                .andExpect(jsonPath("$.status").value("ATIVO"));
+                .andExpect(jsonPath("$.status").value("PENDENTE ATIVACAO"));
     }
 
 }

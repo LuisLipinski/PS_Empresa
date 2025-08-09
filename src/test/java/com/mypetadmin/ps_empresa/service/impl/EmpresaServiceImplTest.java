@@ -2,6 +2,7 @@ package com.mypetadmin.ps_empresa.service.impl;
 
 import com.mypetadmin.ps_empresa.dto.EmpresaRequestDTO;
 import com.mypetadmin.ps_empresa.dto.EmpresaResponseDTO;
+import com.mypetadmin.ps_empresa.exception.EmailExistenteException;
 import com.mypetadmin.ps_empresa.exception.EmpresaExistenteException;
 import com.mypetadmin.ps_empresa.mapper.EmpresaMapper;
 import com.mypetadmin.ps_empresa.model.Empresa;
@@ -10,17 +11,18 @@ import com.mypetadmin.ps_empresa.util.CnpjValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class EmpresaServiceImplTest {
+class EmpresaServiceImplTest {
 
     @InjectMocks
     private EmpresaServiceImpl empresaService;
@@ -31,98 +33,84 @@ public class EmpresaServiceImplTest {
     @Mock
     private EmpresaMapper mapper;
 
-    private EmpresaRequestDTO requestDTO;
-    private Empresa empresa;
-    private EmpresaResponseDTO responseDTO;
+    private EmpresaRequestDTO dto;
+    private Empresa entity;
+    private EmpresaResponseDTO response;
 
     @BeforeEach
     void setUp() {
-        requestDTO = new EmpresaRequestDTO(
-                "20192496000150",
-                "Teste Razao Social",
-                "Teste Nome Fantasia",
-                "41999999999",
-                "email@teste.com",
-                "Nome Teste",
-                "Rua exemplo",
-                "123",
-                null,
-                "Bairro Teste",
-                "Cidade Teste",
-                "PR",
-                "01234567"
-        );
+        dto = new EmpresaRequestDTO();
+        dto.setDocumentNumber("34222351000169");
+        dto.setEmail("empresa@teste.com");
 
-        empresa = Empresa.builder()
-                .documentNumber(requestDTO.getDocumentNumber())
-                .razaoSocial(requestDTO.getRazaoSocial())
-                .nomeFantasia(requestDTO.getNomeFantasia())
-                .telefone(requestDTO.getTelefone())
-                .email(requestDTO.getEmail())
-                .cep(requestDTO.getCep())
-                .endereco("Rua exemplo, 123, Bairro Teste")
-                .cidade(requestDTO.getCidade())
-                .estado(requestDTO.getEstado())
-                .status("PENDENTE ATVACAO")
-                .build();
-        responseDTO = EmpresaResponseDTO.builder()
-                .documentNumber(requestDTO.getDocumentNumber())
-                .razaoSocial(requestDTO.getRazaoSocial())
-                .nomeFantasia(requestDTO.getNomeFantasia())
-                .telefone(requestDTO.getTelefone())
-                .email(requestDTO.getEmail())
-                .cep(requestDTO.getCep())
-                .cidade(requestDTO.getCidade())
-                .estado(requestDTO.getEstado())
-                .status("PENDENTE ATIVACAO")
-                .build();
+        entity = new Empresa();
+        entity.setId(UUID.randomUUID());
+        entity.setStatus("AGUARDANDO_PAGAMENTO");
+
+        response = new EmpresaResponseDTO();
+        response.setId(entity.getId());
     }
 
     @Test
     void deveCadastrarEmpresaComSucesso() {
-        when(empresaRepository.existsByDocumentNumber(requestDTO.getDocumentNumber())).thenReturn(false);
+        when(empresaRepository.existsByDocumentNumber(dto.getDocumentNumber())).thenReturn(false);
+        when(empresaRepository.existsByEmail(dto.getEmail())).thenReturn(false);
+        when(mapper.toEntity(dto)).thenReturn(entity);
+        when(empresaRepository.save(entity)).thenReturn(entity);
+        when(mapper.toResponseDto(entity)).thenReturn(response);
 
-        try (MockedStatic<CnpjValidator> mockedCnpj = Mockito.mockStatic(CnpjValidator.class)) {
-            mockedCnpj.when(() -> CnpjValidator.isCnpjValid(requestDTO.getDocumentNumber())).thenReturn(true);
+        EmpresaResponseDTO resultado = empresaService.cadastrarEmpresa(dto);
 
-            when(mapper.toEntity(requestDTO)).thenReturn(empresa);
-            when(empresaRepository.save(empresa)).thenReturn(empresa);
-            when(mapper.toResponseDto(empresa)).thenReturn(responseDTO);
+        assertThat(resultado).isNotNull();
+        assertThat(resultado.getId()).isEqualTo(entity.getId());
+        verify(empresaRepository).save(entity);
+    }
 
-            EmpresaResponseDTO result = empresaService.cadastrarEmpresa(requestDTO);
+    @Test
+    void deveLancarExcecaoCnpjExistente() {
+        EmpresaRequestDTO dto = new EmpresaRequestDTO();
+        dto.setDocumentNumber("34222351000169");
 
-            assertNotNull(result);
-            assertEquals(responseDTO.getDocumentNumber(), result.getDocumentNumber());
-            verify(empresaRepository).save(empresa);
+        when(empresaRepository.existsByDocumentNumber(dto.getDocumentNumber())).thenReturn(true);
+
+        assertThatThrownBy(() -> empresaService.cadastrarEmpresa(dto))
+                .isInstanceOf(EmpresaExistenteException.class)
+                .hasMessageContaining("CNPJ já cadastrado");
+    }
+
+    @Test
+    void deveLancarExcecaoEmailExistente() {
+        EmpresaRequestDTO dto = new EmpresaRequestDTO();
+        dto.setDocumentNumber("86054433000145");
+        dto.setEmail("empresa@teste.com");
+
+        when(empresaRepository.existsByDocumentNumber(dto.getDocumentNumber())).thenReturn(false);
+        when(empresaRepository.existsByEmail(dto.getEmail())).thenReturn(true);
+
+        try (MockedStatic<CnpjValidator> mocked = Mockito.mockStatic(CnpjValidator.class)) {
+            mocked.when(() -> CnpjValidator.isCnpjValid(dto.getDocumentNumber())).thenReturn(true);
+
+            assertThatThrownBy(() -> empresaService.cadastrarEmpresa(dto))
+                    .isInstanceOf(EmailExistenteException.class)
+                    .hasMessageContaining("Email já cadastrado");
         }
     }
 
     @Test
-    void devoLancarExcecaoQuandoCnpjExistente() {
-        when(empresaRepository.existsByDocumentNumber(requestDTO.getDocumentNumber())).thenReturn(true);
+    void deveLancarExcecaoCnpjInvalido() {
+        EmpresaRequestDTO dto = new EmpresaRequestDTO();
+        dto.setDocumentNumber("00000000000000");
+        dto.setEmail("teste@email.com");
 
-        EmpresaExistenteException exception = assertThrows(EmpresaExistenteException.class,
-                () -> empresaService.cadastrarEmpresa(requestDTO));
+        when(empresaRepository.existsByDocumentNumber(dto.getDocumentNumber())).thenReturn(false);
 
-        assertEquals("CNPJ já cadastrado no sistema.", exception.getMessage());
-        verify(empresaRepository, never()).save(any());
-    }
+        try (MockedStatic<CnpjValidator> mocked = Mockito.mockStatic(CnpjValidator.class)) {
+            mocked.when(() -> CnpjValidator.isCnpjValid(dto.getDocumentNumber())).thenReturn(false);
 
-    @Test
-    void deveLancarExcecaoQuandoCnpjInvalido() {
-        when(empresaRepository.existsByDocumentNumber(requestDTO.getDocumentNumber())).thenReturn(false);
-
-        try (MockedStatic<CnpjValidator> mockedCnpj = Mockito.mockStatic(CnpjValidator.class)) {
-            mockedCnpj.when(() -> CnpjValidator.isCnpjValid(requestDTO.getDocumentNumber())).thenReturn(false);
-
-            IllegalArgumentException exception =assertThrows(IllegalArgumentException.class,
-                    () -> empresaService.cadastrarEmpresa(requestDTO));
-
-            assertEquals("CNPJ inválido.", exception.getMessage());
-            verify(empresaRepository, never()).save(any());
+            assertThatThrownBy(() -> empresaService.cadastrarEmpresa(dto))
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessageContaining("CNPJ inválido");
         }
-
-
-
     }
+
 }

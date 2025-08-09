@@ -1,32 +1,18 @@
-2025-07-29 22:41:55.485 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
-2025-07-29 22:41:55.497 [main] INFO  c.m.p.c.EmpresaControllerTest - Starting EmpresaControllerTest using Java 24.0.2 with PID 90239 (started by luishenrique in /Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa)
-2025-07-29 22:41:55.498 [main] INFO  c.m.p.c.EmpresaControllerTest - No active profile set, falling back to 1 default profile: "default"
-2025-07-29 22:41:56.232 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
-2025-07-29 22:41:56.232 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2025-07-29 22:41:56.233 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
-2025-07-29 22:41:56.244 [main] INFO  c.m.p.c.EmpresaControllerTest - Started EmpresaControllerTest in 0.959 seconds (process running for 1.41)
-2025-07-29 22:43:45.805 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
-2025-07-29 22:43:45.817 [main] INFO  c.m.p.c.EmpresaControllerTest - Starting EmpresaControllerTest using Java 24.0.2 with PID 90489 (started by luishenrique in /Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa)
-2025-07-29 22:43:45.818 [main] INFO  c.m.p.c.EmpresaControllerTest - No active profile set, falling back to 1 default profile: "default"
-2025-07-29 22:43:46.538 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
-2025-07-29 22:43:46.538 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2025-07-29 22:43:46.539 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
-2025-07-29 22:43:46.549 [main] INFO  c.m.p.c.EmpresaControllerTest - Started EmpresaControllerTest in 0.919 seconds (process running for 1.327)
-2025-07-29 22:48:04.031 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
-2025-07-29 22:48:04.042 [main] INFO  c.m.p.c.EmpresaControllerTest - Starting EmpresaControllerTest using Java 24.0.2 with PID 91149 (started by luishenrique in /Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa)
-2025-07-29 22:48:04.043 [main] INFO  c.m.p.c.EmpresaControllerTest - No active profile set, falling back to 1 default profile: "default"
-2025-07-29 22:48:04.759 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
-2025-07-29 22:48:04.759 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2025-07-29 22:48:04.760 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
-2025-07-29 22:48:04.771 [main] INFO  c.m.p.c.EmpresaControllerTest - Started EmpresaControllerTest in 0.925 seconds (process running for 1.335)
-2025-07-29 22:48:04.865 [main] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para cadastrar empresa: CNPJ=17395568000151, Razão Social=Empresa Teste, Nome Fantasia=Fantasia Teste, Telefone=41999999999, Email=teste@empresa.com, Endereco=Rua A, 123, Bloco A, Bairro Central, Cidade=Curitiba, Estado=PR, CEP=01001000
-2025-07-29 22:48:04.866 [main] INFO  c.m.p.controller.EmpresaController - Empresa cadastrada com sucesso: id=920d2492-484f-481a-94c8-4551d0bde3a6, CNPJ=17395568000151, Status=ATIVO
-2025-07-29 22:59:48.273 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
-2025-07-29 22:59:48.286 [main] INFO  c.m.p.c.EmpresaControllerTest - Starting EmpresaControllerTest using Java 24.0.2 with PID 92807 (started by luishenrique in /Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa)
-2025-07-29 22:59:48.286 [main] INFO  c.m.p.c.EmpresaControllerTest - No active profile set, falling back to 1 default profile: "default"
-2025-07-29 22:59:49.012 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
-2025-07-29 22:59:49.012 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2025-07-29 22:59:49.013 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2025-07-29 22:59:49.024 [main] INFO  c.m.p.c.EmpresaControllerTest - Started EmpresaControllerTest in 0.932 seconds (process running for 1.357)
-2025-07-29 22:59:49.122 [main] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para cadastrar empresa: CNPJ=17395568000151, Razão Social=Empresa Teste, Nome Fantasia=Fantasia Teste, Telefone=41999999999, Email=teste@empresa.com, Endereco=Rua A, 123, Bloco A, Bairro Central, Cidade=Curitiba, Estado=PR, CEP=01001000
-2025-07-29 22:59:49.123 [main] INFO  c.m.p.controller.EmpresaController - Empresa cadastrada com sucesso: id=358260b9-7dc5-4173-8dc8-10eaa2dcc712, CNPJ=17395568000151, Status=ATIVO
+2025-08-02 20:07:00.218 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-02 20:07:00.231 [main] INFO  c.m.p.c.EmpresaControllerTest - Starting EmpresaControllerTest using Java 24.0.2 with PID 15676 (started by luishenrique in /Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa)
+2025-08-02 20:07:00.232 [main] INFO  c.m.p.c.EmpresaControllerTest - No active profile set, falling back to 1 default profile: "default"
+2025-08-02 20:07:01.006 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-02 20:07:01.006 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-02 20:07:01.007 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
+2025-08-02 20:07:01.018 [main] INFO  c.m.p.c.EmpresaControllerTest - Started EmpresaControllerTest in 1.03 seconds (process running for 1.569)
+2025-08-02 20:07:01.128 [main] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para cadastrar empresa: CNPJ=17395568000151, Razão Social=Empresa Teste, Nome Fantasia=Fantasia Teste, Telefone=41999999999, Email=teste@empresa.com, Endereco=Rua A, 123, Bloco A, Bairro Central, Cidade=Curitiba, Estado=PR, CEP=01001000
+2025-08-02 20:07:01.129 [main] INFO  c.m.p.controller.EmpresaController - Empresa cadastrada com sucesso: id=239ba11f-9ff4-4f0f-b608-48536d09cb02, CNPJ=17395568000151, Status=ATIVO
+2025-08-02 20:09:01.213 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-02 20:09:01.225 [main] INFO  c.m.p.c.EmpresaControllerTest - Starting EmpresaControllerTest using Java 24.0.2 with PID 15970 (started by luishenrique in /Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa)
+2025-08-02 20:09:01.225 [main] INFO  c.m.p.c.EmpresaControllerTest - No active profile set, falling back to 1 default profile: "default"
+2025-08-02 20:09:01.931 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-02 20:09:01.931 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-02 20:09:01.931 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2025-08-02 20:09:01.943 [main] INFO  c.m.p.c.EmpresaControllerTest - Started EmpresaControllerTest in 0.907 seconds (process running for 1.336)
+2025-08-02 20:09:02.042 [main] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para cadastrar empresa: CNPJ=17395568000151, Razão Social=Empresa Teste, Nome Fantasia=Fantasia Teste, Telefone=41999999999, Email=teste@empresa.com, Endereco=Rua A, 123, Bloco A, Bairro Central, Cidade=Curitiba, Estado=PR, CEP=01001000
+2025-08-02 20:09:02.043 [main] INFO  c.m.p.controller.EmpresaController - Empresa cadastrada com sucesso: id=85d4712f-1980-4f37-abdb-3fcbd4d777a3, CNPJ=17395568000151, Status=PENDENTE ATIVACAO
