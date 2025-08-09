@@ -44,7 +44,7 @@ public class EmpresaServiceImpl implements EmpresaService {
         }
         Empresa empresa = mapper.toEntity(dto);
         empresa.setStatus("AGUARDANDO_PAGAMENTO");
-        Empresa salva =empresaRepository.save(empresa);
+        Empresa salva = empresaRepository.save(empresa);
         log.info("Empresa salva no banco com ID: {}", salva.getId());
         return mapper.toResponseDto(salva);
     }
