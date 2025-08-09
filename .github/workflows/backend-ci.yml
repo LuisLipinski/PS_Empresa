@@ -35,8 +35,8 @@ jobs:
           name: relatorio-cobertura
           path: target/site/jacoco
 
-  build_legacy: # nome interno, pode ser qualquer um
-    name: Backend CI/build # <-- Nome exato que o GitHub está pedindo
+  build_legacy:
+    name: Backend CI/build
     runs-on: ubuntu-latest
     steps:
       - name: Passar check fantasma
