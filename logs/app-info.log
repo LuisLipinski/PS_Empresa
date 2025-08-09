@@ -1,18 +1,40 @@
-2025-08-02 20:07:00.218 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
-2025-08-02 20:07:00.231 [main] INFO  c.m.p.c.EmpresaControllerTest - Starting EmpresaControllerTest using Java 24.0.2 with PID 15676 (started by luishenrique in /Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa)
-2025-08-02 20:07:00.232 [main] INFO  c.m.p.c.EmpresaControllerTest - No active profile set, falling back to 1 default profile: "default"
-2025-08-02 20:07:01.006 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
-2025-08-02 20:07:01.006 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2025-08-02 20:07:01.007 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
-2025-08-02 20:07:01.018 [main] INFO  c.m.p.c.EmpresaControllerTest - Started EmpresaControllerTest in 1.03 seconds (process running for 1.569)
-2025-08-02 20:07:01.128 [main] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para cadastrar empresa: CNPJ=17395568000151, Razão Social=Empresa Teste, Nome Fantasia=Fantasia Teste, Telefone=41999999999, Email=teste@empresa.com, Endereco=Rua A, 123, Bloco A, Bairro Central, Cidade=Curitiba, Estado=PR, CEP=01001000
-2025-08-02 20:07:01.129 [main] INFO  c.m.p.controller.EmpresaController - Empresa cadastrada com sucesso: id=239ba11f-9ff4-4f0f-b608-48536d09cb02, CNPJ=17395568000151, Status=ATIVO
-2025-08-02 20:09:01.213 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
-2025-08-02 20:09:01.225 [main] INFO  c.m.p.c.EmpresaControllerTest - Starting EmpresaControllerTest using Java 24.0.2 with PID 15970 (started by luishenrique in /Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa)
-2025-08-02 20:09:01.225 [main] INFO  c.m.p.c.EmpresaControllerTest - No active profile set, falling back to 1 default profile: "default"
-2025-08-02 20:09:01.931 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
-2025-08-02 20:09:01.931 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2025-08-02 20:09:01.931 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2025-08-02 20:09:01.943 [main] INFO  c.m.p.c.EmpresaControllerTest - Started EmpresaControllerTest in 0.907 seconds (process running for 1.336)
-2025-08-02 20:09:02.042 [main] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para cadastrar empresa: CNPJ=17395568000151, Razão Social=Empresa Teste, Nome Fantasia=Fantasia Teste, Telefone=41999999999, Email=teste@empresa.com, Endereco=Rua A, 123, Bloco A, Bairro Central, Cidade=Curitiba, Estado=PR, CEP=01001000
-2025-08-02 20:09:02.043 [main] INFO  c.m.p.controller.EmpresaController - Empresa cadastrada com sucesso: id=85d4712f-1980-4f37-abdb-3fcbd4d777a3, CNPJ=17395568000151, Status=PENDENTE ATIVACAO
+2025-08-09 17:07:32.886 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-09 17:07:32.900 [main] INFO  c.m.p.e.GlobalExceptionHandlerIntegrationTest - Starting GlobalExceptionHandlerIntegrationTest using Java 24.0.2 with PID 37444 (started by luishenrique in /Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa)
+2025-08-09 17:07:32.900 [main] INFO  c.m.p.e.GlobalExceptionHandlerIntegrationTest - No active profile set, falling back to 1 default profile: "default"
+2025-08-09 17:07:33.707 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-09 17:07:33.708 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-09 17:07:33.708 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2025-08-09 17:07:33.721 [main] INFO  c.m.p.e.GlobalExceptionHandlerIntegrationTest - Started GlobalExceptionHandlerIntegrationTest in 1.05 seconds (process running for 1.477)
+2025-08-09 17:07:41.808 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-09 17:07:41.818 [main] INFO  c.m.p.e.GlobalExceptionHandlerIntegrationTest - Starting GlobalExceptionHandlerIntegrationTest using Java 24.0.2 with PID 37475 (started by luishenrique in /Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa)
+2025-08-09 17:07:41.819 [main] INFO  c.m.p.e.GlobalExceptionHandlerIntegrationTest - No active profile set, falling back to 1 default profile: "default"
+2025-08-09 17:07:42.491 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-09 17:07:42.491 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-09 17:07:42.492 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
+2025-08-09 17:07:42.503 [main] INFO  c.m.p.e.GlobalExceptionHandlerIntegrationTest - Started GlobalExceptionHandlerIntegrationTest in 0.859 seconds (process running for 1.255)
+2025-08-09 17:09:01.918 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-09 17:09:01.929 [main] INFO  c.m.p.e.GlobalExceptionHandlerIntegrationTest - Starting GlobalExceptionHandlerIntegrationTest using Java 24.0.2 with PID 37658 (started by luishenrique in /Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa)
+2025-08-09 17:09:01.930 [main] INFO  c.m.p.e.GlobalExceptionHandlerIntegrationTest - No active profile set, falling back to 1 default profile: "default"
+2025-08-09 17:09:02.650 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-09 17:09:02.650 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-09 17:09:02.651 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
+2025-08-09 17:09:02.662 [main] INFO  c.m.p.e.GlobalExceptionHandlerIntegrationTest - Started GlobalExceptionHandlerIntegrationTest in 0.924 seconds (process running for 1.326)
+2025-08-09 17:09:02.756 [main] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para cadastrar empresa: CNPJ=12345678000195, Razão Social=Empresa Teste Ltda, Nome Fantasia=Empresa Teste, Telefone=11999999999, Email=empresa@teste.com, Endereco=Rua Teste, 100, Sala 1, Centro, Cidade=São Paulo, Estado=SP, CEP=01001000
+2025-08-09 17:09:02.774 [main] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para cadastrar empresa: CNPJ=12345678000195, Razão Social=Empresa Teste Ltda, Nome Fantasia=Empresa Teste, Telefone=11999999999, Email=empresa@teste.com, Endereco=Rua Teste, 100, Sala 1, Centro, Cidade=São Paulo, Estado=SP, CEP=01001000
+2025-08-09 17:09:02.782 [main] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para cadastrar empresa: CNPJ=12345678000195, Razão Social=Empresa Teste Ltda, Nome Fantasia=Empresa Teste, Telefone=11999999999, Email=empresa@teste.com, Endereco=Rua Teste, 100, Sala 1, Centro, Cidade=São Paulo, Estado=SP, CEP=01001000
+2025-08-09 17:09:02.782 [main] INFO  c.m.p.controller.EmpresaController - Empresa cadastrada com sucesso: id=a49e02f8-8fbf-45f8-a94d-481eb556d9d0, CNPJ=12345678000195, Status=AGUARDANDO_PAGAMENTO
+2025-08-09 17:09:02.801 [main] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para cadastrar empresa: CNPJ=12345678000195, Razão Social=Empresa Teste Ltda, Nome Fantasia=Empresa Teste, Telefone=11999999999, Email=empresa@teste.com, Endereco=Rua Teste, 100, Sala 1, Centro, Cidade=São Paulo, Estado=SP, CEP=01001000
+2025-08-09 17:09:02.806 [main] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para cadastrar empresa: CNPJ=12345678000195, Razão Social=Empresa Teste Ltda, Nome Fantasia=Empresa Teste, Telefone=11999999999, Email=empresa@teste.com, Endereco=Rua Teste, 100, Sala 1, Centro, Cidade=São Paulo, Estado=SP, CEP=01001000
+2025-08-09 17:11:11.660 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-09 17:11:11.670 [main] INFO  c.m.p.e.GlobalExceptionHandlerIntegrationTest - Starting GlobalExceptionHandlerIntegrationTest using Java 24.0.2 with PID 37943 (started by luishenrique in /Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa)
+2025-08-09 17:11:11.671 [main] INFO  c.m.p.e.GlobalExceptionHandlerIntegrationTest - No active profile set, falling back to 1 default profile: "default"
+2025-08-09 17:11:12.366 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-09 17:11:12.366 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-09 17:11:12.367 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2025-08-09 17:11:12.378 [main] INFO  c.m.p.e.GlobalExceptionHandlerIntegrationTest - Started GlobalExceptionHandlerIntegrationTest in 0.892 seconds (process running for 1.286)
+2025-08-09 17:11:12.464 [main] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para cadastrar empresa: CNPJ=12345678000195, Razão Social=Empresa Teste Ltda, Nome Fantasia=Empresa Teste, Telefone=11999999999, Email=empresa@teste.com, Endereco=Rua Teste, 100, Sala 1, Centro, Cidade=São Paulo, Estado=SP, CEP=01001000
+2025-08-09 17:11:12.480 [main] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para cadastrar empresa: CNPJ=12345678000195, Razão Social=Empresa Teste Ltda, Nome Fantasia=Empresa Teste, Telefone=11999999999, Email=empresa@teste.com, Endereco=Rua Teste, 100, Sala 1, Centro, Cidade=São Paulo, Estado=SP, CEP=01001000
+2025-08-09 17:11:12.487 [main] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para cadastrar empresa: CNPJ=12345678000195, Razão Social=Empresa Teste Ltda, Nome Fantasia=Empresa Teste, Telefone=11999999999, Email=empresa@teste.com, Endereco=Rua Teste, 100, Sala 1, Centro, Cidade=São Paulo, Estado=SP, CEP=01001000
+2025-08-09 17:11:12.487 [main] INFO  c.m.p.controller.EmpresaController - Empresa cadastrada com sucesso: id=44eb5112-9ea0-427b-9b73-a9e1af357643, CNPJ=12345678000195, Status=AGUARDANDO_PAGAMENTO
+2025-08-09 17:11:12.506 [main] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para cadastrar empresa: CNPJ=12345678000195, Razão Social=Empresa Teste Ltda, Nome Fantasia=Empresa Teste, Telefone=11999999999, Email=empresa@teste.com, Endereco=Rua Teste, 100, Sala 1, Centro, Cidade=São Paulo, Estado=SP, CEP=01001000
+2025-08-09 17:11:12.511 [main] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para cadastrar empresa: CNPJ=12345678000195, Razão Social=Empresa Teste Ltda, Nome Fantasia=Empresa Teste, Telefone=11999999999, Email=empresa@teste.com, Endereco=Rua Teste, 100, Sala 1, Centro, Cidade=São Paulo, Estado=SP, CEP=01001000
