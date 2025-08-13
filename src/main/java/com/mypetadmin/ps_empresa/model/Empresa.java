@@ -1,5 +1,6 @@
 package com.mypetadmin.ps_empresa.model;
 
+import com.mypetadmin.ps_empresa.enums.StatusEmpresa;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -49,9 +50,9 @@ public class Empresa {
     @Column(name = "NomeTitular", nullable = false)
     private String nomeTitular;
 
-    @Builder.Default
     @Column(name = "status", nullable = false)
-    private String status = "PENDENTE ATIVACAO";
+    @Enumerated(EnumType.STRING)
+    private StatusEmpresa status;
 
     @Column(name= "data_atualizacao_status")
     private LocalDateTime dataAtualizacaoStatus;
