@@ -1,5 +1,6 @@
 package com.mypetadmin.ps_empresa.dto;
 
+import com.mypetadmin.ps_empresa.enums.StatusEmpresa;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -26,5 +27,5 @@ public class EmpresaResponseDTO {
     private String cidade;
     private String estado;
     private String endereco;
-    private String status;
+    private StatusEmpresa status;
 }

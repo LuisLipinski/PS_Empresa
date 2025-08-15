@@ -2,9 +2,11 @@ package com.mypetadmin.ps_empresa.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -29,9 +31,11 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(EmpresaNaoEncontradaException.class)
-    public ResponseEntity<String> handleEmpresaNaoEncontrada(EmpresaNaoEncontradaException ex) {
+    public ResponseEntity<Map<String, String>> handleEmpresaNaoEncontrada(EmpresaNaoEncontradaException ex) {
+        Map<String, String> body = new HashMap<>();
+        body.put("error", ex.getMessage());
         log.warn("Empresa não encontrada? {}", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(body);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
@@ -57,5 +61,12 @@ public class GlobalExceptionHandler {
             log.warn("Validação falhou para campo '{}': {}", field, message);
         }
         return ResponseEntity.badRequest().body(errors);
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<Map<String, String>> handleMissingParams(MissingServletRequestParameterException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", "Parâmetro ausente: " + ex.getParameterName());
+        return ResponseEntity.badRequest().body(error);
     }
 }

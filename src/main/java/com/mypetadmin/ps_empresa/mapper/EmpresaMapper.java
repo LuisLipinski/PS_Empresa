@@ -2,8 +2,11 @@ package com.mypetadmin.ps_empresa.mapper;
 
 import com.mypetadmin.ps_empresa.dto.EmpresaRequestDTO;
 import com.mypetadmin.ps_empresa.dto.EmpresaResponseDTO;
+import com.mypetadmin.ps_empresa.enums.StatusEmpresa;
 import com.mypetadmin.ps_empresa.model.Empresa;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
 
 @Component
 public class EmpresaMapper {
@@ -28,6 +31,8 @@ public class EmpresaMapper {
                 )
                 .cidade(dto.getCidade())
                 .estado(dto.getEstado())
+                .status(StatusEmpresa.AGUARDANDO_PAGAMENTO)
+                .dataCriacao(LocalDateTime.now())
                 .build();
 
     }
