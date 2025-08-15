@@ -2,6 +2,7 @@ package com.mypetadmin.ps_empresa.mapper;
 
 import com.mypetadmin.ps_empresa.dto.EmpresaRequestDTO;
 import com.mypetadmin.ps_empresa.dto.EmpresaResponseDTO;
+import com.mypetadmin.ps_empresa.enums.StatusEmpresa;
 import com.mypetadmin.ps_empresa.model.Empresa;
 import org.junit.jupiter.api.Test;
 
@@ -94,7 +95,7 @@ public class EmpresaMapperTest {
                 .cidade("São Paulo")
                 .estado("SP")
                 .endereco("Rua dos Pets, 123 - Sala 1, Centro")
-                .status("PENDENTE ATIVACAO")
+                .status(StatusEmpresa.AGUARDANDO_PAGAMENTO)
                 .build();
 
         EmpresaResponseDTO responseDTO = empresaMapper.toResponseDto(entity);

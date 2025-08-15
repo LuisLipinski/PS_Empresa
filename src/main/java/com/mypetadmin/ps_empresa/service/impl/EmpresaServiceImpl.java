@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -55,16 +56,17 @@ public class EmpresaServiceImpl implements EmpresaService {
     @Override
     @Transactional
     public void atualizarStatus(UUID empresaId, StatusEmpresa novoStatus) {
+
+        Objects.requireNonNull(novoStatus, "Novo status não pode ser nulo");
         Empresa empresa = empresaRepository.findById(empresaId)
                 .orElseThrow(() -> new EmpresaNaoEncontradaException("Empresa não encontrada"));
 
         if (!empresa.getStatus().equals(novoStatus)) {
             empresa.setStatus(novoStatus);
             empresa.setDataAtualizacaoStatus(LocalDateTime.now());
-            empresaRepository.save(empresa);
+            log.info("Status da empresa {} atualizado para {}", empresaId, novoStatus);
         } else {
-            log.warn("Esse status ja esta cadastrado nesse usuário");
-//            throw new MethodArgumentNotValidException(novoStatus, "O Status não pode ser o mesmo que ja esta na empresa");
+            log.warn("O status da empresa {} já está definido como {}", empresaId, novoStatus);
         }
     }
 }

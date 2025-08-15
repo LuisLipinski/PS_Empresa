@@ -3,8 +3,11 @@ package com.mypetadmin.ps_empresa.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mypetadmin.ps_empresa.dto.EmpresaRequestDTO;
 import com.mypetadmin.ps_empresa.dto.EmpresaResponseDTO;
+import com.mypetadmin.ps_empresa.enums.StatusEmpresa;
+import com.mypetadmin.ps_empresa.exception.EmpresaNaoEncontradaException;
 import com.mypetadmin.ps_empresa.service.EmpresaService;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.http.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -13,11 +16,12 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.UUID;
 
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(EmpresaController.class)
 public class EmpresaControllerTest {
@@ -51,7 +55,7 @@ public class EmpresaControllerTest {
         EmpresaResponseDTO responseDTO = new EmpresaResponseDTO(
                 UUID.randomUUID(), requestDTO.getDocumentNumber(), requestDTO.getRazaoSocial(), requestDTO.getNomeFantasia(), requestDTO.getTelefone(),
                 requestDTO.getEmail(), requestDTO.getNomeTitular(), requestDTO.getCep(), requestDTO.getCidade(), requestDTO.getEstado(),
-                "Rua A, 123, Bloco B - Bairro Central", "PENDENTE ATIVACAO"
+                "Rua A, 123, Bloco B - Bairro Central", StatusEmpresa.AGUARDANDO_PAGAMENTO
         );
 
         when(empresaService.cadastrarEmpresa(requestDTO)).thenReturn(responseDTO);
@@ -63,7 +67,46 @@ public class EmpresaControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.documentNumber").value("17395568000151"))
                 .andExpect(jsonPath("$.razaoSocial").value("Empresa Teste"))
-                .andExpect(jsonPath("$.status").value("PENDENTE ATIVACAO"));
+                .andExpect(jsonPath("$.status").value(StatusEmpresa.AGUARDANDO_PAGAMENTO.name()));
+    }
+
+    @Test
+    void atualizaStatus_QuandoDadosValidos_entaoRetorna200() throws Exception {
+        UUID empresaID = UUID.randomUUID();
+        StatusEmpresa novoStatus = StatusEmpresa.ATIVO;
+        Mockito.doNothing().when(empresaService).atualizarStatus(eq(empresaID), eq(novoStatus));
+
+        mockMvc.perform(put("/empresas/atualizarStatus")
+                .param("empresaId", empresaID.toString())
+                .param("novoStatus", novoStatus.name())
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.message").value("Status atualizado com sucesso"))
+            .andExpect(jsonPath("$.statusCode").value(200));
+    }
+
+    @Test
+    void atualizarStatus_quandoEmpresaNaoEncontrada_retorna404() throws Exception {
+        UUID empresaId = UUID.randomUUID();
+        StatusEmpresa novoStatus = StatusEmpresa.INATIVO;
+        Mockito.doThrow(new EmpresaNaoEncontradaException("Empresa não encontrada"))
+                .when(empresaService).atualizarStatus(eq(empresaId), eq(novoStatus));
+
+        mockMvc.perform(put("/empresas/atualizarStatus")
+                .param("empresaId", empresaId.toString())
+                .param("novoStatus", novoStatus.name())
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.error").value("Empresa não encontrada"));
+    }
+
+    @Test
+    void atualizarStatus_quandoParametrosAusentes_entaoRetorna400() throws Exception{
+        mockMvc.perform(put("/empresas/atualizarStatus")
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isBadRequest());
     }
 
 }

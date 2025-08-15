@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mypetadmin.ps_empresa.controller.EmpresaController;
 import com.mypetadmin.ps_empresa.dto.EmpresaRequestDTO;
 import com.mypetadmin.ps_empresa.dto.EmpresaResponseDTO;
+import com.mypetadmin.ps_empresa.enums.StatusEmpresa;
 import com.mypetadmin.ps_empresa.exception.GlobalExceptionHandler;
 import com.mypetadmin.ps_empresa.exception.*;
 import com.mypetadmin.ps_empresa.service.EmpresaService;
@@ -58,7 +59,7 @@ public class GlobalExceptionHandlerIntegrationTest {
         EmpresaResponseDTO responseDTO = new EmpresaResponseDTO();
         responseDTO.setId(UUID.randomUUID());
         responseDTO.setDocumentNumber(dto.getDocumentNumber());
-        responseDTO.setStatus("AGUARDANDO_PAGAMENTO");
+        responseDTO.setStatus(StatusEmpresa.AGUARDANDO_PAGAMENTO);
         responseDTO.setRazaoSocial(dto.getRazaoSocial());
         responseDTO.setNomeFantasia(dto.getNomeFantasia());
         responseDTO.setEmail(dto.getEmail());

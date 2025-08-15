@@ -2,8 +2,10 @@ package com.mypetadmin.ps_empresa.service.impl;
 
 import com.mypetadmin.ps_empresa.dto.EmpresaRequestDTO;
 import com.mypetadmin.ps_empresa.dto.EmpresaResponseDTO;
+import com.mypetadmin.ps_empresa.enums.StatusEmpresa;
 import com.mypetadmin.ps_empresa.exception.EmailExistenteException;
 import com.mypetadmin.ps_empresa.exception.EmpresaExistenteException;
+import com.mypetadmin.ps_empresa.exception.EmpresaNaoEncontradaException;
 import com.mypetadmin.ps_empresa.mapper.EmpresaMapper;
 import com.mypetadmin.ps_empresa.model.Empresa;
 import com.mypetadmin.ps_empresa.repository.EmpresaRepository;
@@ -14,10 +16,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -45,7 +49,7 @@ class EmpresaServiceImplTest {
 
         entity = new Empresa();
         entity.setId(UUID.randomUUID());
-        entity.setStatus("AGUARDANDO_PAGAMENTO");
+        entity.setStatus(StatusEmpresa.AGUARDANDO_PAGAMENTO);
 
         response = new EmpresaResponseDTO();
         response.setId(entity.getId());
@@ -111,6 +115,48 @@ class EmpresaServiceImplTest {
                     .isInstanceOf(IllegalArgumentException.class)
                     .hasMessageContaining("CNPJ inválido");
         }
+    }
+
+    @Test
+    void atualizarStatus_quandoEmpresaNaoExiste_entaoLancaExcecao() {
+        when(empresaRepository.findById(entity.getId())).thenReturn(Optional.empty());
+
+        EmpresaNaoEncontradaException exception = assertThrows(
+                EmpresaNaoEncontradaException.class,
+                () -> empresaService.atualizarStatus(entity.getId(), StatusEmpresa.ATIVO)
+        );
+
+        assertEquals("Empresa não encontrada", exception.getMessage());
+        verify(empresaRepository,never()).save(any());
+    }
+
+    @Test
+    void atualizarStatus_quandoNovoStatusDiferente_entaoAtualizaStatus() {
+        when(empresaRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
+
+        empresaService.atualizarStatus(entity.getId(), StatusEmpresa.ATIVO);
+
+        assertEquals(StatusEmpresa.ATIVO, entity.getStatus());
+        assertNotNull(entity.getDataAtualizacaoStatus());
+        verify(empresaRepository, never()).save(any());
+    }
+
+    @Test
+    void atualizarStatus_quandoNovoStatusIgual_entaoNaoAtualiza() {
+        when(empresaRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
+
+        empresaService.atualizarStatus(entity.getId(), StatusEmpresa.AGUARDANDO_PAGAMENTO);
+
+        assertEquals(StatusEmpresa.AGUARDANDO_PAGAMENTO, entity.getStatus());
+        assertNull(entity.getDataAtualizacaoStatus());
+        verify(empresaRepository, never()).save(any());
+    }
+
+    @Test
+    void atualizarStatus_quandoStatusNulo_entaoLancaNullPointerException() {
+
+        assertThrows(NullPointerException.class,
+                () -> empresaService.atualizarStatus(entity.getId(), null));
     }
 
 }
