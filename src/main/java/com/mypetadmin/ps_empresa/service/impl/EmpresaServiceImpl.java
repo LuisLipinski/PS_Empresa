@@ -2,10 +2,13 @@ package com.mypetadmin.ps_empresa.service.impl;
 
 import com.mypetadmin.ps_empresa.dto.EmpresaRequestDTO;
 import com.mypetadmin.ps_empresa.dto.EmpresaResponseDTO;
+import com.mypetadmin.ps_empresa.enums.DirectionField;
+import com.mypetadmin.ps_empresa.enums.SortField;
 import com.mypetadmin.ps_empresa.enums.StatusEmpresa;
 import com.mypetadmin.ps_empresa.exception.EmailExistenteException;
 import com.mypetadmin.ps_empresa.exception.EmpresaExistenteException;
 import com.mypetadmin.ps_empresa.exception.EmpresaNaoEncontradaException;
+import com.mypetadmin.ps_empresa.helper.EmpresaSpecification;
 import com.mypetadmin.ps_empresa.mapper.EmpresaMapper;
 import com.mypetadmin.ps_empresa.model.Empresa;
 import com.mypetadmin.ps_empresa.repository.EmpresaRepository;
@@ -14,12 +17,15 @@ import com.mypetadmin.ps_empresa.util.CnpjValidator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -68,5 +74,39 @@ public class EmpresaServiceImpl implements EmpresaService {
         } else {
             log.warn("O status da empresa {} já está definido como {}", empresaId, novoStatus);
         }
+    }
+
+    public List<EmpresaResponseDTO> getAllEmpresaSorted(
+            String documentNumber,
+            String razaoSocial,
+            String email,
+            StatusEmpresa status,
+            SortField sortField,
+            DirectionField directionField
+    ) {
+        documentNumber = normalize(documentNumber);
+        razaoSocial = normalize(razaoSocial);
+        email = normalize(email);
+        Sort sort = Sort.by(Sort.Direction.fromString(directionField.getDirectionField()), sortField.getSortField());
+        Specification<Empresa> spec = EmpresaSpecification.hasDocumentNumber(documentNumber)
+                .and(EmpresaSpecification.hasRazaoSocial(razaoSocial))
+                .and(EmpresaSpecification.hasEmail(email))
+                .and(EmpresaSpecification.hasStatus(status));
+        List<Empresa> empresas = empresaRepository.findAll(spec, sort);
+
+        return empresas.stream()
+                .map(mapper::toResponseDto)
+                .collect(Collectors.toList());
+
+    }
+
+    private String normalize(String value) {
+        return (value == null || value.trim().isEmpty() ? null : value.trim());
+    }
+
+    public EmpresaResponseDTO getEmpresaById(UUID id) {
+        Empresa empresa = empresaRepository.findById(id)
+                .orElseThrow(() -> new EmpresaNaoEncontradaException("Empresa não encontrada com o id: " + id));
+        return mapper.toResponseDto(empresa);
     }
 }
