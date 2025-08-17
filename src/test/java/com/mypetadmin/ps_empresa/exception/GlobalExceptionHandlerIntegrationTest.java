@@ -159,7 +159,7 @@ public class GlobalExceptionHandlerIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.email").value(containsString("Formato de e-mail inválido")));
+                .andExpect(jsonPath("$.email").value("Formato de e-mail inválido."));
     }
 
     @Test
