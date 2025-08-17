@@ -5,6 +5,7 @@ import com.mypetadmin.ps_empresa.dto.EmpresaResponseDTO;
 import com.mypetadmin.ps_empresa.enums.DirectionField;
 import com.mypetadmin.ps_empresa.enums.SortField;
 import com.mypetadmin.ps_empresa.enums.StatusEmpresa;
+import com.mypetadmin.ps_empresa.exception.CnpjInvalidException;
 import com.mypetadmin.ps_empresa.exception.EmailExistenteException;
 import com.mypetadmin.ps_empresa.exception.EmpresaExistenteException;
 import com.mypetadmin.ps_empresa.exception.EmpresaNaoEncontradaException;
@@ -45,7 +46,7 @@ public class EmpresaServiceImpl implements EmpresaService {
         }
         if (!CnpjValidator.isCnpjValid(dto.getDocumentNumber())) {
             log.warn("CNPJ inválido detectado: {}", dto.getDocumentNumber());
-            throw new IllegalArgumentException("CNPJ inválido.");
+            throw new CnpjInvalidException("CNPJ inválido.");
         }
 
         if (empresaRepository.existsByEmail(dto.getEmail())) {
@@ -88,11 +89,26 @@ public class EmpresaServiceImpl implements EmpresaService {
         razaoSocial = normalize(razaoSocial);
         email = normalize(email);
         Sort sort = Sort.by(Sort.Direction.fromString(directionField.getDirectionField()), sortField.getSortField());
+
+        if (documentNumber != null) {
+            if (!CnpjValidator.isCnpjValid(documentNumber)) {
+                throw new CnpjInvalidException("Cnpj informado é invalido");
+            }
+        }
         Specification<Empresa> spec = EmpresaSpecification.hasDocumentNumber(documentNumber)
                 .and(EmpresaSpecification.hasRazaoSocial(razaoSocial))
                 .and(EmpresaSpecification.hasEmail(email))
                 .and(EmpresaSpecification.hasStatus(status));
         List<Empresa> empresas = empresaRepository.findAll(spec, sort);
+
+        StringBuilder logMessage = new StringBuilder("Busca de empresas realizada com filtros: ");
+        if (documentNumber != null) logMessage.append("CNPJ=").append(documentNumber).append(" ");
+        if (razaoSocial != null) logMessage.append("Razão Social=").append(razaoSocial).append(" ");
+        if (email != null) logMessage.append("Email=").append(email).append(" ");
+        if (status != null) logMessage.append("Status=").append(status).append(" ");
+        logMessage.append("| Total resultados: ").append(empresas.size());
+
+        log.info(logMessage.toString());
 
         return empresas.stream()
                 .map(mapper::toResponseDto)
@@ -107,6 +123,7 @@ public class EmpresaServiceImpl implements EmpresaService {
     public EmpresaResponseDTO getEmpresaById(UUID id) {
         Empresa empresa = empresaRepository.findById(id)
                 .orElseThrow(() -> new EmpresaNaoEncontradaException("Empresa não encontrada com o id: " + id));
+        log.info("Empresa com o id {} foi encontrada com sucesso", id);
         return mapper.toResponseDto(empresa);
     }
 }

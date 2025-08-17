@@ -8,6 +8,7 @@ import com.mypetadmin.ps_empresa.enums.DirectionField;
 import com.mypetadmin.ps_empresa.enums.SortField;
 import com.mypetadmin.ps_empresa.enums.StatusEmpresa;
 import com.mypetadmin.ps_empresa.service.EmpresaService;
+import com.mypetadmin.ps_empresa.util.CnpjValidator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -98,12 +99,22 @@ public class EmpresaController {
                                                             @RequestParam (required = false) StatusEmpresa status,
                                                             @RequestParam (required = false, defaultValue = "DOCUMENT_NUMBER") SortField sortField,
                                                             @RequestParam (required = false, defaultValue = "ASC") DirectionField directionField) {
+
+
+        log.info("Iniciado a busca por empresas no banco de dados");
+
         List<EmpresaResponseDTO> dto = empresaService.getAllEmpresaSorted(documentNumber, razaoSocial, email, status, sortField, directionField);
         return ResponseEntity.ok(dto);
     }
 
+    @Operation(summary = "Buscar empresa por id.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Buscado a empresa com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Não foi encontrado a empresa com o id informado")
+    })
     @GetMapping("buscaEmpresas/{id}")
     public ResponseEntity<EmpresaResponseDTO> getEmpresaById(@PathVariable UUID id) {
+        log.info("Iniciado a busca pela empresa com id: {}", id);
         EmpresaResponseDTO dto = empresaService.getEmpresaById(id);
         return ResponseEntity.ok(dto);
     }
