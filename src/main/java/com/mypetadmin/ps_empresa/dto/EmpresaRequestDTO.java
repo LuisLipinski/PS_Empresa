@@ -41,7 +41,7 @@ public class EmpresaRequestDTO {
     private String telefone;
 
     @NotBlank
-    @Email(message = "Formato de e-mail inválido.")
+    @Email(message = "Email inválido: deve ter ao menos 3 caracteres antes do @ e um domínio válido (ex: .com, .org)")
     @Pattern(
             regexp = "^[\\w.%+-]{3,}@[\\w.-]+\\.[a-zA-Z]{2,}$",
             message = "Email inválido: deve ter ao menos 3 caracteres antes do @ e um domínio válido (ex: .com, .org)"

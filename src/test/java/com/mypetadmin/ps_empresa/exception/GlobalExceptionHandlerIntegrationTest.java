@@ -159,7 +159,7 @@ public class GlobalExceptionHandlerIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.email").value("Formato de e-mail inválido."));
+                .andExpect(jsonPath("$.email").value("Email inválido: deve ter ao menos 3 caracteres antes do @ e um domínio válido (ex: .com, .org)"));
     }
 
     @Test

@@ -414,3 +414,69 @@
 2025-08-17 16:22:45.229 [main] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para cadastrar empresa: CNPJ=12345678000195, Razão Social=Empresa Teste Ltda, Nome Fantasia=Empresa Teste, Telefone=11999999999, Email=empresa@teste.com, Endereco=Rua Teste, 100, Sala 1, Centro, Cidade=São Paulo, Estado=SP, CEP=01001000
 2025-08-17 16:22:45.234 [main] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para cadastrar empresa: CNPJ=12345678000195, Razão Social=Empresa Teste Ltda, Nome Fantasia=Empresa Teste, Telefone=11999999999, Email=empresa@teste.com, Endereco=Rua Teste, 100, Sala 1, Centro, Cidade=São Paulo, Estado=SP, CEP=01001000
 2025-08-17 16:22:45.241 [main] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para cadastrar empresa: CNPJ=12345678000195, Razão Social=Empresa Teste Ltda, Nome Fantasia=Empresa Teste, Telefone=11999999999, Email=empresa@teste.com, Endereco=Rua Teste, 100, Sala 1, Centro, Cidade=São Paulo, Estado=SP, CEP=01001000
+2025-08-17 16:25:00.307 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-17 16:25:00.317 [main] INFO  c.m.p.e.GlobalExceptionHandlerIntegrationTest - Starting GlobalExceptionHandlerIntegrationTest using Java 24.0.2 with PID 46023 (started by luishenrique in /Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa)
+2025-08-17 16:25:00.317 [main] INFO  c.m.p.e.GlobalExceptionHandlerIntegrationTest - No active profile set, falling back to 1 default profile: "default"
+2025-08-17 16:25:01.017 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-17 16:25:01.017 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-17 16:25:01.018 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2025-08-17 16:25:01.028 [main] INFO  c.m.p.e.GlobalExceptionHandlerIntegrationTest - Started GlobalExceptionHandlerIntegrationTest in 0.897 seconds (process running for 1.299)
+2025-08-17 16:25:01.122 [main] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para cadastrar empresa: CNPJ=12345678000195, Razão Social=Empresa Teste Ltda, Nome Fantasia=Empresa Teste, Telefone=11999999999, Email=empresa@teste.com, Endereco=Rua Teste, 100, Sala 1, Centro, Cidade=São Paulo, Estado=SP, CEP=01001000
+2025-08-17 16:25:01.139 [main] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para cadastrar empresa: CNPJ=12345678000195, Razão Social=Empresa Teste Ltda, Nome Fantasia=Empresa Teste, Telefone=11999999999, Email=empresa@teste.com, Endereco=Rua Teste, 100, Sala 1, Centro, Cidade=São Paulo, Estado=SP, CEP=01001000
+2025-08-17 16:25:01.146 [main] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para cadastrar empresa: CNPJ=12345678000195, Razão Social=Empresa Teste Ltda, Nome Fantasia=Empresa Teste, Telefone=11999999999, Email=empresa@teste.com, Endereco=Rua Teste, 100, Sala 1, Centro, Cidade=São Paulo, Estado=SP, CEP=01001000
+2025-08-17 16:25:01.147 [main] INFO  c.m.p.controller.EmpresaController - Empresa cadastrada com sucesso: id=44f5d645-96cc-4acc-9494-7b5ea0d2be0f, CNPJ=12345678000195, Status=AGUARDANDO_PAGAMENTO
+2025-08-17 16:25:01.166 [main] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para cadastrar empresa: CNPJ=12345678000195, Razão Social=Empresa Teste Ltda, Nome Fantasia=Empresa Teste, Telefone=11999999999, Email=empresa@teste.com, Endereco=Rua Teste, 100, Sala 1, Centro, Cidade=São Paulo, Estado=SP, CEP=01001000
+2025-08-17 16:25:01.171 [main] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para cadastrar empresa: CNPJ=12345678000195, Razão Social=Empresa Teste Ltda, Nome Fantasia=Empresa Teste, Telefone=11999999999, Email=empresa@teste.com, Endereco=Rua Teste, 100, Sala 1, Centro, Cidade=São Paulo, Estado=SP, CEP=01001000
+2025-08-17 16:25:01.176 [main] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para cadastrar empresa: CNPJ=12345678000195, Razão Social=Empresa Teste Ltda, Nome Fantasia=Empresa Teste, Telefone=11999999999, Email=empresa@teste.com, Endereco=Rua Teste, 100, Sala 1, Centro, Cidade=São Paulo, Estado=SP, CEP=01001000
+2025-08-17 16:36:10.536 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-17 16:36:10.547 [main] INFO  c.m.p.e.GlobalExceptionHandlerIntegrationTest - Starting GlobalExceptionHandlerIntegrationTest using Java 24.0.2 with PID 47565 (started by luishenrique in /Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa)
+2025-08-17 16:36:10.547 [main] INFO  c.m.p.e.GlobalExceptionHandlerIntegrationTest - No active profile set, falling back to 1 default profile: "default"
+2025-08-17 16:36:10.612 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-08-17 16:36:10.612 [Thread-14] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-08-17 16:36:10.613 [tomcat-shutdown] INFO  o.a.coyote.http11.Http11NioProtocol - Pausing ProtocolHandler ["http-nio-8081"]
+2025-08-17 16:36:10.614 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-08-17 16:36:10.614 [Thread-14] INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8081"]
+2025-08-17 16:36:10.614 [Thread-14] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-08-17 16:36:10.615 [Thread-14] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-4 - Shutdown initiated...
+2025-08-17 16:36:10.617 [Thread-14] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-4 - Shutdown completed.
+2025-08-17 16:36:10.670 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - Starting PsEmpresaApplication using Java 24.0.2 with PID 21495 (/Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa/target/classes started by luishenrique in /Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa)
+2025-08-17 16:36:10.670 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - No active profile set, falling back to 1 default profile: "default"
+2025-08-17 16:36:10.750 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-17 16:36:10.761 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 10 ms. Found 1 JPA repository interface.
+2025-08-17 16:36:10.799 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2025-08-17 16:36:10.799 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2025-08-17 16:36:10.799 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-08-17 16:36:10.799 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.42]
+2025-08-17 16:36:10.807 [restartedMain] INFO  o.a.c.c.C.[Tomcat-1].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-08-17 16:36:10.807 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 136 ms
+2025-08-17 16:36:10.829 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-08-17 16:36:10.834 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-17 16:36:10.835 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-5 - Starting...
+2025-08-17 16:36:10.865 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-5 - Added connection org.postgresql.jdbc.PgConnection@7e038011
+2025-08-17 16:36:10.865 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-5 - Start completed.
+2025-08-17 16:36:10.868 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-5)']
+	Database driver: undefined/unknown
+	Database version: 17.6
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-08-17 16:36:10.892 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-08-17 16:36:10.909 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-17 16:36:10.971 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-08-17 16:36:10.973 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+2025-08-17 16:36:10.974 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
+2025-08-17 16:36:10.976 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - Started PsEmpresaApplication in 0.322 seconds (process running for 11639.418)
+2025-08-17 16:36:10.976 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-08-17 16:36:11.348 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-17 16:36:11.348 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-17 16:36:11.349 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
+2025-08-17 16:36:11.361 [main] INFO  c.m.p.e.GlobalExceptionHandlerIntegrationTest - Started GlobalExceptionHandlerIntegrationTest in 1.005 seconds (process running for 1.411)
+2025-08-17 16:36:11.460 [main] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para cadastrar empresa: CNPJ=12345678000195, Razão Social=Empresa Teste Ltda, Nome Fantasia=Empresa Teste, Telefone=11999999999, Email=empresa@teste.com, Endereco=Rua Teste, 100, Sala 1, Centro, Cidade=São Paulo, Estado=SP, CEP=01001000
+2025-08-17 16:36:11.476 [main] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para cadastrar empresa: CNPJ=12345678000195, Razão Social=Empresa Teste Ltda, Nome Fantasia=Empresa Teste, Telefone=11999999999, Email=empresa@teste.com, Endereco=Rua Teste, 100, Sala 1, Centro, Cidade=São Paulo, Estado=SP, CEP=01001000
+2025-08-17 16:36:11.483 [main] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para cadastrar empresa: CNPJ=12345678000195, Razão Social=Empresa Teste Ltda, Nome Fantasia=Empresa Teste, Telefone=11999999999, Email=empresa@teste.com, Endereco=Rua Teste, 100, Sala 1, Centro, Cidade=São Paulo, Estado=SP, CEP=01001000
+2025-08-17 16:36:11.484 [main] INFO  c.m.p.controller.EmpresaController - Empresa cadastrada com sucesso: id=6364c2eb-c47c-45e5-ab32-f16a6b77c8f8, CNPJ=12345678000195, Status=AGUARDANDO_PAGAMENTO
+2025-08-17 16:36:11.505 [main] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para cadastrar empresa: CNPJ=12345678000195, Razão Social=Empresa Teste Ltda, Nome Fantasia=Empresa Teste, Telefone=11999999999, Email=empresa@teste.com, Endereco=Rua Teste, 100, Sala 1, Centro, Cidade=São Paulo, Estado=SP, CEP=01001000
+2025-08-17 16:36:11.510 [main] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para cadastrar empresa: CNPJ=12345678000195, Razão Social=Empresa Teste Ltda, Nome Fantasia=Empresa Teste, Telefone=11999999999, Email=empresa@teste.com, Endereco=Rua Teste, 100, Sala 1, Centro, Cidade=São Paulo, Estado=SP, CEP=01001000
+2025-08-17 16:36:11.517 [main] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para cadastrar empresa: CNPJ=12345678000195, Razão Social=Empresa Teste Ltda, Nome Fantasia=Empresa Teste, Telefone=11999999999, Email=empresa@teste.com, Endereco=Rua Teste, 100, Sala 1, Centro, Cidade=São Paulo, Estado=SP, CEP=01001000
