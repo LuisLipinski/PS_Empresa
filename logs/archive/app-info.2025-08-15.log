@@ -1,0 +1,515 @@
+2025-08-15 16:42:20.408 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-08-15 16:42:20.455 [Thread-5] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-08-15 16:42:20.458 [tomcat-shutdown] INFO  o.a.coyote.http11.Http11NioProtocol - Pausing ProtocolHandler ["http-nio-8081"]
+2025-08-15 16:42:20.464 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-08-15 16:42:20.464 [Thread-5] INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8081"]
+2025-08-15 16:42:20.471 [Thread-5] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-08-15 16:42:20.487 [Thread-5] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-08-15 16:42:20.489 [Thread-5] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-08-15 16:42:20.635 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - Starting PsEmpresaApplication using Java 24.0.2 with PID 84626 (/Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa/target/classes started by luishenrique in /Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa)
+2025-08-15 16:42:20.635 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - No active profile set, falling back to 1 default profile: "default"
+2025-08-15 16:42:20.715 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-15 16:42:20.723 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 7 ms. Found 1 JPA repository interface.
+2025-08-15 16:42:20.783 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2025-08-15 16:42:20.785 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2025-08-15 16:42:20.785 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-08-15 16:42:20.785 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.42]
+2025-08-15 16:42:20.793 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-08-15 16:42:20.793 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 157 ms
+2025-08-15 16:42:20.820 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-08-15 16:42:20.825 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-15 16:42:20.827 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Starting...
+2025-08-15 16:42:20.867 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-2 - Added connection org.postgresql.jdbc.PgConnection@4856f9b3
+2025-08-15 16:42:20.867 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Start completed.
+2025-08-15 16:42:20.870 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-2)']
+	Database driver: undefined/unknown
+	Database version: 17.5
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-08-15 16:42:20.902 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-08-15 16:42:20.926 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-15 16:42:21.040 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-08-15 16:42:21.044 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+2025-08-15 16:42:21.047 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
+2025-08-15 16:42:21.052 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - Started PsEmpresaApplication in 0.434 seconds (process running for 195915.324)
+2025-08-15 16:42:21.053 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-08-15 16:43:51.708 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-15 16:43:51.719 [main] INFO  c.m.p.c.EmpresaControllerTest - Starting EmpresaControllerTest using Java 24.0.2 with PID 27917 (started by luishenrique in /Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa)
+2025-08-15 16:43:51.720 [main] INFO  c.m.p.c.EmpresaControllerTest - No active profile set, falling back to 1 default profile: "default"
+2025-08-15 16:43:52.146 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-08-15 16:43:52.147 [Thread-7] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-08-15 16:43:52.147 [tomcat-shutdown] INFO  o.a.coyote.http11.Http11NioProtocol - Pausing ProtocolHandler ["http-nio-8081"]
+2025-08-15 16:43:52.148 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-08-15 16:43:52.148 [Thread-7] INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8081"]
+2025-08-15 16:43:52.150 [Thread-7] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-08-15 16:43:52.150 [Thread-7] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Shutdown initiated...
+2025-08-15 16:43:52.151 [Thread-7] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Shutdown completed.
+2025-08-15 16:43:52.208 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - Starting PsEmpresaApplication using Java 24.0.2 with PID 84626 (/Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa/target/classes started by luishenrique in /Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa)
+2025-08-15 16:43:52.208 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - No active profile set, falling back to 1 default profile: "default"
+2025-08-15 16:43:52.272 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-15 16:43:52.278 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 5 ms. Found 1 JPA repository interface.
+2025-08-15 16:43:52.303 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2025-08-15 16:43:52.303 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2025-08-15 16:43:52.304 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-08-15 16:43:52.304 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.42]
+2025-08-15 16:43:52.308 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-08-15 16:43:52.308 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 99 ms
+2025-08-15 16:43:52.319 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-08-15 16:43:52.322 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-15 16:43:52.323 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Starting...
+2025-08-15 16:43:52.357 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-3 - Added connection org.postgresql.jdbc.PgConnection@392748f6
+2025-08-15 16:43:52.357 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Start completed.
+2025-08-15 16:43:52.360 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-3)']
+	Database driver: undefined/unknown
+	Database version: 17.5
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-08-15 16:43:52.388 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-08-15 16:43:52.405 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-15 16:43:52.470 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-08-15 16:43:52.471 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+2025-08-15 16:43:52.472 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
+2025-08-15 16:43:52.475 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - Started PsEmpresaApplication in 0.281 seconds (process running for 196006.747)
+2025-08-15 16:43:52.475 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-08-15 16:43:52.497 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-15 16:43:52.497 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-15 16:43:52.498 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
+2025-08-15 16:43:52.511 [main] INFO  c.m.p.c.EmpresaControllerTest - Started EmpresaControllerTest in 0.993 seconds (process running for 1.43)
+2025-08-15 16:43:52.546 [main] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para atualização do status da empresa com id $fc296d7e-5be8-4c98-b9f3-74417a3dedbf para o status $ATIVO.
+2025-08-15 16:43:52.547 [main] INFO  c.m.p.controller.EmpresaController - Status da empresa com o id $fc296d7e-5be8-4c98-b9f3-74417a3dedbf foi alterado para $ATIVO com sucesso.
+2025-08-15 16:43:52.585 [main] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para atualização do status da empresa com id $ea3ade0f-8348-40b5-b063-6b719d6d1449 para o status $INATIVO.
+2025-08-15 16:43:52.663 [main] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para cadastrar empresa: CNPJ=17395568000151, Razão Social=Empresa Teste, Nome Fantasia=Fantasia Teste, Telefone=41999999999, Email=teste@empresa.com, Endereco=Rua A, 123, Bloco A, Bairro Central, Cidade=Curitiba, Estado=PR, CEP=01001000
+2025-08-15 16:43:52.663 [main] INFO  c.m.p.controller.EmpresaController - Empresa cadastrada com sucesso: id=ddf0860f-0b50-4f6e-b7a4-67403d71adbe, CNPJ=17395568000151, Status=AGUARDANDO_PAGAMENTO
+2025-08-15 16:53:10.839 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-15 16:53:10.850 [main] INFO  c.m.p.c.EmpresaControllerTest - Starting EmpresaControllerTest using Java 24.0.2 with PID 29188 (started by luishenrique in /Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa)
+2025-08-15 16:53:10.850 [main] INFO  c.m.p.c.EmpresaControllerTest - No active profile set, falling back to 1 default profile: "default"
+2025-08-15 16:53:11.095 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-08-15 16:53:11.098 [Thread-11] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-08-15 16:53:11.098 [tomcat-shutdown] INFO  o.a.coyote.http11.Http11NioProtocol - Pausing ProtocolHandler ["http-nio-8081"]
+2025-08-15 16:53:11.100 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-08-15 16:53:11.101 [Thread-11] INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8081"]
+2025-08-15 16:53:11.106 [Thread-11] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-08-15 16:53:11.107 [Thread-11] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Shutdown initiated...
+2025-08-15 16:53:11.108 [Thread-11] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Shutdown completed.
+2025-08-15 16:53:11.176 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - Starting PsEmpresaApplication using Java 24.0.2 with PID 84626 (/Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa/target/classes started by luishenrique in /Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa)
+2025-08-15 16:53:11.176 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - No active profile set, falling back to 1 default profile: "default"
+2025-08-15 16:53:11.232 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-15 16:53:11.238 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 5 ms. Found 1 JPA repository interface.
+2025-08-15 16:53:11.268 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2025-08-15 16:53:11.268 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2025-08-15 16:53:11.268 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-08-15 16:53:11.268 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.42]
+2025-08-15 16:53:11.273 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-08-15 16:53:11.273 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 97 ms
+2025-08-15 16:53:11.284 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-08-15 16:53:11.287 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-15 16:53:11.288 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-4 - Starting...
+2025-08-15 16:53:11.327 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-4 - Added connection org.postgresql.jdbc.PgConnection@22c294a
+2025-08-15 16:53:11.327 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-4 - Start completed.
+2025-08-15 16:53:11.329 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-4)']
+	Database driver: undefined/unknown
+	Database version: 17.5
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-08-15 16:53:11.354 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-08-15 16:53:11.376 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-15 16:53:11.430 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-08-15 16:53:11.431 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+2025-08-15 16:53:11.432 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
+2025-08-15 16:53:11.435 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - Started PsEmpresaApplication in 0.272 seconds (process running for 196565.708)
+2025-08-15 16:53:11.435 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-08-15 16:53:11.611 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-15 16:53:11.611 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-15 16:53:11.612 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2025-08-15 16:53:11.623 [main] INFO  c.m.p.c.EmpresaControllerTest - Started EmpresaControllerTest in 0.978 seconds (process running for 1.401)
+2025-08-15 16:53:11.661 [main] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para atualização do status da empresa com id $5f5452a8-be0d-4747-baf2-ad627821e896 para o status $ATIVO.
+2025-08-15 16:53:11.662 [main] INFO  c.m.p.controller.EmpresaController - Status da empresa com o id $5f5452a8-be0d-4747-baf2-ad627821e896 foi alterado para $ATIVO com sucesso.
+2025-08-15 16:53:11.704 [main] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para atualização do status da empresa com id $d7b4f1f5-ff7a-45f5-900c-fecaba5028cd para o status $INATIVO.
+2025-08-15 16:53:11.769 [main] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para cadastrar empresa: CNPJ=17395568000151, Razão Social=Empresa Teste, Nome Fantasia=Fantasia Teste, Telefone=41999999999, Email=teste@empresa.com, Endereco=Rua A, 123, Bloco A, Bairro Central, Cidade=Curitiba, Estado=PR, CEP=01001000
+2025-08-15 16:53:11.769 [main] INFO  c.m.p.controller.EmpresaController - Empresa cadastrada com sucesso: id=a1e69034-244f-44ea-a535-38b3ee677b6a, CNPJ=17395568000151, Status=AGUARDANDO_PAGAMENTO
+2025-08-15 16:55:38.669 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-15 16:55:38.680 [main] INFO  c.m.p.c.EmpresaControllerTest - Starting EmpresaControllerTest using Java 24.0.2 with PID 29571 (started by luishenrique in /Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa)
+2025-08-15 16:55:38.681 [main] INFO  c.m.p.c.EmpresaControllerTest - No active profile set, falling back to 1 default profile: "default"
+2025-08-15 16:55:39.412 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-15 16:55:39.412 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-15 16:55:39.412 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2025-08-15 16:55:39.424 [main] INFO  c.m.p.c.EmpresaControllerTest - Started EmpresaControllerTest in 0.936 seconds (process running for 1.367)
+2025-08-15 16:55:39.453 [main] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para atualização do status da empresa com id $d88e787c-ea94-4d12-8bb0-07169964d58b para o status $ATIVO.
+2025-08-15 16:55:39.455 [main] INFO  c.m.p.controller.EmpresaController - Status da empresa com o id $d88e787c-ea94-4d12-8bb0-07169964d58b foi alterado para $ATIVO com sucesso.
+2025-08-15 16:55:39.491 [main] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para atualização do status da empresa com id $76e9b20f-e581-4673-b009-d2be28a22423 para o status $INATIVO.
+2025-08-15 16:55:39.557 [main] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para cadastrar empresa: CNPJ=17395568000151, Razão Social=Empresa Teste, Nome Fantasia=Fantasia Teste, Telefone=41999999999, Email=teste@empresa.com, Endereco=Rua A, 123, Bloco A, Bairro Central, Cidade=Curitiba, Estado=PR, CEP=01001000
+2025-08-15 16:55:39.558 [main] INFO  c.m.p.controller.EmpresaController - Empresa cadastrada com sucesso: id=949f3f2f-edd9-4019-8067-9b527c659539, CNPJ=17395568000151, Status=AGUARDANDO_PAGAMENTO
+2025-08-15 17:20:56.070 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-08-15 17:20:56.078 [Thread-15] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-08-15 17:20:56.079 [tomcat-shutdown] INFO  o.a.coyote.http11.Http11NioProtocol - Pausing ProtocolHandler ["http-nio-8081"]
+2025-08-15 17:20:56.082 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-08-15 17:20:56.082 [Thread-15] INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8081"]
+2025-08-15 17:20:56.083 [Thread-15] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-08-15 17:20:56.084 [Thread-15] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-4 - Shutdown initiated...
+2025-08-15 17:20:56.085 [Thread-15] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-4 - Shutdown completed.
+2025-08-15 17:20:56.145 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - Starting PsEmpresaApplication using Java 24.0.2 with PID 84626 (/Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa/target/classes started by luishenrique in /Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa)
+2025-08-15 17:20:56.145 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - No active profile set, falling back to 1 default profile: "default"
+2025-08-15 17:20:56.206 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-15 17:20:56.212 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 5 ms. Found 1 JPA repository interface.
+2025-08-15 17:20:56.237 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2025-08-15 17:20:56.237 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2025-08-15 17:20:56.237 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-08-15 17:20:56.237 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.42]
+2025-08-15 17:20:56.241 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-08-15 17:20:56.241 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 95 ms
+2025-08-15 17:20:56.251 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-08-15 17:20:56.254 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-15 17:20:56.255 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-5 - Starting...
+2025-08-15 17:20:56.299 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-5 - Added connection org.postgresql.jdbc.PgConnection@2f5055a5
+2025-08-15 17:20:56.299 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-5 - Start completed.
+2025-08-15 17:20:56.302 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-5)']
+	Database driver: undefined/unknown
+	Database version: 17.5
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-08-15 17:20:56.324 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-08-15 17:20:56.346 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-15 17:20:56.399 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-08-15 17:20:56.400 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+2025-08-15 17:20:56.401 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
+2025-08-15 17:20:56.403 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - Started PsEmpresaApplication in 0.27 seconds (process running for 198230.677)
+2025-08-15 17:20:56.403 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-08-15 17:37:01.911 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 1 deletion, 0 modifications)
+2025-08-15 17:37:01.913 [Thread-19] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-08-15 17:37:01.914 [tomcat-shutdown] INFO  o.a.coyote.http11.Http11NioProtocol - Pausing ProtocolHandler ["http-nio-8081"]
+2025-08-15 17:37:01.916 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-08-15 17:37:01.916 [Thread-19] INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8081"]
+2025-08-15 17:37:01.917 [Thread-19] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-08-15 17:37:01.918 [Thread-19] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-5 - Shutdown initiated...
+2025-08-15 17:37:01.920 [Thread-19] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-5 - Shutdown completed.
+2025-08-15 17:37:01.990 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - Starting PsEmpresaApplication using Java 24.0.2 with PID 84626 (/Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa/target/classes started by luishenrique in /Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa)
+2025-08-15 17:37:01.991 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - No active profile set, falling back to 1 default profile: "default"
+2025-08-15 17:37:02.060 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-15 17:37:02.070 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 8 ms. Found 1 JPA repository interface.
+2025-08-15 17:37:02.091 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2025-08-15 17:37:02.091 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2025-08-15 17:37:02.092 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-08-15 17:37:02.092 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.42]
+2025-08-15 17:37:02.096 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-08-15 17:37:02.096 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 105 ms
+2025-08-15 17:37:02.104 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-08-15 17:37:02.108 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-15 17:37:02.108 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-6 - Starting...
+2025-08-15 17:37:02.151 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-6 - Added connection org.postgresql.jdbc.PgConnection@f777199
+2025-08-15 17:37:02.152 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-6 - Start completed.
+2025-08-15 17:37:02.154 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-6)']
+	Database driver: undefined/unknown
+	Database version: 17.5
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-08-15 17:37:02.173 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-08-15 17:37:02.191 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-15 17:37:02.238 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-08-15 17:37:02.239 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+2025-08-15 17:37:02.240 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
+2025-08-15 17:37:02.242 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - Started PsEmpresaApplication in 0.267 seconds (process running for 199196.553)
+2025-08-15 17:37:02.242 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-08-15 17:37:03.656 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (1 addition, 0 deletions, 0 modifications)
+2025-08-15 17:37:03.657 [Thread-23] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-08-15 17:37:03.658 [tomcat-shutdown] INFO  o.a.coyote.http11.Http11NioProtocol - Pausing ProtocolHandler ["http-nio-8081"]
+2025-08-15 17:37:03.660 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-08-15 17:37:03.661 [Thread-23] INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8081"]
+2025-08-15 17:37:03.662 [Thread-23] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-08-15 17:37:03.662 [Thread-23] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-6 - Shutdown initiated...
+2025-08-15 17:37:03.663 [Thread-23] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-6 - Shutdown completed.
+2025-08-15 17:37:03.716 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - Starting PsEmpresaApplication using Java 24.0.2 with PID 84626 (/Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa/target/classes started by luishenrique in /Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa)
+2025-08-15 17:37:03.716 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - No active profile set, falling back to 1 default profile: "default"
+2025-08-15 17:37:03.762 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-15 17:37:03.767 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 5 ms. Found 1 JPA repository interface.
+2025-08-15 17:37:03.786 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2025-08-15 17:37:03.786 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2025-08-15 17:37:03.786 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-08-15 17:37:03.786 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.42]
+2025-08-15 17:37:03.790 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-08-15 17:37:03.790 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 73 ms
+2025-08-15 17:37:03.798 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-08-15 17:37:03.801 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-15 17:37:03.801 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-7 - Starting...
+2025-08-15 17:37:03.843 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-7 - Added connection org.postgresql.jdbc.PgConnection@4a992a53
+2025-08-15 17:37:03.843 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-7 - Start completed.
+2025-08-15 17:37:03.845 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-7)']
+	Database driver: undefined/unknown
+	Database version: 17.5
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-08-15 17:37:03.862 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-08-15 17:37:03.874 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-15 17:37:03.919 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-08-15 17:37:03.920 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+2025-08-15 17:37:03.921 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
+2025-08-15 17:37:03.922 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - Started PsEmpresaApplication in 0.216 seconds (process running for 199198.233)
+2025-08-15 17:37:03.923 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-08-15 20:36:30.329 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-15 20:36:30.343 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - Starting PsEmpresaApplication using Java 24.0.2 with PID 59265 (/Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa/target/classes started by luishenrique in /Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa)
+2025-08-15 20:36:30.344 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - No active profile set, falling back to 1 default profile: "default"
+2025-08-15 20:36:30.360 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-08-15 20:36:30.360 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-08-15 20:36:30.677 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-15 20:36:30.712 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 24 ms. Found 1 JPA repository interface.
+2025-08-15 20:36:30.924 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2025-08-15 20:36:30.932 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2025-08-15 20:36:30.933 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-08-15 20:36:30.933 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.42]
+2025-08-15 20:36:30.950 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-08-15 20:36:30.951 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 591 ms
+2025-08-15 20:36:31.050 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.18.Final
+2025-08-15 20:36:31.062 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-08-15 20:36:31.180 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-15 20:36:31.197 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-08-15 20:36:31.267 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@2cc4f209
+2025-08-15 20:36:31.268 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-08-15 20:36:31.290 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 17.5
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-08-15 20:36:31.609 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-08-15 20:36:31.640 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-15 20:36:31.975 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-08-15 20:36:31.982 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+2025-08-15 20:36:31.989 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
+2025-08-15 20:36:32.000 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - Started PsEmpresaApplication in 1.881 seconds (process running for 2.127)
+2025-08-15 20:36:44.690 [http-nio-8081-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-08-15 20:36:44.690 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-08-15 20:36:44.691 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2025-08-15 20:36:45.072 [http-nio-8081-exec-7] INFO  o.s.api.AbstractOpenApiResource - Init duration for springdoc-openapi is: 144 ms
+2025-08-15 20:44:08.688 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-08-15 20:44:08.694 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-08-15 20:44:08.697 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-08-15 20:44:08.701 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-08-15 20:44:08.702 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-08-15 20:44:10.600 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-15 20:44:10.618 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - Starting PsEmpresaApplication using Java 24.0.2 with PID 60258 (/Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa/target/classes started by luishenrique in /Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa)
+2025-08-15 20:44:10.619 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - No active profile set, falling back to 1 default profile: "default"
+2025-08-15 20:44:10.635 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-08-15 20:44:10.635 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-08-15 20:44:10.946 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-15 20:44:10.977 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 24 ms. Found 1 JPA repository interface.
+2025-08-15 20:44:11.178 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2025-08-15 20:44:11.184 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2025-08-15 20:44:11.185 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-08-15 20:44:11.185 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.42]
+2025-08-15 20:44:11.201 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-08-15 20:44:11.202 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 566 ms
+2025-08-15 20:44:11.289 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.18.Final
+2025-08-15 20:44:11.301 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-08-15 20:44:11.411 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-15 20:44:11.427 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-08-15 20:44:11.503 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@48f493f0
+2025-08-15 20:44:11.504 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-08-15 20:44:11.530 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 17.5
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-08-15 20:44:11.853 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-08-15 20:44:11.882 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-15 20:44:12.212 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-08-15 20:44:12.218 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+2025-08-15 20:44:12.225 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
+2025-08-15 20:44:12.235 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - Started PsEmpresaApplication in 1.839 seconds (process running for 2.021)
+2025-08-15 20:44:16.767 [http-nio-8081-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-08-15 20:44:16.768 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-08-15 20:44:16.769 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2025-08-15 20:44:17.076 [http-nio-8081-exec-4] INFO  o.s.api.AbstractOpenApiResource - Init duration for springdoc-openapi is: 158 ms
+2025-08-15 20:46:18.751 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-08-15 20:46:18.758 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-08-15 20:46:18.760 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-08-15 20:46:18.763 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-08-15 20:46:18.765 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-08-15 20:46:20.389 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-15 20:46:20.405 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - Starting PsEmpresaApplication using Java 24.0.2 with PID 60556 (/Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa/target/classes started by luishenrique in /Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa)
+2025-08-15 20:46:20.405 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - No active profile set, falling back to 1 default profile: "default"
+2025-08-15 20:46:20.421 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-08-15 20:46:20.421 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-08-15 20:46:20.729 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-15 20:46:20.759 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 23 ms. Found 1 JPA repository interface.
+2025-08-15 20:46:20.969 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2025-08-15 20:46:20.975 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2025-08-15 20:46:20.976 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-08-15 20:46:20.976 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.42]
+2025-08-15 20:46:20.992 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-08-15 20:46:20.993 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 571 ms
+2025-08-15 20:46:21.079 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.18.Final
+2025-08-15 20:46:21.090 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-08-15 20:46:21.188 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-15 20:46:21.209 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-08-15 20:46:21.297 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@48f493f0
+2025-08-15 20:46:21.298 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-08-15 20:46:21.320 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 17.5
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-08-15 20:46:21.626 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-08-15 20:46:21.662 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-15 20:46:21.994 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-08-15 20:46:22.000 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+2025-08-15 20:46:22.006 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
+2025-08-15 20:46:22.014 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - Started PsEmpresaApplication in 1.84 seconds (process running for 2.025)
+2025-08-15 20:46:25.514 [http-nio-8081-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-08-15 20:46:25.514 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-08-15 20:46:25.515 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2025-08-15 20:47:26.053 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-08-15 20:47:26.059 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-08-15 20:47:26.062 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-08-15 20:47:26.065 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-08-15 20:47:26.067 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-08-15 20:47:27.639 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-15 20:47:27.659 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - Starting PsEmpresaApplication using Java 24.0.2 with PID 60721 (/Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa/target/classes started by luishenrique in /Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa)
+2025-08-15 20:47:27.660 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - No active profile set, falling back to 1 default profile: "default"
+2025-08-15 20:47:27.677 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-08-15 20:47:27.677 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-08-15 20:47:27.989 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-15 20:47:28.019 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 24 ms. Found 1 JPA repository interface.
+2025-08-15 20:47:28.220 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2025-08-15 20:47:28.226 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2025-08-15 20:47:28.227 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-08-15 20:47:28.227 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.42]
+2025-08-15 20:47:28.244 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-08-15 20:47:28.244 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 567 ms
+2025-08-15 20:47:28.337 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.18.Final
+2025-08-15 20:47:28.348 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-08-15 20:47:28.446 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-15 20:47:28.460 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-08-15 20:47:28.533 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@20ae3318
+2025-08-15 20:47:28.533 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-08-15 20:47:28.552 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 17.5
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-08-15 20:47:28.850 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-08-15 20:47:28.884 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-15 20:47:29.247 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-08-15 20:47:29.253 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+2025-08-15 20:47:29.260 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
+2025-08-15 20:47:29.270 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - Started PsEmpresaApplication in 1.833 seconds (process running for 2.015)
+2025-08-15 20:47:35.383 [http-nio-8081-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-08-15 20:47:35.383 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-08-15 20:47:35.385 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+2025-08-15 20:47:37.521 [http-nio-8081-exec-5] INFO  o.s.api.AbstractOpenApiResource - Init duration for springdoc-openapi is: 155 ms
+2025-08-15 20:48:58.643 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-08-15 20:48:58.648 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-08-15 20:48:58.659 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-08-15 20:48:58.662 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-08-15 20:48:58.663 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-08-15 20:49:00.400 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-15 20:49:00.416 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - Starting PsEmpresaApplication using Java 24.0.2 with PID 61015 (/Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa/target/classes started by luishenrique in /Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa)
+2025-08-15 20:49:00.416 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - No active profile set, falling back to 1 default profile: "default"
+2025-08-15 20:49:00.432 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-08-15 20:49:00.432 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-08-15 20:49:00.749 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-15 20:49:00.777 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 19 ms. Found 1 JPA repository interface.
+2025-08-15 20:49:00.987 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2025-08-15 20:49:00.993 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2025-08-15 20:49:00.994 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-08-15 20:49:00.994 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.42]
+2025-08-15 20:49:01.012 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-08-15 20:49:01.013 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 579 ms
+2025-08-15 20:49:01.108 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.18.Final
+2025-08-15 20:49:01.119 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-08-15 20:49:01.224 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-15 20:49:01.237 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-08-15 20:49:01.307 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@918bd74
+2025-08-15 20:49:01.307 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-08-15 20:49:01.325 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 17.5
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-08-15 20:49:01.620 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-08-15 20:49:01.654 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-15 20:49:01.992 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-08-15 20:49:01.998 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+2025-08-15 20:49:02.004 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
+2025-08-15 20:49:02.012 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - Started PsEmpresaApplication in 1.824 seconds (process running for 2.012)
+2025-08-15 20:49:04.659 [http-nio-8081-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-08-15 20:49:04.660 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-08-15 20:49:04.661 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2025-08-15 20:49:09.140 [http-nio-8081-exec-5] INFO  o.s.api.AbstractOpenApiResource - Init duration for springdoc-openapi is: 223 ms
+2025-08-15 21:08:25.823 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-08-15 21:08:25.829 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-08-15 21:08:25.834 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-08-15 21:08:25.837 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-08-15 21:08:25.838 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-08-15 21:08:27.843 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-15 21:08:27.866 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - Starting PsEmpresaApplication using Java 24.0.2 with PID 63717 (/Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa/target/classes started by luishenrique in /Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa)
+2025-08-15 21:08:27.866 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - No active profile set, falling back to 1 default profile: "default"
+2025-08-15 21:08:27.885 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-08-15 21:08:27.885 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-08-15 21:08:28.205 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-15 21:08:28.233 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 21 ms. Found 1 JPA repository interface.
+2025-08-15 21:08:28.434 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2025-08-15 21:08:28.440 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2025-08-15 21:08:28.441 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-08-15 21:08:28.441 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.42]
+2025-08-15 21:08:28.457 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-08-15 21:08:28.458 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 573 ms
+2025-08-15 21:08:28.550 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.18.Final
+2025-08-15 21:08:28.560 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-08-15 21:08:28.658 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-15 21:08:28.672 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-08-15 21:08:28.741 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@2d15ddfc
+2025-08-15 21:08:28.741 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-08-15 21:08:28.759 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 17.5
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-08-15 21:08:29.055 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-08-15 21:08:29.098 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-15 21:08:29.467 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-08-15 21:08:29.473 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+2025-08-15 21:08:29.480 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
+2025-08-15 21:08:29.488 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - Started PsEmpresaApplication in 1.872 seconds (process running for 2.097)
+2025-08-15 21:08:39.742 [http-nio-8081-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-08-15 21:08:39.742 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-08-15 21:08:39.743 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2025-08-15 21:08:40.073 [http-nio-8081-exec-4] INFO  o.s.api.AbstractOpenApiResource - Init duration for springdoc-openapi is: 179 ms
+2025-08-15 21:15:12.746 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-08-15 21:15:12.753 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-08-15 21:15:12.757 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-08-15 21:15:12.760 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-08-15 21:15:12.761 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

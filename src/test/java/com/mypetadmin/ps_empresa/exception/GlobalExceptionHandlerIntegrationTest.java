@@ -135,4 +135,38 @@ public class GlobalExceptionHandlerIntegrationTest {
                 .andExpect(status().isInternalServerError())
                 .andExpect(content().string(containsString("Erro interno no servidor. Tente novamente mais tarde.")));
     }
+
+    @Test
+    public void testCadastroEmpresa_CnpjInvalidException() throws Exception {
+        EmpresaRequestDTO dto = createValidEmpresaRequest();
+
+        Mockito.when(empresaService.cadastrarEmpresa(any(EmpresaRequestDTO.class)))
+                .thenThrow(new CnpjInvalidException("CNPJ inválido."));
+
+        mockMvc.perform(post("/empresas/createEmpresas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("CNPJ inválido."));
+    }
+
+    @Test
+    public void testCadastroEmpresa_MethodArgumentNotValidException() throws Exception {
+        EmpresaRequestDTO dto = createValidEmpresaRequest();
+        dto.setEmail("email-invalido");
+
+        mockMvc.perform(post("/empresas/createEmpresas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.email").value("Email inválido: deve ter ao menos 3 caracteres antes do @ e um domínio válido (ex: .com, .org)"));
+    }
+
+    @Test
+    public void testCadastroEmpresa_MissingServletRequestParameterException() throws Exception {
+        mockMvc.perform(post("/empresas/createEmpresas")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("Corpo da requisição ausente ou inválido."));
+    }
 }
