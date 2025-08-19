@@ -118,4 +118,16 @@ public class EmpresaController {
         EmpresaResponseDTO dto = empresaService.getEmpresaById(id);
         return ResponseEntity.ok(dto);
     }
+
+    @Operation(summary = "Exclui a empresa pelo id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "empresa excluida com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Não foi encontrado a empresa com o id informado")
+    })
+    @DeleteMapping("excluirEmpresa/{id}")
+    public ResponseEntity<Void> deleteEmpresaById(@PathVariable UUID id) {
+        log.info("Buscando empresa com id {} para excluir.", id);
+        empresaService.deleteEmpresaById(id);
+        return ResponseEntity.noContent().build();
+    }
 }

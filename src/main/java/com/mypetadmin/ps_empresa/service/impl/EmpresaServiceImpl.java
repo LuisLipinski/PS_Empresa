@@ -126,4 +126,11 @@ public class EmpresaServiceImpl implements EmpresaService {
         log.info("Empresa com o id {} foi encontrada com sucesso", id);
         return mapper.toResponseDto(empresa);
     }
+
+    public void deleteEmpresaById(UUID id) {
+        Empresa empresa = empresaRepository.findById(id)
+                .orElseThrow(() -> new EmpresaNaoEncontradaException("Empresa não encontrada com o id: " + id));
+        empresaRepository.delete(empresa);
+        log.info("Empresa com o id {} foi excluida com sucesso", id);
+    }
 }
