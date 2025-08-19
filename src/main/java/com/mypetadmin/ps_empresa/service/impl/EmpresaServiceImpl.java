@@ -2,6 +2,7 @@ package com.mypetadmin.ps_empresa.service.impl;
 
 import com.mypetadmin.ps_empresa.dto.EmpresaRequestDTO;
 import com.mypetadmin.ps_empresa.dto.EmpresaResponseDTO;
+import com.mypetadmin.ps_empresa.dto.UpdateEmpresaRequestDto;
 import com.mypetadmin.ps_empresa.enums.DirectionField;
 import com.mypetadmin.ps_empresa.enums.SortField;
 import com.mypetadmin.ps_empresa.enums.StatusEmpresa;
@@ -11,6 +12,7 @@ import com.mypetadmin.ps_empresa.exception.EmpresaExistenteException;
 import com.mypetadmin.ps_empresa.exception.EmpresaNaoEncontradaException;
 import com.mypetadmin.ps_empresa.helper.EmpresaSpecification;
 import com.mypetadmin.ps_empresa.mapper.EmpresaMapper;
+import com.mypetadmin.ps_empresa.mapper.EmpresaUpdateMapper;
 import com.mypetadmin.ps_empresa.model.Empresa;
 import com.mypetadmin.ps_empresa.repository.EmpresaRepository;
 import com.mypetadmin.ps_empresa.service.EmpresaService;
@@ -132,5 +134,26 @@ public class EmpresaServiceImpl implements EmpresaService {
                 .orElseThrow(() -> new EmpresaNaoEncontradaException("Empresa não encontrada com o id: " + id));
         empresaRepository.delete(empresa);
         log.info("Empresa com o id {} foi excluida com sucesso", id);
+    }
+    @Override
+    @Transactional
+    public EmpresaResponseDTO editEmpresaById(UUID empresaId, UpdateEmpresaRequestDto updateEmpresa) {
+        log.info("buscando a empresa com o id " + empresaId);
+        Empresa empresa = empresaRepository.findById(empresaId)
+                .orElseThrow(() -> new EmpresaNaoEncontradaException("Empresa não encontrada com o id: " + empresaId));
+        try {
+            log.info("Atualizando a empresa {} com os dados fornecidos", empresaId);
+
+            EmpresaUpdateMapper.updateEntityFromDto(empresa, updateEmpresa);
+
+            log.info("Salvando os dados no banco de dados");
+            Empresa empresaAtualizada = empresaRepository.save(empresa);
+            log.info("Empresa {} atualizada com sucesso.", empresaId);
+
+            return mapper.toResponseDto(empresaAtualizada);
+        } catch (Exception e) {
+            log.error("Falha ao editar a empresa: {}", e.getMessage());
+            throw e;
+        }
     }
 }

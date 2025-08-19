@@ -2,6 +2,7 @@ package com.mypetadmin.ps_empresa.service;
 
 import com.mypetadmin.ps_empresa.dto.EmpresaRequestDTO;
 import com.mypetadmin.ps_empresa.dto.EmpresaResponseDTO;
+import com.mypetadmin.ps_empresa.dto.UpdateEmpresaRequestDto;
 import com.mypetadmin.ps_empresa.enums.DirectionField;
 import com.mypetadmin.ps_empresa.enums.SortField;
 import com.mypetadmin.ps_empresa.enums.StatusEmpresa;
@@ -20,4 +21,6 @@ public interface EmpresaService {
     EmpresaResponseDTO getEmpresaById(UUID id);
 
     void deleteEmpresaById(UUID id);
+
+    EmpresaResponseDTO editEmpresaById(UUID empresaId, UpdateEmpresaRequestDto updateEmpresa);
 }

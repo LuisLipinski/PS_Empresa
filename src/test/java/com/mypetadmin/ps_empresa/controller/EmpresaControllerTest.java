@@ -3,6 +3,7 @@ package com.mypetadmin.ps_empresa.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mypetadmin.ps_empresa.dto.EmpresaRequestDTO;
 import com.mypetadmin.ps_empresa.dto.EmpresaResponseDTO;
+import com.mypetadmin.ps_empresa.dto.UpdateEmpresaRequestDto;
 import com.mypetadmin.ps_empresa.enums.StatusEmpresa;
 import com.mypetadmin.ps_empresa.exception.EmpresaNaoEncontradaException;
 import com.mypetadmin.ps_empresa.service.EmpresaService;
@@ -212,6 +213,88 @@ public class EmpresaControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.error").value("Empresa não encontrada com o id: " + empresaId));
     }
+
+    @Test
+    void editEmpresaById_quandoDadosValidos_entaoRetorna200() throws Exception {
+        UUID empresaId = UUID.randomUUID();
+
+        UpdateEmpresaRequestDto updateDto = new UpdateEmpresaRequestDto();
+        updateDto.setNomeFantasia("PetShop Atualizado");
+        updateDto.setTelefone("41999999999");
+        updateDto.setEmail("novoemail@teste.com");
+        updateDto.setRua("Rua Nova");
+        updateDto.setNumero("123");
+        updateDto.setComplemento("Sala 2");
+        updateDto.setBairro("Centro");
+        updateDto.setCidade("Curitiba");
+        updateDto.setEstado("PR");
+        updateDto.setCep("80000000");
+
+        EmpresaResponseDTO responseDto = new EmpresaResponseDTO(
+                empresaId,
+                "12345678000199",
+                "Razão Social LTDA",
+                "PetShop Atualizado",
+                "41999999999",
+                "novoemail@teste.com",
+                "João",
+                "80000000",
+                "Curitiba",
+                "PR",
+                "Rua Nova, 123 - Sala 2, Centro",
+                StatusEmpresa.ATIVO
+        );
+
+        when(empresaService.editEmpresaById(eq(empresaId), any(UpdateEmpresaRequestDto.class)))
+                .thenReturn(responseDto);
+
+        mockMvc.perform(put("/empresas/editEmpresa/{id}", empresaId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateDto)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(empresaId.toString()))
+                .andExpect(jsonPath("$.nomeFantasia").value("PetShop Atualizado"))
+                .andExpect(jsonPath("$.telefone").value("41999999999"))
+                .andExpect(jsonPath("$.email").value("novoemail@teste.com"))
+                .andExpect(jsonPath("$.endereco").value("Rua Nova, 123 - Sala 2, Centro"));
+    }
+
+    @Test
+    void editEmpresaById_quandoEmpresaNaoEncontrada_entaoRetorna404() throws Exception {
+        UUID empresaId = UUID.randomUUID();
+
+        UpdateEmpresaRequestDto updateDto = new UpdateEmpresaRequestDto();
+        updateDto.setNomeFantasia("Nome qualquer");
+
+        when(empresaService.editEmpresaById(eq(empresaId), any(UpdateEmpresaRequestDto.class)))
+                .thenThrow(new EmpresaNaoEncontradaException("Empresa não encontrada"));
+
+        mockMvc.perform(put("/empresas/editEmpresa/{id}", empresaId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateDto)))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.error").value("Empresa não encontrada"));
+    }
+
+    @Test
+    void editEmpresaById_quandoRequestBodyNulo_entaoAceitaERetorna200() throws Exception {
+        UUID empresaId = UUID.randomUUID();
+
+        EmpresaResponseDTO responseDto = new EmpresaResponseDTO();
+        responseDto.setId(empresaId);
+        responseDto.setNomeFantasia("Empresa Existente");
+        responseDto.setStatus(StatusEmpresa.ATIVO);
+
+        when(empresaService.editEmpresaById(eq(empresaId), any(UpdateEmpresaRequestDto.class)))
+                .thenReturn(responseDto);
+
+        mockMvc.perform(put("/empresas/editEmpresa/{id}", empresaId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(empresaId.toString()))
+                .andExpect(jsonPath("$.nomeFantasia").value("Empresa Existente"));
+    }
+
 
 
 }

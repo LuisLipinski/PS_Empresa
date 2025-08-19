@@ -2,6 +2,7 @@ package com.mypetadmin.ps_empresa.service.impl;
 
 import com.mypetadmin.ps_empresa.dto.EmpresaRequestDTO;
 import com.mypetadmin.ps_empresa.dto.EmpresaResponseDTO;
+import com.mypetadmin.ps_empresa.dto.UpdateEmpresaRequestDto;
 import com.mypetadmin.ps_empresa.enums.DirectionField;
 import com.mypetadmin.ps_empresa.enums.SortField;
 import com.mypetadmin.ps_empresa.enums.StatusEmpresa;
@@ -276,5 +277,61 @@ class EmpresaServiceImplTest {
         verify(empresaRepository, times(1)).findById(id);
         verify(empresaRepository, never()).delete(any(Empresa.class));
     }
+
+    @Test
+    void editEmpresaById_quandoEmpresaExiste_entaoAtualizaComSucesso() {
+        UUID empresaId = entity.getId();
+
+        UpdateEmpresaRequestDto updateDto = new UpdateEmpresaRequestDto();
+        updateDto.setNomeFantasia("Novo Nome");
+        updateDto.setEmail("novo@email.com");
+
+        when(empresaRepository.findById(empresaId)).thenReturn(Optional.of(entity));
+        when(empresaRepository.save(any(Empresa.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(mapper.toResponseDto(any(Empresa.class))).thenReturn(response);
+
+        EmpresaResponseDTO resultado = empresaService.editEmpresaById(empresaId, updateDto);
+
+        assertThat(resultado).isNotNull();
+        assertThat(resultado.getId()).isEqualTo(entity.getId());
+
+        verify(empresaRepository).findById(empresaId);
+        verify(empresaRepository).save(entity);
+        verify(mapper).toResponseDto(entity);
+    }
+
+    @Test
+    void editEmpresaById_quandoEmpresaNaoExiste_entaoLancaExcecao() {
+        UUID empresaId = UUID.randomUUID();
+        UpdateEmpresaRequestDto updateDto = new UpdateEmpresaRequestDto();
+
+        when(empresaRepository.findById(empresaId)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> empresaService.editEmpresaById(empresaId, updateDto))
+                .isInstanceOf(EmpresaNaoEncontradaException.class)
+                .hasMessageContaining("Empresa não encontrada com o id: " + empresaId);
+
+        verify(empresaRepository).findById(empresaId);
+        verify(empresaRepository, never()).save(any());
+        verify(mapper, never()).toResponseDto(any());
+    }
+
+    @Test
+    void editEmpresaById_quandoFalhaAoSalvar_entaoPropagaExcecao() {
+        UUID empresaId = entity.getId();
+        UpdateEmpresaRequestDto updateDto = new UpdateEmpresaRequestDto();
+
+        when(empresaRepository.findById(empresaId)).thenReturn(Optional.of(entity));
+        when(empresaRepository.save(any(Empresa.class))).thenThrow(new RuntimeException("Erro ao salvar"));
+
+        assertThatThrownBy(() -> empresaService.editEmpresaById(empresaId, updateDto))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessageContaining("Erro ao salvar");
+
+        verify(empresaRepository).findById(empresaId);
+        verify(empresaRepository).save(entity);
+        verify(mapper, never()).toResponseDto(any());
+    }
+
 
 }
