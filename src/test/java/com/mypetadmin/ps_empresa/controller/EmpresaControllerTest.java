@@ -189,4 +189,29 @@ public class EmpresaControllerTest {
                 .andExpect(jsonPath("$.error").value("Empresa não encontrada"));
     }
 
+    @Test
+    void deleteEmpresaById_sucesso() throws Exception {
+        UUID empresaId = UUID.randomUUID();
+
+        Mockito.doNothing().when(empresaService).deleteEmpresaById(empresaId);
+
+        mockMvc.perform(delete("/empresas/excluirEmpresa/{id}", empresaId.toString())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent()); // 204
+    }
+
+    @Test
+    void deleteEmpresaById_naoEncontrada_retorna404() throws Exception {
+        UUID empresaId = UUID.randomUUID();
+
+        Mockito.doThrow(new EmpresaNaoEncontradaException("Empresa não encontrada com o id: " + empresaId))
+                .when(empresaService).deleteEmpresaById(empresaId);
+
+        mockMvc.perform(delete("/empresas/excluirEmpresa/{id}", empresaId.toString())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.error").value("Empresa não encontrada com o id: " + empresaId));
+    }
+
+
 }

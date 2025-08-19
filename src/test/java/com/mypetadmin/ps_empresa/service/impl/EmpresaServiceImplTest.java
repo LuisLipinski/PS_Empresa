@@ -248,4 +248,33 @@ class EmpresaServiceImplTest {
         verify(mapper, never()).toResponseDto(any());
     }
 
+    @Test
+    void deleteEmpresaById_quandoEmpresaExiste_entaoDeletaComSucesso() {
+
+        UUID id = UUID.randomUUID();
+        Empresa empresa = new Empresa();
+        empresa.setId(id);
+
+        when(empresaRepository.findById(id)).thenReturn(Optional.of(empresa));
+
+        empresaService.deleteEmpresaById(id);
+
+        verify(empresaRepository, times(1)).findById(id);
+        verify(empresaRepository, times(1)).delete(empresa);
+    }
+
+    @Test
+    void deleteEmpresaById_quandoEmpresaNaoExiste_entaoLancaExcecao() {
+
+        UUID id = UUID.randomUUID();
+        when(empresaRepository.findById(id)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> empresaService.deleteEmpresaById(id))
+                .isInstanceOf(EmpresaNaoEncontradaException.class)
+                .hasMessageContaining("Empresa não encontrada com o id: " + id);
+
+        verify(empresaRepository, times(1)).findById(id);
+        verify(empresaRepository, never()).delete(any(Empresa.class));
+    }
+
 }

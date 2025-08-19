@@ -18,4 +18,6 @@ public interface EmpresaService {
     List<EmpresaResponseDTO> getAllEmpresaSorted(String documentNumber, String razaoSocial, String email, StatusEmpresa status, SortField sortField, DirectionField directionField);
 
     EmpresaResponseDTO getEmpresaById(UUID id);
+
+    void deleteEmpresaById(UUID id);
 }
