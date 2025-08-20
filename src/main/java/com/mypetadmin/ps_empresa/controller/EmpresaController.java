@@ -1,9 +1,6 @@
 package com.mypetadmin.ps_empresa.controller;
 
-import com.mypetadmin.ps_empresa.dto.AtualizacaoStatusRequestDTO;
-import com.mypetadmin.ps_empresa.dto.AtualizacaoStatusResponseDTO;
-import com.mypetadmin.ps_empresa.dto.EmpresaRequestDTO;
-import com.mypetadmin.ps_empresa.dto.EmpresaResponseDTO;
+import com.mypetadmin.ps_empresa.dto.*;
 import com.mypetadmin.ps_empresa.enums.DirectionField;
 import com.mypetadmin.ps_empresa.enums.SortField;
 import com.mypetadmin.ps_empresa.enums.StatusEmpresa;
@@ -66,7 +63,8 @@ public class EmpresaController {
     @Operation(summary = "Atualiza o status de uma empresa sem a necessidade de token")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Status atualizado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Requisição invalida")
+            @ApiResponse(responseCode = "400", description = "Requisição invalida"),
+            @ApiResponse(responseCode = "404", description = "Empresa não encontrada")
     })
     @PutMapping("/atualizarStatus")
     public ResponseEntity<AtualizacaoStatusResponseDTO> atualizarStatus(@RequestParam @Valid UUID empresaId,
@@ -129,5 +127,31 @@ public class EmpresaController {
         log.info("Buscando empresa com id {} para excluir.", id);
         empresaService.deleteEmpresaById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Atualiza os dados de uma empresa")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Empresa atualizado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição invalida"),
+            @ApiResponse(responseCode = "404", description = "Empresa não encontrada")
+    })
+    @PutMapping("editEmpresa/{id}")
+    public ResponseEntity<EmpresaResponseDTO> editEmpresaById(@PathVariable("id") UUID empresaId, @RequestBody(required = false) UpdateEmpresaRequestDto updateEmpresa) {
+
+        log.info("Recebendo requisição para editar empresa com id {}", empresaId);
+
+        if (updateEmpresa == null) {
+            updateEmpresa = new UpdateEmpresaRequestDto();
+        }
+
+        try {
+
+            EmpresaResponseDTO empresaAtualizada = empresaService.editEmpresaById(empresaId, updateEmpresa);
+            log.info("Empresa com o id {} foi atualizado com sucesso", empresaId);
+            return ResponseEntity.ok(empresaAtualizada);
+        } catch (Exception e) {
+            log.error("Error ao atualizar empresa: {}", e.getMessage(), e);
+            throw e;
+        }
     }
 }
