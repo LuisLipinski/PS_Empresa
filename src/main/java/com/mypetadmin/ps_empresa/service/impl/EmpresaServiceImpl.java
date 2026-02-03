@@ -1,5 +1,6 @@
 package com.mypetadmin.ps_empresa.service.impl;
 
+import com.mypetadmin.ps_empresa.cliente.ContratoClient;
 import com.mypetadmin.ps_empresa.dto.EmpresaRequestDTO;
 import com.mypetadmin.ps_empresa.dto.EmpresaResponseDTO;
 import com.mypetadmin.ps_empresa.dto.UpdateEmpresaRequestDto;
@@ -37,6 +38,7 @@ public class EmpresaServiceImpl implements EmpresaService {
 
     private final EmpresaRepository empresaRepository;
     private final EmpresaMapper mapper;
+    private final ContratoClient contratoClient;
 
     @Override
     public EmpresaResponseDTO cadastrarEmpresa(EmpresaRequestDTO dto) {
@@ -69,6 +71,14 @@ public class EmpresaServiceImpl implements EmpresaService {
         Objects.requireNonNull(novoStatus, "Novo status não pode ser nulo");
         Empresa empresa = empresaRepository.findById(empresaId)
                 .orElseThrow(() -> new EmpresaNaoEncontradaException("Empresa não encontrada"));
+
+        if (empresa.getStatus() == StatusEmpresa.AGUARDANDO_PAGAMENTO && novoStatus == StatusEmpresa.ATIVO) {
+            boolean possuiContratoAtivo = contratoClient.empresaPossuiContratoAtivo(empresaId);
+
+            if (!possuiContratoAtivo) {
+                throw new IllegalArgumentException("Empresa só pode ser ativada quando houver contrato ativo");
+            }
+        }
 
         if (!empresa.getStatus().equals(novoStatus)) {
             empresa.setStatus(novoStatus);
@@ -132,8 +142,9 @@ public class EmpresaServiceImpl implements EmpresaService {
     public void deleteEmpresaById(UUID id) {
         Empresa empresa = empresaRepository.findById(id)
                 .orElseThrow(() -> new EmpresaNaoEncontradaException("Empresa não encontrada com o id: " + id));
-        empresaRepository.delete(empresa);
-        log.info("Empresa com o id {} foi excluida com sucesso", id);
+        empresa.setStatus(StatusEmpresa.INATIVO);
+        empresa.setDataAtualizacaoStatus(LocalDateTime.now());
+        log.info("Empresa com o id {} foi marcada como INATIVA", id);
     }
     @Override
     @Transactional
@@ -154,6 +165,22 @@ public class EmpresaServiceImpl implements EmpresaService {
         } catch (Exception e) {
             log.error("Falha ao editar a empresa: {}", e.getMessage());
             throw e;
+        }
+    }
+
+    @Transactional
+    public void ativarEmpresaPorContrato(UUID empresaId) {
+        Empresa empresa = empresaRepository.findById(empresaId)
+                .orElseThrow(() -> new EmpresaNaoEncontradaException("Empresa não encontrada"));
+        boolean contratoAtivo = contratoClient.empresaPossuiContratoAtivo(empresaId);
+
+        if (!contratoAtivo) {
+            throw new IllegalStateException("Tentativa de ativar empresa sem contrato ativo. empresaId=" + empresaId);
+        }
+
+        if (!empresa.getStatus().equals(StatusEmpresa.ATIVO)) {
+            empresa.setStatus(StatusEmpresa.ATIVO);
+            empresa.setDataAtualizacaoStatus(LocalDateTime.now());
         }
     }
 }

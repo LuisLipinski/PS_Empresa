@@ -67,13 +67,12 @@ public class EmpresaController {
             @ApiResponse(responseCode = "404", description = "Empresa não encontrada")
     })
     @PutMapping("/atualizarStatus")
-    public ResponseEntity<AtualizacaoStatusResponseDTO> atualizarStatus(@RequestParam @Valid UUID empresaId,
-                                                                        @RequestParam @Valid StatusEmpresa novoStatus) {
-        log.info("Recebendo requisição para atualização do status da empresa com id ${} para o status ${}.", empresaId, novoStatus);
+    public ResponseEntity<AtualizacaoStatusResponseDTO> atualizarStatus(@Valid @RequestBody AtualizacaoStatusRequestDTO request) {
+        log.info("Recebendo requisição para atualização do status da empresa com id ${} para o status ${}.", request.getEmpresaId(), request.getNovoStatus());
 
         try {
-            empresaService.atualizarStatus(empresaId, novoStatus);
-            log.info("Status da empresa com o id ${} foi alterado para ${} com sucesso.", empresaId, novoStatus);
+            empresaService.atualizarStatus(request.getEmpresaId(), request.getNovoStatus());
+            log.info("Status da empresa com o id ${} foi alterado para ${} com sucesso.", request.getEmpresaId(), request.getNovoStatus());
             AtualizacaoStatusResponseDTO response = AtualizacaoStatusResponseDTO.builder()
                     .message("Status atualizado com sucesso")
                     .statusCode(HttpStatus.OK.value())
@@ -153,5 +152,11 @@ public class EmpresaController {
             log.error("Error ao atualizar empresa: {}", e.getMessage(), e);
             throw e;
         }
+    }
+
+    @PutMapping("/internal/{empresaId}/ativar")
+    public ResponseEntity<Void> ativarEmpresa(@PathVariable UUID empresaId) {
+        empresaService.ativarEmpresaPorContrato(empresaId);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -23,4 +23,6 @@ public interface EmpresaService {
     void deleteEmpresaById(UUID id);
 
     EmpresaResponseDTO editEmpresaById(UUID empresaId, UpdateEmpresaRequestDto updateEmpresa);
+
+    void ativarEmpresaPorContrato(UUID empresaId);
 }

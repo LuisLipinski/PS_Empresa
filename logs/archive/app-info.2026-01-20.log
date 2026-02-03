@@ -1,0 +1,135 @@
+2026-01-20 20:44:49.187 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2026-01-20 20:44:49.208 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - Starting PsEmpresaApplication using Java 24.0.2 with PID 78644 (/Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa/target/classes started by luishenrique in /Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa)
+2026-01-20 20:44:49.210 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - No active profile set, falling back to 1 default profile: "default"
+2026-01-20 20:44:49.231 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-01-20 20:44:49.231 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-01-20 20:44:49.648 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-01-20 20:44:49.680 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 25 ms. Found 1 JPA repository interface.
+2026-01-20 20:44:49.780 [restartedMain] INFO  o.s.cloud.context.scope.GenericScope - BeanFactory id=5f61555d-09ea-3e8f-9ca4-5129f4e235dc
+2026-01-20 20:44:50.011 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2026-01-20 20:44:50.018 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2026-01-20 20:44:50.019 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-01-20 20:44:50.019 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.43]
+2026-01-20 20:44:50.039 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-01-20 20:44:50.040 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 809 ms
+2026-01-20 20:44:50.145 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.22.Final
+2026-01-20 20:44:50.161 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-01-20 20:44:50.274 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-01-20 20:44:50.291 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-01-20 20:44:50.381 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@597b191d
+2026-01-20 20:44:50.381 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-01-20 20:44:50.406 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 17.6
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-01-20 20:44:50.743 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-01-20 20:44:50.784 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-01-20 20:44:50.991 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-01-20 20:44:51.257 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-01-20 20:44:51.258 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-01-20 20:44:51.260 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-01-20 20:44:51.261 [restartedMain] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
+2026-01-20 20:45:55.802 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2026-01-20 20:45:55.827 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - Starting PsEmpresaApplication using Java 24.0.2 with PID 78844 (/Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa/target/classes started by luishenrique in /Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa)
+2026-01-20 20:45:55.828 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - No active profile set, falling back to 1 default profile: "default"
+2026-01-20 20:45:55.853 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-01-20 20:45:55.853 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-01-20 20:45:56.310 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-01-20 20:45:56.340 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 23 ms. Found 1 JPA repository interface.
+2026-01-20 20:45:56.429 [restartedMain] INFO  o.s.cloud.context.scope.GenericScope - BeanFactory id=5f61555d-09ea-3e8f-9ca4-5129f4e235dc
+2026-01-20 20:45:56.662 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2026-01-20 20:45:56.668 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2026-01-20 20:45:56.669 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-01-20 20:45:56.669 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.43]
+2026-01-20 20:45:56.689 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-01-20 20:45:56.690 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 836 ms
+2026-01-20 20:45:56.794 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.22.Final
+2026-01-20 20:45:56.813 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-01-20 20:45:56.928 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-01-20 20:45:56.942 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-01-20 20:45:57.033 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@dd65c77
+2026-01-20 20:45:57.034 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-01-20 20:45:57.061 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 17.6
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-01-20 20:45:57.454 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-01-20 20:45:57.485 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-01-20 20:45:58.107 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-01-20 20:45:58.109 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-01-20 20:45:58.110 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-01-20 20:45:58.111 [restartedMain] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
+2026-01-20 20:53:26.295 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2026-01-20 20:53:26.311 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - Starting PsEmpresaApplication using Java 24.0.2 with PID 79932 (/Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa/target/classes started by luishenrique in /Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa)
+2026-01-20 20:53:26.311 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - No active profile set, falling back to 1 default profile: "default"
+2026-01-20 20:53:26.328 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-01-20 20:53:26.328 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-01-20 20:53:26.667 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-01-20 20:53:26.697 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 24 ms. Found 1 JPA repository interface.
+2026-01-20 20:53:26.771 [restartedMain] INFO  o.s.cloud.context.scope.GenericScope - BeanFactory id=5f61555d-09ea-3e8f-9ca4-5129f4e235dc
+2026-01-20 20:53:26.969 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2026-01-20 20:53:26.975 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2026-01-20 20:53:26.976 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-01-20 20:53:26.977 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.43]
+2026-01-20 20:53:26.997 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-01-20 20:53:26.998 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 669 ms
+2026-01-20 20:53:27.095 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.22.Final
+2026-01-20 20:53:27.106 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-01-20 20:53:27.202 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-01-20 20:53:27.220 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-01-20 20:53:27.308 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@da23cde
+2026-01-20 20:53:27.308 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-01-20 20:53:27.328 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 17.6
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-01-20 20:53:27.662 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-01-20 20:53:27.696 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-01-20 20:53:28.129 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+2026-01-20 20:53:28.138 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
+2026-01-20 20:53:28.153 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - Started PsEmpresaApplication in 2.089 seconds (process running for 2.429)
+2026-01-20 20:55:20.029 [http-nio-8081-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-01-20 20:55:20.031 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-01-20 20:55:20.046 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 15 ms
+2026-01-20 20:55:20.520 [http-nio-8081-exec-9] INFO  o.s.api.AbstractOpenApiResource - Init duration for springdoc-openapi is: 209 ms
+2026-01-20 21:00:45.881 [http-nio-8081-exec-5] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para cadastrar empresa: CNPJ=53432522000129, Razão Social=Teste empresa, Nome Fantasia=Teste, Telefone=41999999999, Email=lhlipinski@gmail.com, Endereco=Rua Exemplo, 123, Bloco 05, Bairro Exemplo, Cidade=Curitiba, Estado=PR, CEP=99999999
+2026-01-20 21:00:45.992 [http-nio-8081-exec-5] INFO  c.m.p.s.impl.EmpresaServiceImpl - Empresa salva no banco com ID: e6d157c1-1c15-4042-831d-13d8bed375a7
+2026-01-20 21:00:45.992 [http-nio-8081-exec-5] INFO  c.m.p.controller.EmpresaController - Empresa cadastrada com sucesso: id=e6d157c1-1c15-4042-831d-13d8bed375a7, CNPJ=53432522000129, Status=AGUARDANDO_PAGAMENTO
+2026-01-20 21:01:12.678 [http-nio-8081-exec-4] INFO  c.m.p.controller.EmpresaController - Iniciado a busca pela empresa com id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+2026-01-20 21:01:22.509 [http-nio-8081-exec-6] INFO  c.m.p.controller.EmpresaController - Iniciado a busca por empresas no banco de dados
+2026-01-20 21:01:22.530 [http-nio-8081-exec-6] INFO  c.m.p.s.impl.EmpresaServiceImpl - Busca de empresas realizada com filtros: | Total resultados: 1
+2026-01-20 21:01:55.815 [http-nio-8081-exec-7] INFO  c.m.p.controller.EmpresaController - Iniciado a busca pela empresa com id: e6d157c1-1c15-4042-831d-13d8bed375a7
+2026-01-20 21:01:55.822 [http-nio-8081-exec-7] INFO  c.m.p.s.impl.EmpresaServiceImpl - Empresa com o id e6d157c1-1c15-4042-831d-13d8bed375a7 foi encontrada com sucesso
+2026-01-20 21:03:15.611 [http-nio-8081-exec-3] INFO  c.m.p.controller.EmpresaController - Iniciado a busca pela empresa com id: e6d157c1-1c15-4042-831d-13d8bed375a7
+2026-01-20 21:03:15.625 [http-nio-8081-exec-3] INFO  c.m.p.s.impl.EmpresaServiceImpl - Empresa com o id e6d157c1-1c15-4042-831d-13d8bed375a7 foi encontrada com sucesso
+2026-01-20 21:38:14.093 [http-nio-8081-exec-8] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para cadastrar empresa: CNPJ=53432522000129, Razão Social=Teste empresa, Nome Fantasia=Teste, Telefone=41999999999, Email=lhlipinski@gmail.com, Endereco=Rua Exemplo, 123, Bloco 05, Bairro Exemplo, Cidade=Curitiba, Estado=PR, CEP=99999999
+2026-01-20 21:38:23.653 [http-nio-8081-exec-9] INFO  c.m.p.controller.EmpresaController - Iniciado a busca por empresas no banco de dados
+2026-01-20 21:38:23.665 [http-nio-8081-exec-9] INFO  c.m.p.s.impl.EmpresaServiceImpl - Busca de empresas realizada com filtros: | Total resultados: 1
+2026-01-20 21:38:24.934 [http-nio-8081-exec-1] INFO  c.m.p.controller.EmpresaController - Iniciado a busca por empresas no banco de dados
+2026-01-20 21:38:24.943 [http-nio-8081-exec-1] INFO  c.m.p.s.impl.EmpresaServiceImpl - Busca de empresas realizada com filtros: | Total resultados: 1
+2026-01-20 21:38:26.229 [http-nio-8081-exec-10] INFO  c.m.p.controller.EmpresaController - Iniciado a busca por empresas no banco de dados
+2026-01-20 21:38:26.237 [http-nio-8081-exec-10] INFO  c.m.p.s.impl.EmpresaServiceImpl - Busca de empresas realizada com filtros: | Total resultados: 1
+2026-01-20 21:38:26.859 [http-nio-8081-exec-2] INFO  c.m.p.controller.EmpresaController - Iniciado a busca por empresas no banco de dados
+2026-01-20 21:38:26.867 [http-nio-8081-exec-2] INFO  c.m.p.s.impl.EmpresaServiceImpl - Busca de empresas realizada com filtros: | Total resultados: 1
+2026-01-20 21:38:38.899 [http-nio-8081-exec-3] INFO  c.m.p.controller.EmpresaController - Iniciado a busca pela empresa com id: e6d157c1-1c15-4042-831d-13d8bed375a7
+2026-01-20 21:38:38.907 [http-nio-8081-exec-3] INFO  c.m.p.s.impl.EmpresaServiceImpl - Empresa com o id e6d157c1-1c15-4042-831d-13d8bed375a7 foi encontrada com sucesso
+2026-01-20 21:46:57.173 [http-nio-8081-exec-7] INFO  c.m.p.controller.EmpresaController - Iniciado a busca por empresas no banco de dados
+2026-01-20 21:46:57.195 [http-nio-8081-exec-7] INFO  c.m.p.s.impl.EmpresaServiceImpl - Busca de empresas realizada com filtros: | Total resultados: 1
+2026-01-20 21:47:35.771 [http-nio-8081-exec-8] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para cadastrar empresa: CNPJ=19337053000120, Razão Social=Teste empresa, Nome Fantasia=Teste, Telefone=41999999999, Email=lhlipinski@gmail.com, Endereco=Rua Exemplo, 123, Bloco 05, Bairro Exemplo, Cidade=Curitiba, Estado=PR, CEP=99999999
+2026-01-20 21:47:50.540 [http-nio-8081-exec-9] INFO  c.m.p.controller.EmpresaController - Recebendo requisição para cadastrar empresa: CNPJ=19337053000120, Razão Social=Teste empresa, Nome Fantasia=Teste, Telefone=41999999999, Email=lhlipinski@hotmail.com, Endereco=Rua Exemplo, 123, Bloco 05, Bairro Exemplo, Cidade=Curitiba, Estado=PR, CEP=99999999
+2026-01-20 21:47:50.566 [http-nio-8081-exec-9] INFO  c.m.p.s.impl.EmpresaServiceImpl - Empresa salva no banco com ID: d8e338b2-5d1c-4574-9fb3-8eb570b91ab5
+2026-01-20 21:47:50.566 [http-nio-8081-exec-9] INFO  c.m.p.controller.EmpresaController - Empresa cadastrada com sucesso: id=d8e338b2-5d1c-4574-9fb3-8eb570b91ab5, CNPJ=19337053000120, Status=AGUARDANDO_PAGAMENTO
+2026-01-20 21:48:11.030 [http-nio-8081-exec-1] INFO  c.m.p.controller.EmpresaController - Iniciado a busca pela empresa com id: d8e338b2-5d1c-4574-9fb3-8eb570b91ab5
+2026-01-20 21:48:11.035 [http-nio-8081-exec-1] INFO  c.m.p.s.impl.EmpresaServiceImpl - Empresa com o id d8e338b2-5d1c-4574-9fb3-8eb570b91ab5 foi encontrada com sucesso

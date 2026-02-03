@@ -3,7 +3,7 @@ package com.mypetadmin.ps_empresa.enums;
 public enum SortField {
     DOCUMENT_NUMBER("documentNumber"),
     ID("id"),
-    RAZAO_SOCIAL("razão social"),
+    RAZAO_SOCIAL("razãosocial"),
     EMAIL("email"),
     STATUS("status");
 

@@ -1,0 +1,63 @@
+2026-01-12 19:42:17.003 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2026-01-12 19:42:17.018 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - Starting PsEmpresaApplication using Java 24.0.1 with PID 84128 (/Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa/target/classes started by luishenrique in /Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa)
+2026-01-12 19:42:17.019 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - No active profile set, falling back to 1 default profile: "default"
+2026-01-12 19:42:17.034 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-01-12 19:42:17.035 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-01-12 19:42:17.312 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-01-12 19:42:17.337 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 18 ms. Found 1 JPA repository interface.
+2026-01-12 19:42:17.532 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2026-01-12 19:42:17.538 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2026-01-12 19:42:17.539 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-01-12 19:42:17.539 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.42]
+2026-01-12 19:42:17.552 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-01-12 19:42:17.553 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 517 ms
+2026-01-12 19:42:17.585 [restartedMain] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
+2026-01-12 19:42:32.518 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2026-01-12 19:42:32.533 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - Starting PsEmpresaApplication using Java 24.0.2 with PID 84180 (/Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa/target/classes started by luishenrique in /Users/luishenrique/Documents/particular/MyPetAdmin/Backend/MS/ps_empresa)
+2026-01-12 19:42:32.533 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - No active profile set, falling back to 1 default profile: "default"
+2026-01-12 19:42:32.548 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-01-12 19:42:32.549 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-01-12 19:42:32.854 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-01-12 19:42:32.881 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 21 ms. Found 1 JPA repository interface.
+2026-01-12 19:42:33.108 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2026-01-12 19:42:33.113 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2026-01-12 19:42:33.114 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-01-12 19:42:33.114 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.42]
+2026-01-12 19:42:33.129 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-01-12 19:42:33.129 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 580 ms
+2026-01-12 19:42:33.241 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.18.Final
+2026-01-12 19:42:33.255 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-01-12 19:42:33.365 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-01-12 19:42:33.382 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-01-12 19:42:33.482 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@430b33b0
+2026-01-12 19:42:33.483 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-01-12 19:42:33.519 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 17.6
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-01-12 19:42:33.865 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-01-12 19:42:33.918 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-01-12 19:42:34.329 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-01-12 19:42:34.336 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+2026-01-12 19:42:34.343 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
+2026-01-12 19:42:34.353 [restartedMain] INFO  c.m.ps_empresa.PsEmpresaApplication - Started PsEmpresaApplication in 2.141 seconds (process running for 2.354)
+2026-01-12 19:44:50.485 [http-nio-8081-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-01-12 19:44:50.485 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-01-12 19:44:50.491 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 5 ms
+2026-01-12 19:44:50.873 [http-nio-8081-exec-10] INFO  o.s.api.AbstractOpenApiResource - Init duration for springdoc-openapi is: 193 ms
+2026-01-12 19:47:47.038 [http-nio-8081-exec-5] INFO  c.m.p.controller.EmpresaController - Iniciado a busca por empresas no banco de dados
+2026-01-12 19:47:47.135 [http-nio-8081-exec-5] INFO  c.m.p.s.impl.EmpresaServiceImpl - Busca de empresas realizada com filtros: | Total resultados: 6
+2026-01-12 20:00:14.421 [http-nio-8081-exec-1] INFO  c.m.p.controller.EmpresaController - Iniciado a busca por empresas no banco de dados
+2026-01-12 20:00:14.452 [http-nio-8081-exec-1] INFO  c.m.p.s.impl.EmpresaServiceImpl - Busca de empresas realizada com filtros: Status=INATIVO | Total resultados: 0
+2026-01-12 20:00:58.900 [http-nio-8081-exec-2] INFO  c.m.p.controller.EmpresaController - Iniciado a busca pela empresa com id: 8665e9d0-d500-4c79-94c9-be92bdff8531
+2026-01-12 20:00:58.921 [http-nio-8081-exec-2] INFO  c.m.p.s.impl.EmpresaServiceImpl - Empresa com o id 8665e9d0-d500-4c79-94c9-be92bdff8531 foi encontrada com sucesso
+2026-01-12 20:07:46.977 [http-nio-8081-exec-6] INFO  c.m.p.controller.EmpresaController - Iniciado a busca pela empresa com id: 8665e9d0-d500-4c79-94c9-be92bdff8531
+2026-01-12 20:07:46.982 [http-nio-8081-exec-6] INFO  c.m.p.s.impl.EmpresaServiceImpl - Empresa com o id 8665e9d0-d500-4c79-94c9-be92bdff8531 foi encontrada com sucesso
+2026-01-12 20:07:47.872 [http-nio-8081-exec-9] INFO  c.m.p.controller.EmpresaController - Iniciado a busca pela empresa com id: 8665e9d0-d500-4c79-94c9-be92bdff8531
+2026-01-12 20:07:47.877 [http-nio-8081-exec-9] INFO  c.m.p.s.impl.EmpresaServiceImpl - Empresa com o id 8665e9d0-d500-4c79-94c9-be92bdff8531 foi encontrada com sucesso
+2026-01-12 20:08:11.416 [http-nio-8081-exec-8] INFO  c.m.p.controller.EmpresaController - Iniciado a busca pela empresa com id: 8665e9d0-d500-4c79-94c9-be92bdff8531
+2026-01-12 20:08:11.421 [http-nio-8081-exec-8] INFO  c.m.p.s.impl.EmpresaServiceImpl - Empresa com o id 8665e9d0-d500-4c79-94c9-be92bdff8531 foi encontrada com sucesso
