@@ -2,6 +2,7 @@ package com.mypetadmin.ps_empresa.service.impl;
 
 import com.mypetadmin.ps_empresa.dto.EmpresaRequestDTO;
 import com.mypetadmin.ps_empresa.dto.EmpresaResponseDTO;
+import com.mypetadmin.ps_empresa.dto.PageResponse;
 import com.mypetadmin.ps_empresa.dto.UpdateEmpresaRequestDto;
 import com.mypetadmin.ps_empresa.enums.DirectionField;
 import com.mypetadmin.ps_empresa.enums.SortField;
@@ -20,6 +21,9 @@ import com.mypetadmin.ps_empresa.util.CnpjValidator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -79,11 +83,13 @@ public class EmpresaServiceImpl implements EmpresaService {
         }
     }
 
-    public List<EmpresaResponseDTO> getAllEmpresaSorted(
+    public PageResponse<EmpresaResponseDTO> getAllEmpresaSorted(
             String documentNumber,
             String razaoSocial,
             String email,
             StatusEmpresa status,
+            int page,
+            int size,
             SortField sortField,
             DirectionField directionField
     ) {
@@ -91,6 +97,8 @@ public class EmpresaServiceImpl implements EmpresaService {
         razaoSocial = normalize(razaoSocial);
         email = normalize(email);
         Sort sort = Sort.by(Sort.Direction.fromString(directionField.getDirectionField()), sortField.getSortField());
+
+        Pageable pageable = PageRequest.of(page, size, sort);
 
         if (documentNumber != null) {
             if (!CnpjValidator.isCnpjValid(documentNumber)) {
@@ -101,20 +109,34 @@ public class EmpresaServiceImpl implements EmpresaService {
                 .and(EmpresaSpecification.hasRazaoSocial(razaoSocial))
                 .and(EmpresaSpecification.hasEmail(email))
                 .and(EmpresaSpecification.hasStatus(status));
-        List<Empresa> empresas = empresaRepository.findAll(spec, sort);
+        Page<Empresa> empresas = empresaRepository.findAll(spec, pageable);
+        Page<EmpresaResponseDTO> pageDto =
+                empresas.map(mapper::toResponseDto);
 
         StringBuilder logMessage = new StringBuilder("Busca de empresas realizada com filtros: ");
         if (documentNumber != null) logMessage.append("CNPJ=").append(documentNumber).append(" ");
         if (razaoSocial != null) logMessage.append("Razão Social=").append(razaoSocial).append(" ");
         if (email != null) logMessage.append("Email=").append(email).append(" ");
         if (status != null) logMessage.append("Status=").append(status).append(" ");
-        logMessage.append("| Total resultados: ").append(empresas.size());
+        logMessage.append("| Total resultados: ").append(empresas.getTotalElements());
 
         log.info(logMessage.toString());
 
-        return empresas.stream()
-                .map(mapper::toResponseDto)
-                .collect(Collectors.toList());
+        long totalElements = pageDto.getTotalElements();
+        size = pageDto.getSize();
+
+        int totalPages = totalElements == 0
+                ? 0
+                : (int) Math.ceil((double) totalElements / size);
+
+        return new PageResponse<>(
+                pageDto.getContent(),
+                pageDto.getNumber(),
+                size,
+                totalElements,
+                totalPages
+        );
+
 
     }
 

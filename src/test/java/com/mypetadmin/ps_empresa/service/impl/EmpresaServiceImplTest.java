@@ -2,6 +2,7 @@ package com.mypetadmin.ps_empresa.service.impl;
 
 import com.mypetadmin.ps_empresa.dto.EmpresaRequestDTO;
 import com.mypetadmin.ps_empresa.dto.EmpresaResponseDTO;
+import com.mypetadmin.ps_empresa.dto.PageResponse;
 import com.mypetadmin.ps_empresa.dto.UpdateEmpresaRequestDto;
 import com.mypetadmin.ps_empresa.enums.DirectionField;
 import com.mypetadmin.ps_empresa.enums.SortField;
@@ -19,13 +20,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -180,18 +178,24 @@ class EmpresaServiceImplTest {
 
         List<Empresa> empresas = Arrays.asList(empresa1, empresa2);
 
+
+        Page<Empresa> page =
+                new PageImpl<>(empresas, PageRequest.of(0, 10), empresas.size());
+
         try (MockedStatic<CnpjValidator> mocked = Mockito.mockStatic(CnpjValidator.class)) {
             mocked.when(() -> CnpjValidator.isCnpjValid(cnpj)).thenReturn(true);
 
-            when(empresaRepository.findAll(any(Specification.class), any(Sort.class))).thenReturn(empresas);
+            when(empresaRepository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(page);
             when(mapper.toResponseDto(any(Empresa.class))).thenReturn(new EmpresaResponseDTO());
 
-            List<EmpresaResponseDTO> resultado = empresaService.getAllEmpresaSorted(
-                    cnpj, razaoSocial, null, status, SortField.RAZAO_SOCIAL, DirectionField.ASC
+            PageResponse<EmpresaResponseDTO> resultado = empresaService.getAllEmpresaSorted(
+                    cnpj, razaoSocial, null, status, 0, 10, SortField.RAZAO_SOCIAL, DirectionField.ASC
             );
 
-            assertThat(resultado).hasSize(2);
-            verify(empresaRepository).findAll(any(Specification.class), any(Sort.class));
+            assertThat(resultado.getContent()).hasSize(2);
+            assertThat(resultado.getTotalElements()).isEqualTo(2);
+            assertThat(resultado.getTotalPages()).isEqualTo(1);
+            verify(empresaRepository).findAll(any(Specification.class), any(Pageable.class));
             verify(mapper, times(2)).toResponseDto(any());
         }
     }
@@ -204,7 +208,7 @@ class EmpresaServiceImplTest {
             mocked.when(() -> CnpjValidator.isCnpjValid(cnpj)).thenReturn(false);
 
             assertThatThrownBy(() -> empresaService.getAllEmpresaSorted(
-                    cnpj, null, null, null, SortField.RAZAO_SOCIAL, DirectionField.ASC
+                    cnpj, null, null, null, 0, 10, SortField.RAZAO_SOCIAL, DirectionField.ASC
             )).isInstanceOf(CnpjInvalidException.class)
                     .hasMessageContaining("Cnpj informado é invalido");
 
@@ -214,13 +218,16 @@ class EmpresaServiceImplTest {
 
     @Test
     void getAllEmpresaSorted_semFiltros_retornaListaVazia() {
-        when(empresaRepository.findAll(any(Specification.class), any(Sort.class))).thenReturn(Arrays.asList());
+        when(empresaRepository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(new PageImpl<>(Collections.emptyList()));
 
-        List<EmpresaResponseDTO> resultado = empresaService.getAllEmpresaSorted(
-                null, null, null, null, SortField.RAZAO_SOCIAL, DirectionField.ASC
+        PageResponse<EmpresaResponseDTO> resultado = empresaService.getAllEmpresaSorted(
+                null, null, null, null, 0, 10, SortField.RAZAO_SOCIAL, DirectionField.ASC
         );
 
-        assertThat(resultado).isEmpty();
+        assertThat(resultado.getContent()).isEmpty();
+        assertThat(resultado.getTotalElements()).isZero();
+        assertThat(resultado.getTotalPages()).isZero();
+
     }
 
     @Test

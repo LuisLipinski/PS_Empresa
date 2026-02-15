@@ -12,18 +12,4 @@ public interface EmpresaRepository extends JpaRepository<Empresa, UUID>, JpaSpec
     boolean existsByDocumentNumber(String documentNumber);
 
     boolean existsByEmail(String email);
-
-//    List<Empresa> findByCnpjAndRazaoSocialAndEmailAndStatus(String cnpj, String razaoSocial, String email, String status, Sort sort);
-//
-//    List<Empresa> findByCnpjAndEmailAndStatus(String cnpj, String email, String status, Sort sort);
-//
-//    List<Empresa> findByCnpjAndStatus(String cnpj, String status, Sort sort);
-//
-//    List<Empresa> findByCnpj(String cnpj, Sort sort);
-//
-//    List<Empresa> findByRazaoSocial(String razaoSocial, Sort sort);
-//
-//    List<Empresa> findByEmail(String email, Sort sort);
-//
-//    List<Empresa> findByStatus(String status, Sort sort);
 }

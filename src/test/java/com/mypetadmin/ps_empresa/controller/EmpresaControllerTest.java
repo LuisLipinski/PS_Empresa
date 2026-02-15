@@ -3,6 +3,7 @@ package com.mypetadmin.ps_empresa.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mypetadmin.ps_empresa.dto.EmpresaRequestDTO;
 import com.mypetadmin.ps_empresa.dto.EmpresaResponseDTO;
+import com.mypetadmin.ps_empresa.dto.PageResponse;
 import com.mypetadmin.ps_empresa.dto.UpdateEmpresaRequestDto;
 import com.mypetadmin.ps_empresa.enums.StatusEmpresa;
 import com.mypetadmin.ps_empresa.exception.EmpresaNaoEncontradaException;
@@ -14,6 +15,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -21,6 +25,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -131,10 +136,14 @@ public class EmpresaControllerTest {
         empresa2.setDocumentNumber("98765432000188");
         empresa2.setStatus(StatusEmpresa.AGUARDANDO_PAGAMENTO);
 
-        List<EmpresaResponseDTO> empresas = Arrays.asList(empresa1, empresa2);
+        List<EmpresaResponseDTO> lista = Arrays.asList(empresa1, empresa2);
+
+
+        PageResponse<EmpresaResponseDTO> empresas =
+                new PageResponse<>(lista, 0, 10, lista.size(), 1);
 
         when(empresaService.getAllEmpresaSorted(
-                any(), any(), any(), any(), any(), any()
+                any(), any(), any(), any(), anyInt(), anyInt(), any(), any()
         )).thenReturn(empresas);
 
         mockMvc.perform(get("/empresas/buscaEmpresas")
@@ -142,21 +151,31 @@ public class EmpresaControllerTest {
                         .param("razaoSocial", "Pet Shop")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$[0].razaoSocial").value("Pet Shop ABC"))
-                .andExpect(jsonPath("$[1].razaoSocial").value("Pet Shop XYZ"));
+                .andExpect(jsonPath("$.content.length()").value(2))
+                .andExpect(jsonPath("$.content[0].razaoSocial").value("Pet Shop ABC"))
+                .andExpect(jsonPath("$.content[1].razaoSocial").value("Pet Shop XYZ"))
+                .andExpect(jsonPath("$.totalElements").value(2))
+                .andExpect(jsonPath("$.totalPages").value(1));
     }
 
     @Test
     void buscarEmpresas_semResultados_retornaListaVazia() throws Exception {
-        when(empresaService.getAllEmpresaSorted(any(), any(), any(), any(), any(), any()))
-                .thenReturn(Arrays.asList());
+
+        PageResponse<EmpresaResponseDTO> page =
+                new PageResponse<>(Collections.emptyList(), 0, 10, 0, 0);
+
+        when(empresaService.getAllEmpresaSorted(any(), any(), any(), any(), anyInt(), anyInt(), any(), any()))
+                .thenReturn(page);
 
         mockMvc.perform(get("/empresas/buscaEmpresas")
                         .param("documentNumber", "00000000000000")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(0));
+                .andExpect(jsonPath("$.content.length()").value(0))
+                .andExpect(jsonPath("$.totalElements").value(0))
+                .andExpect(jsonPath("$.totalPages").value(0));
+
+
     }
 
     @Test
