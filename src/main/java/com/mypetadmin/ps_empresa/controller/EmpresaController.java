@@ -13,6 +13,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -91,17 +93,19 @@ public class EmpresaController {
             @ApiResponse(responseCode = "404", description = "Não foi encontrado nenhuma empresa")
     })
     @GetMapping("/buscaEmpresas")
-    public ResponseEntity<List<EmpresaResponseDTO>>buscarEmpresas(@RequestParam (required = false) String documentNumber,
-                                                            @RequestParam (required = false) String razaoSocial,
-                                                            @RequestParam (required = false) String email,
-                                                            @RequestParam (required = false) StatusEmpresa status,
-                                                            @RequestParam (required = false, defaultValue = "DOCUMENT_NUMBER") SortField sortField,
-                                                            @RequestParam (required = false, defaultValue = "ASC") DirectionField directionField) {
+    public ResponseEntity<PageResponse<EmpresaResponseDTO>>buscarEmpresas(@RequestParam (required = false) String documentNumber,
+                                                                  @RequestParam (required = false) String razaoSocial,
+                                                                  @RequestParam (required = false) String email,
+                                                                  @RequestParam (required = false) StatusEmpresa status,
+                                                                  @RequestParam(defaultValue = "0") int page,
+                                                                  @RequestParam(defaultValue = "10") int size,
+                                                                  @RequestParam (required = false, defaultValue = "DOCUMENT_NUMBER") SortField sortField,
+                                                                  @RequestParam (required = false, defaultValue = "ASC") DirectionField directionField) {
 
 
         log.info("Iniciado a busca por empresas no banco de dados");
 
-        List<EmpresaResponseDTO> dto = empresaService.getAllEmpresaSorted(documentNumber, razaoSocial, email, status, sortField, directionField);
+        PageResponse<EmpresaResponseDTO> dto = empresaService.getAllEmpresaSorted(documentNumber, razaoSocial, email, status, page, size, sortField, directionField);
         return ResponseEntity.ok(dto);
     }
 
