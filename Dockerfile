@@ -1,14 +1,27 @@
-# Imagem base com Java 17 leve
-FROM eclipse-temurin:17-jdk-jammy
+# ---------- STAGE 1 : BUILD ----------
+FROM maven:3.9.9-eclipse-temurin-17 AS build
 
-# Diretório interno do container
 WORKDIR /app
 
-# Copia o jar gerado pelo Maven
-COPY target/ps_empresa-0.0.1-SNAPSHOT.jar app.jar
+# Copia apenas dependências primeiro (cache inteligente)
+COPY pom.xml .
+RUN mvn -B -q -e -DskipTests dependency:go-offline
 
-# Expõe a porta do MS
-EXPOSE 8081
+# Copia o resto do código
+COPY src ./src
 
-# Comando de inicialização
+# Gera o jar
+RUN mvn clean package -DskipTests
+
+
+# ---------- STAGE 2 : RUNTIME ----------
+FROM eclipse-temurin:17-jdk-jammy
+
+WORKDIR /app
+
+# Copia o jar gerado no estágio anterior
+COPY --from=build /app/target/*.jar app.jar
+
+EXPOSE 8080
+
 ENTRYPOINT ["java","-jar","/app/app.jar"]
