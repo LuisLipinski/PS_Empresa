@@ -1,10 +1,46 @@
-HELP.md
-target/
-.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+############################
+# 🔐 SEGURANÇA (CRÍTICO)
+############################
+.env
+.env.*
+!.env.example
 
-### STS ###
+############################
+# 🧱 Build Java / Maven
+############################
+target/
+*.log
+*.class
+*.jar
+*.war
+*.ear
+dependency-reduced-pom.xml
+
+############################
+# 📊 Logs da aplicação
+############################
+logs/
+*.log
+hs_err_pid*
+replay_pid*
+
+############################
+# ☕ Maven Wrapper
+############################
+.mvn/wrapper/maven-wrapper.jar
+
+############################
+# 🧠 IDEs
+############################
+
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+### Eclipse / STS ###
 .apt_generated
 .classpath
 .factorypath
@@ -13,12 +49,6 @@ target/
 .springBeans
 .sts4-cache
 
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
@@ -26,8 +56,41 @@ target/
 /nbdist/
 /.nb-gradle/
 build/
-!**/src/main/**/build/
-!**/src/test/**/build/
 
 ### VS Code ###
 .vscode/
+
+############################
+# 🐳 Docker
+############################
+docker-compose.override.yml
+Dockerfile.local
+*.pid
+*.seed
+*.swp
+
+############################
+# 🍎 macOS (IMPORTANTÍSSIMO)
+############################
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+
+############################
+# 🧪 Testes
+############################
+coverage/
+jacoco.exec
+/jacoco-report/
+
+############################
+# 📦 Dependências locais
+############################
+node_modules/
+
+############################
+# 🧾 Git
+############################
+*.orig
