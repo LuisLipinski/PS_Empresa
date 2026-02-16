@@ -95,24 +95,35 @@ jobs:
         run: |
           chmod +x ./mvnw
           nohup ./mvnw spring-boot:run \
-          -Dspring.datasource.url=jdbc:postgresql://localhost:5432/mypetdb \
-          -Dspring.datasource.username=postgres \
-          -Dspring.datasource.password=postgres \
+          -Dspring-boot.run.profiles=ci \
           > app.log 2>&1 &
+
+      - name: Mostrar logs iniciais
+        run: sleep 25 && cat app.log
 
 
       - name: Wait for API
         run: |
-          for i in {1..40}; do
-            curl -s http://localhost:8081/actuator/health && break
-            echo "Aguardando API..."
+          echo "Aguardando Spring Boot iniciar..."
+          
+          for i in {1..60}; do
+            if curl -s http://localhost:8081/actuator/health | grep UP; then
+              echo "API está pronta!"
+              exit 0
+            fi
             sleep 5
           done
+          
+          echo "===== LOG DA APLICAÇÃO ====="
+          cat app.log
+          exit 1
+
+
 
       - name: Checkout automation
         uses: actions/checkout@v4
         with:
-          repository: SEU_USUARIO/qa-automation
+          repository: LuisLipinski/ps_automacao_backend
           path: qa-tests
           token: ${{ secrets.GH_TOKEN }}
 
