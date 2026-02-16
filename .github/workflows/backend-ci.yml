@@ -145,9 +145,3 @@ jobs:
         env:
           BASE_URL: http://localhost:8081
         run: npm run test:smoke
-
-
-
-
-
-
