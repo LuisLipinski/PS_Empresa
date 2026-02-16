@@ -144,4 +144,4 @@ jobs:
         working-directory: qa-tests
         env:
           BASE_URL: http://localhost:8081
-        run: box run empresa:smoke:local
+        run: npx run empresa:smoke:local
