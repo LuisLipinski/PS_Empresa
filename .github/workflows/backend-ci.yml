@@ -5,10 +5,11 @@ on:
     branches:
       - master
       - 'feature/**'
+
   pull_request:
     branches:
       - master
-
+    types: [opened, synchronize, reopened]
 
 jobs:
   build:
@@ -160,3 +161,72 @@ jobs:
         env:
           BASE_URL: http://localhost:8081
         run: npm run empresa:smoke:local
+
+  core-regression:
+    name: Core Regression Tests
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    needs: build
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: mypetdb
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Start Spring Boot
+        run: |
+          chmod +x ./mvnw
+          nohup ./mvnw spring-boot:run -Dspring-boot.run.profiles=ci > app.log 2>&1 &
+
+      - name: Wait API
+        run: |
+          for i in {1..40}; do
+            if curl -s http://localhost:8081/actuator/health; then
+              exit 0
+            fi
+            sleep 5
+          done
+          cat app.log
+          exit 1
+
+      - name: Checkout automation
+        uses: actions/checkout@v4
+        with:
+          repository: LuisLipinski/ps_automacao_backend
+          path: qa-tests
+          token: ${{ secrets.GH_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - run: npm install
+        working-directory: qa-tests
+
+      - run: npx playwright install --with-deps
+        working-directory: qa-tests
+
+      - name: Run CORE regression
+        working-directory: qa-tests
+        env:
+          BASE_URL: http://localhost:8081
+        run: npm run empresa:regression:local
+
