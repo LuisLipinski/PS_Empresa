@@ -43,7 +43,7 @@ jobs:
           echo "Aguardando subir..."
 
           for i in {1..30}; do
-            if curl -s http://localhost:8080/actuator/health | grep '"status":"UP"'; then
+            if curl -s http://127.0.0.1:8081/actuator/health | grep '"status":"UP"'; then
               echo "Aplicação pronta!"
               break
             fi
@@ -76,5 +76,5 @@ jobs:
       - name: Rodar testes API local
         working-directory: qa-tests
         env:
-          PS_EMPRESA_URL: http://localhost:8081
+          PS_EMPRESA_URL: http://127.0.0.1:8081
         run: npm run empresa:regression:local
