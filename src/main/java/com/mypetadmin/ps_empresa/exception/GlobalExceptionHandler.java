@@ -1,5 +1,6 @@
 package com.mypetadmin.ps_empresa.exception;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,9 +21,15 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(EmpresaExistenteException.class)
-    public ResponseEntity<String> handleEmpresaExistente(EmpresaExistenteException ex) {
-        log.warn("Erro de negócio: {}", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    public ResponseEntity<ErrorResponse> handleEmpresaExistente(EmpresaExistenteException ex, HttpServletRequest request) {
+        ErrorResponse error = new ErrorResponse(
+                ex.getMessage(),
+                HttpStatus.BAD_REQUEST.value(),
+                request.getRequestURI()
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+
     }
 
     @ExceptionHandler(EmailExistenteException.class)
