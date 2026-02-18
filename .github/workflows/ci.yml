@@ -1,26 +1,80 @@
-name: CI - Unit Tests
+name: CI - Validation
 
 on:
   push:
     branches:
       - 'feature/**'
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  unit-tests:
+  validation:
     runs-on: ubuntu-latest
 
     steps:
+      # ---------------- CHECKOUT ----------------
       - name: Checkout
         uses: actions/checkout@v4
 
+      # ---------------- JAVA ----------------
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
+          cache: maven
 
       - name: Permissão Maven
         run: chmod +x ./mvnw
 
+      # ---------------- UNIT TESTS ----------------
       - name: Rodar unitários
         run: ./mvnw -B clean test
+
+      # ---------------- BUILD ----------------
+      - name: Gerar jar
+        run: ./mvnw -B package -DskipTests
+
+      # ---------------- START APP ----------------
+      - name: Subir aplicação local
+        run: |
+          nohup java -jar target/*.jar > app.log 2>&1 &
+          echo "Aguardando subir..."
+
+          for i in {1..30}; do
+            if curl -s http://localhost:8080/actuator/health | grep '"status":"UP"'; then
+              echo "Aplicação pronta!"
+              break
+            fi
+            sleep 5
+          done
+
+      # ---------------- AUTOMATION REPO ----------------
+      - name: Checkout automation
+        uses: actions/checkout@v4
+        with:
+          repository: LuisLipinski/ps_automacao_backend
+          path: qa-tests
+          token: ${{ secrets.GH_TOKEN }}
+
+      # ---------------- NODE ----------------
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        working-directory: qa-tests
+        run: npm install
+
+      - name: Install Playwright
+        working-directory: qa-tests
+        run: npx playwright install --with-deps
+
+      # ---------------- API TESTS ----------------
+      - name: Rodar testes API local
+        working-directory: qa-tests
+        env:
+          PS_EMPRESA_URL: http://localhost:8081
+        run: npm run empresa:regression:local

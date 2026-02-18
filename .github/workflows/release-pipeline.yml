@@ -1,0 +1,141 @@
+name: Release Pipeline
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: write
+
+jobs:
+
+  # ---------------- BUILD ----------------
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: maven
+
+      - name: Build application
+        run: mvn -B clean package -DskipTests
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-build
+          path: target/*.jar
+
+  # ---------------- DEPLOY STAGING ----------------
+  deploy-staging:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: staging
+
+    steps:
+      - name: Trigger Render Deploy
+        run: curl -X POST "$RENDER_DEPLOY_HOOK"
+
+  # ---------------- WAIT HEALTH ----------------
+  wait-health:
+    needs: deploy-staging
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Wait for Render
+        run: |
+          echo "Aguardando aplicação subir..."
+          for i in {1..40}; do
+            RESPONSE=$(curl -s https://ps-empresa.onrender.com/actuator/health || true)
+            if echo "$RESPONSE" | grep '"status":"UP"'; then
+              echo "Aplicação está UP!"
+              exit 0
+            fi
+            echo "Ainda não respondeu... aguardando 15s"
+            sleep 15
+          done
+          echo "Aplicação não subiu a tempo"
+          exit 1
+
+  # ---------------- SMOKE ----------------
+  smoke:
+    needs: wait-health
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: LuisLipinski/ps_automacao_backend
+          path: qa-tests
+          token: ${{ secrets.GH_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        working-directory: qa-tests
+        run: npm install
+
+      - name: Install Playwright
+        working-directory: qa-tests
+        run: npx playwright install --with-deps
+
+      - name: Run Smoke Tests
+        working-directory: qa-tests
+        env:
+          PS_EMPRESA_URL: https://ps-empresa.onrender.com
+        run: npm run empresa:smoke:render
+
+  # ---------------- CORE REGRESSION ----------------
+  core-regression:
+    needs: smoke
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: LuisLipinski/ps_automacao_backend
+          path: qa-tests
+          token: ${{ secrets.GH_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        working-directory: qa-tests
+        run: npm install
+
+      - name: Install Playwright
+        working-directory: qa-tests
+        run: npx playwright install --with-deps
+
+      - name: Run Core Regression
+        working-directory: qa-tests
+        env:
+          PS_EMPRESA_URL: https://ps-empresa.onrender.com
+        run: npm run empresa:core:render
+
+  # ---------------- APPROVAL + RELEASE ----------------
+  release-production:
+    needs: core-regression
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create Release Tag
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+          VERSION=v1.${{ github.run_number }}
+          git tag $VERSION
+          git push origin $VERSION
