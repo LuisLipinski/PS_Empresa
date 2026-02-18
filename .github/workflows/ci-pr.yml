@@ -25,17 +25,17 @@ jobs:
           --health-retries=5
 
     steps:
+      # BACKEND
       - name: Checkout backend
         uses: actions/checkout@v4
 
-      - name: Set up JDK
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
 
-      # Cache Maven
-      - name: Cache Maven dependencies
+      - name: Cache Maven
         uses: actions/cache@v4
         with:
           path: ~/.m2/repository
@@ -64,8 +64,7 @@ jobs:
           cat app.log
           exit 1
 
-      # -------- AUTOMATION --------
-
+      # AUTOMATION
       - name: Checkout automation
         uses: actions/checkout@v4
         with:
@@ -78,15 +77,13 @@ jobs:
         with:
           node-version: 20
 
-      # Cache node
-      - name: Cache Node modules
+      - name: Cache Node
         uses: actions/cache@v4
         with:
           path: qa-tests/node_modules
           key: ${{ runner.os }}-node-${{ hashFiles('qa-tests/package-lock.json') }}
 
-      # Cache browsers
-      - name: Cache Playwright browsers
+      - name: Cache Playwright
         uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
