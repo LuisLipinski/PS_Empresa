@@ -5,52 +5,77 @@ on:
     branches:
       - 'feature/**'
   pull_request:
-    branches:
-      - main
+    branches: [ master ]
 
 jobs:
-  validation:
+  unit-tests:
     runs-on: ubuntu-latest
 
     steps:
-      # ---------------- CHECKOUT ----------------
       - name: Checkout
         uses: actions/checkout@v4
 
-      # ---------------- JAVA ----------------
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
-          cache: maven
 
       - name: Permissão Maven
         run: chmod +x ./mvnw
 
-      # ---------------- UNIT TESTS ----------------
       - name: Rodar unitários
         run: ./mvnw -B clean test
+  core-regression:
+    runs-on: ubuntu-latest
 
-      # ---------------- BUILD ----------------
-      - name: Gerar jar
-        run: ./mvnw -B package -DskipTests
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: mypetdb
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
 
-      # ---------------- START APP ----------------
-      - name: Subir aplicação local
+    steps:
+      # Backend
+      - name: Checkout backend
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Build jar
+        run: ./mvnw -B clean package -DskipTests
+
+      - name: Start API
         run: |
-          nohup java -jar target/*.jar > app.log 2>&1 &
-          echo "Aguardando subir..."
+          nohup java -jar target/*.jar --spring.profiles.active=ci > app.log 2>&1 &
 
-          for i in {1..30}; do
-            if curl -s http://127.0.0.1:8081/actuator/health | grep '"status":"UP"'; then
-              echo "Aplicação pronta!"
-              break
+      - name: Wait API
+        run: |
+          for i in {1..40}; do
+            if curl -s http://localhost:8081/actuator/health | grep UP; then
+              echo "API pronta"
+              exit 0
             fi
             sleep 5
           done
+          echo "API não subiu"
+          cat app.log
+          exit 1
 
-      # ---------------- AUTOMATION REPO ----------------
+      # Automation
       - name: Checkout automation
         uses: actions/checkout@v4
         with:
@@ -58,7 +83,6 @@ jobs:
           path: qa-tests
           token: ${{ secrets.GH_TOKEN }}
 
-      # ---------------- NODE ----------------
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -72,9 +96,8 @@ jobs:
         working-directory: qa-tests
         run: npx playwright install --with-deps
 
-      # ---------------- API TESTS ----------------
-      - name: Rodar testes API local
+      - name: Run Core Regression
         working-directory: qa-tests
         env:
-          PS_EMPRESA_URL: http://127.0.0.1:8081
+          PS_EMPRESA_URL: http://localhost:8081
         run: npm run empresa:regression:local
