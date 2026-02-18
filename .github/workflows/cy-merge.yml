@@ -1,0 +1,47 @@
+name: Deploy Smoke Test
+
+on:
+  workflow_run:
+    workflows: ["Post Merge Validation"]
+    types: [completed]
+
+jobs:
+  deploy-smoke:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Wait for Render
+        run: |
+          echo "Aguardando deploy do Render..."
+          for i in {1..40}; do
+            if curl -s https://ps-empresa.onrender.com/actuator/health | grep UP; then
+              echo "Render online!"
+              exit 0
+            fi
+            sleep 15
+          done
+          echo "Render não subiu"
+          exit 1
+
+      - name: Checkout automation
+        uses: actions/checkout@v4
+        with:
+          repository: LuisLipinski/ps_automacao_backend
+          path: qa-tests
+          token: ${{ secrets.GH_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - run: npm install
+        working-directory: qa-tests
+
+      - run: npx playwright install --with-deps
+        working-directory: qa-tests
+
+      - name: Run Deploy Smoke
+        working-directory: qa-tests
+        env:
+          PS_EMPRESA_URL: https://ps-empresa.onrender.com
+        run: npm run empresa:smoke:render
