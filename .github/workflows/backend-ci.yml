@@ -228,5 +228,5 @@ jobs:
         working-directory: qa-tests
         env:
           BASE_URL: http://localhost:8081
-        run: npm run empresa:regression:local
+        run: npm run empresa:regression:render
 
