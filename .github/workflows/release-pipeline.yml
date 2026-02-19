@@ -59,35 +59,62 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+      - name: Wait actuator online
+        run: |
+          echo "Aguardando actuator ficar disponível..."
+
+          for i in {1..60}; do
+            RESPONSE=$(curl -s https://ps-empresa.onrender.com/actuator/health || true)
+
+            if echo "$RESPONSE" | grep '"status"'; then
+              echo "Actuator disponível!"
+              break
+            fi
+
+            echo "Actuator ainda não respondeu... aguardando 10s"
+            sleep 10
+          done
+
       - name: Capture current start time
         id: before
         run: |
           echo "Capturando start atual..."
-          START_TIME=$(curl -s https://ps-empresa.onrender.com/actuator/metrics/process.start.time | jq '.measurements[0].value')
-          echo "start=$START_TIME" >> $GITHUB_OUTPUT
-          echo "Start atual: $START_TIME"
 
-      - name: Wait new deploy
+          START=$(curl -s https://ps-empresa.onrender.com/actuator/metrics/process.start.time \
+            | jq -r '.measurements[0].value')
+
+          echo "old=$START" >> $GITHUB_OUTPUT
+          echo "Start atual: $START"
+
+      - name: Wait new container
         run: |
-          echo "Aguardando novo container entrar em produção..."
-  
-          OLD_START=${{ steps.before.outputs.start }}
-  
-          for i in {1..60}; do
-            NEW_START=$(curl -s https://ps-empresa.onrender.com/actuator/metrics/process.start.time | jq '.measurements[0].value')
-  
-            echo "Start atual em produção: $NEW_START"
-  
-            if [ "$NEW_START" != "$OLD_START" ]; then
-              echo "Novo deploy detectado!"
+          OLD=${{ steps.before.outputs.old }}
+
+          echo "Esperando novo container entrar..."
+
+          for i in {1..80}; do
+            NEW=$(curl -s https://ps-empresa.onrender.com/actuator/metrics/process.start.time \
+              | jq -r '.measurements[0].value' || echo "fail")
+
+            if [ "$NEW" = "fail" ]; then
+              echo "Container ainda reiniciando..."
+              sleep 15
+              continue
+            fi
+
+            echo "Start atual em produção: $NEW"
+
+            if [ "$NEW" != "$OLD" ]; then
+              echo "Novo deploy confirmado!"
               exit 0
             fi
-  
-            echo "Ainda é o container antigo... aguardando 20s"
-            sleep 20
+
+            echo "Ainda é a versão antiga... aguardando 15s"
+            sleep 15
           done
-  
-          echo "Novo deploy não entrou em produção"
+
+          echo "Novo deploy não foi detectado"
           exit 1
 
   # ---------------- SMOKE TEST ----------------
