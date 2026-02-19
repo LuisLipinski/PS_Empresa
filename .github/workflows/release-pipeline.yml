@@ -123,7 +123,7 @@ jobs:
         working-directory: qa-tests
         env:
           PS_EMPRESA_URL: https://ps-empresa.onrender.com
-        run: npm run empresa:core:render
+        run: npm run empresa:regression:render
 
   # ---------------- APPROVAL + RELEASE ----------------
   release-production:
