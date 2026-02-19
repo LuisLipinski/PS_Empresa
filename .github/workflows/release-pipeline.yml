@@ -54,32 +54,41 @@ jobs:
           echo "Webhook enviado com sucesso"
 
   # ---------------- WAIT HEALTH ----------------
-  wait-new-version:
-    needs: deploy-render
-    runs-on: ubuntu-latest
+wait-new-version:
+  needs: deploy-staging
+  runs-on: ubuntu-latest
 
-    steps:
-      - name: Wait new deploy
-        run: |
-          echo "Aguardando nova versão entrar em produção..."
-  
-          EXPECTED_SHA=${{ github.sha }}
-  
-          for i in {1..60}; do
-            RESPONSE=$(curl -s https://ps-empresa.onrender.com/actuator/info || true)
-  
-            if echo "$RESPONSE" | grep -q "${EXPECTED_SHA:0:7}"; then
-              echo "Nova versão detectada em produção!"
-              exit 0
-            fi
-  
-            echo "Ainda é a versão antiga... aguardando 20s"
-            sleep 20
-          done
-  
-          echo "Nova versão nunca entrou em produção"
-          exit 1
+  steps:
+    - name: Capture current start time
+      id: before
+      run: |
+        echo "Capturando start atual..."
+        START_TIME=$(curl -s https://ps-empresa.onrender.com/actuator/metrics/process.start.time | jq '.measurements[0].value')
+        echo "start=$START_TIME" >> $GITHUB_OUTPUT
+        echo "Start atual: $START_TIME"
 
+    - name: Wait new deploy
+      run: |
+        echo "Aguardando novo container entrar em produção..."
+
+        OLD_START=${{ steps.before.outputs.start }}
+
+        for i in {1..60}; do
+          NEW_START=$(curl -s https://ps-empresa.onrender.com/actuator/metrics/process.start.time | jq '.measurements[0].value')
+
+          echo "Start atual em produção: $NEW_START"
+
+          if [ "$NEW_START" != "$OLD_START" ]; then
+            echo "Novo deploy detectado!"
+            exit 0
+          fi
+
+          echo "Ainda é o container antigo... aguardando 20s"
+          sleep 20
+        done
+
+        echo "Novo deploy não entrou em produção"
+        exit 1
 
   # ---------------- SMOKE TEST ----------------
   smoke:
