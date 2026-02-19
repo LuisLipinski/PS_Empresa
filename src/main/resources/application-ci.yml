@@ -21,6 +21,13 @@ management:
     web:
       exposure:
         include: health,info
+
+  endpoint:
+    info:
+      enabled: true
+
   info:
     git:
+      enabled: true
       mode: full
+
