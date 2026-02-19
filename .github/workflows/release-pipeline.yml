@@ -83,7 +83,7 @@ jobs:
 
   # ---------------- SMOKE TEST ----------------
   smoke:
-    needs: wait-health
+    needs: wait-new-version
     runs-on: ubuntu-latest
 
     steps:
