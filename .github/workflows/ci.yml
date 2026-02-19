@@ -1,4 +1,4 @@
-name: CI - Validation
+name: CI - Quality gate
 
 on:
   pull_request:
