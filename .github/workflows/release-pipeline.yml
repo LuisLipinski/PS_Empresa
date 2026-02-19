@@ -4,6 +4,11 @@ on:
   push:
     branches: [ master ]
 
+# 🔒 Impede dois deploys ao mesmo tempo (resolve o "Deploy canceled" do Render)
+concurrency:
+  group: render-production
+  cancel-in-progress: true
+
 permissions:
   contents: write
 
@@ -32,40 +37,48 @@ jobs:
           name: app-build
           path: target/*.jar
 
-  # ---------------- DEPLOY STAGING ----------------
-  deploy-staging:
+  # ---------------- DEPLOY RENDER ----------------
+  deploy-render:
+    # garante que só roda quando realmente é merge na master
+    if: github.ref == 'refs/heads/master'
     needs: build
     runs-on: ubuntu-latest
-    environment: staging
 
     steps:
       - name: Trigger Render Deploy
         env:
           RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
-        run: curl -X POST "$RENDER_DEPLOY_HOOK"
+        run: |
+          echo "Disparando deploy no Render..."
+          curl -fsSL -X POST "$RENDER_DEPLOY_HOOK"
+          echo "Webhook enviado com sucesso"
 
   # ---------------- WAIT HEALTH ----------------
   wait-health:
-    needs: deploy-staging
+    needs: deploy-render
     runs-on: ubuntu-latest
 
     steps:
       - name: Wait for Render
         run: |
           echo "Aguardando aplicação subir..."
-          for i in {1..40}; do
+
+          for i in {1..80}; do
             RESPONSE=$(curl -s https://ps-empresa.onrender.com/actuator/health || true)
-            if echo "$RESPONSE" | grep '"status":"UP"'; then
+
+            if echo "$RESPONSE" | grep -q '"status":"UP"'; then
               echo "Aplicação está UP!"
               exit 0
             fi
+
             echo "Ainda não respondeu... aguardando 15s"
             sleep 15
           done
+
           echo "Aplicação não subiu a tempo"
           exit 1
 
-  # ---------------- SMOKE ----------------
+  # ---------------- SMOKE TEST ----------------
   smoke:
     needs: wait-health
     runs-on: ubuntu-latest
@@ -83,7 +96,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: qa-tests
-        run: npm install
+        run: npm ci
 
       - name: Install Playwright
         working-directory: qa-tests
@@ -113,7 +126,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: qa-tests
-        run: npm install
+        run: npm ci
 
       - name: Install Playwright
         working-directory: qa-tests
@@ -125,7 +138,7 @@ jobs:
           PS_EMPRESA_URL: https://ps-empresa.onrender.com
         run: npm run empresa:regression:render
 
-  # ---------------- APPROVAL + RELEASE ----------------
+  # ---------------- RELEASE TAG ----------------
   release-production:
     needs: core-regression
     runs-on: ubuntu-latest
