@@ -54,41 +54,41 @@ jobs:
           echo "Webhook enviado com sucesso"
 
   # ---------------- WAIT HEALTH ----------------
-wait-new-version:
-  needs: deploy-staging
-  runs-on: ubuntu-latest
+  wait-new-version:
+    needs: deploy-staging
+    runs-on: ubuntu-latest
 
-  steps:
-    - name: Capture current start time
-      id: before
-      run: |
-        echo "Capturando start atual..."
-        START_TIME=$(curl -s https://ps-empresa.onrender.com/actuator/metrics/process.start.time | jq '.measurements[0].value')
-        echo "start=$START_TIME" >> $GITHUB_OUTPUT
-        echo "Start atual: $START_TIME"
+    steps:
+      - name: Capture current start time
+        id: before
+        run: |
+          echo "Capturando start atual..."
+          START_TIME=$(curl -s https://ps-empresa.onrender.com/actuator/metrics/process.start.time | jq '.measurements[0].value')
+          echo "start=$START_TIME" >> $GITHUB_OUTPUT
+          echo "Start atual: $START_TIME"
 
-    - name: Wait new deploy
-      run: |
-        echo "Aguardando novo container entrar em produção..."
-
-        OLD_START=${{ steps.before.outputs.start }}
-
-        for i in {1..60}; do
-          NEW_START=$(curl -s https://ps-empresa.onrender.com/actuator/metrics/process.start.time | jq '.measurements[0].value')
-
-          echo "Start atual em produção: $NEW_START"
-
-          if [ "$NEW_START" != "$OLD_START" ]; then
-            echo "Novo deploy detectado!"
-            exit 0
-          fi
-
-          echo "Ainda é o container antigo... aguardando 20s"
-          sleep 20
-        done
-
-        echo "Novo deploy não entrou em produção"
-        exit 1
+      - name: Wait new deploy
+        run: |
+          echo "Aguardando novo container entrar em produção..."
+  
+          OLD_START=${{ steps.before.outputs.start }}
+  
+          for i in {1..60}; do
+            NEW_START=$(curl -s https://ps-empresa.onrender.com/actuator/metrics/process.start.time | jq '.measurements[0].value')
+  
+            echo "Start atual em produção: $NEW_START"
+  
+            if [ "$NEW_START" != "$OLD_START" ]; then
+              echo "Novo deploy detectado!"
+              exit 0
+            fi
+  
+            echo "Ainda é o container antigo... aguardando 20s"
+            sleep 20
+          done
+  
+          echo "Novo deploy não entrou em produção"
+          exit 1
 
   # ---------------- SMOKE TEST ----------------
   smoke:
