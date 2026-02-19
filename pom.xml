@@ -121,6 +121,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
+					<layers enabled="true"/>
 					<excludes>
 						<exclude>
 							<groupId>org.projectlombok</groupId>
@@ -129,6 +130,12 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>pl.project13.maven</groupId>
+				<artifactId>git-commit-id-plugin</artifactId>
+				<version>4.9.10</version>
+			</plugin>
+
 		</plugins>
 	</build>
 

@@ -54,29 +54,32 @@ jobs:
           echo "Webhook enviado com sucesso"
 
   # ---------------- WAIT HEALTH ----------------
-  wait-health:
+  wait-new-version:
     needs: deploy-render
     runs-on: ubuntu-latest
 
     steps:
-      - name: Wait for Render
+      - name: Wait new deploy
         run: |
-          echo "Aguardando aplicação subir..."
-
-          for i in {1..80}; do
-            RESPONSE=$(curl -s https://ps-empresa.onrender.com/actuator/health || true)
-
-            if echo "$RESPONSE" | grep -q '"status":"UP"'; then
-              echo "Aplicação está UP!"
+          echo "Aguardando nova versão entrar em produção..."
+  
+          EXPECTED_SHA=${{ github.sha }}
+  
+          for i in {1..60}; do
+            RESPONSE=$(curl -s https://ps-empresa.onrender.com/actuator/info || true)
+  
+            if echo "$RESPONSE" | grep -q "${EXPECTED_SHA:0:7}"; then
+              echo "Nova versão detectada em produção!"
               exit 0
             fi
-
-            echo "Ainda não respondeu... aguardando 15s"
-            sleep 15
+  
+            echo "Ainda é a versão antiga... aguardando 20s"
+            sleep 20
           done
-
-          echo "Aplicação não subiu a tempo"
+  
+          echo "Nova versão nunca entrou em produção"
           exit 1
+
 
   # ---------------- SMOKE TEST ----------------
   smoke:
