@@ -55,7 +55,7 @@ jobs:
 
   # ---------------- WAIT HEALTH ----------------
   wait-new-version:
-    needs: deploy-staging
+    needs: deploy-render
     runs-on: ubuntu-latest
 
     steps:
