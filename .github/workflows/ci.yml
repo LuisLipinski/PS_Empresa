@@ -10,7 +10,7 @@ on:
 
 jobs:
   unit-tests:
-    if: github.event_name == 'push' || github.event_name == 'pull_request'
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
 
     steps:
