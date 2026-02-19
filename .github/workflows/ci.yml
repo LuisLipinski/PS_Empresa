@@ -10,6 +10,7 @@ on:
 
 jobs:
   unit-tests:
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
     runs-on: ubuntu-latest
 
     steps:
@@ -28,6 +29,7 @@ jobs:
       - name: Rodar unitários
         run: ./mvnw -B clean test
   core-regression:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
 
     services:
