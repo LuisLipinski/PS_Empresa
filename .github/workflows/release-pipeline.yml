@@ -40,6 +40,8 @@ jobs:
 
     steps:
       - name: Trigger Render Deploy
+        env:
+          RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
         run: curl -X POST "$RENDER_DEPLOY_HOOK"
 
   # ---------------- WAIT HEALTH ----------------
