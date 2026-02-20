@@ -17,20 +17,12 @@ server:
   port: 8081
 
 management:
-  server:
-    port: 8081
-
   endpoints:
     web:
-      base-path: /actuator
       exposure:
-        include: "*"
+        include: health,info
+  info:
+    git:
+      mode: full
 
-  endpoint:
-    health:
-      show-details: always
-
-  metrics:
-    enable:
-      all: true
 
