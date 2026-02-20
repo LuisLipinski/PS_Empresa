@@ -92,8 +92,6 @@
 			<artifactId>micrometer-registry-prometheus</artifactId>
 		</dependency>
 
-
-
 	</dependencies>
 
 	<build>
@@ -132,15 +130,13 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<layers enabled="true"/>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
-				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>pl.project13.maven</groupId>
