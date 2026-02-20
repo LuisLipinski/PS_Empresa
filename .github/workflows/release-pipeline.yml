@@ -59,43 +59,26 @@ jobs:
     needs: deploy-render
 
     steps:
-      - name: Instalar jq
-        run: sudo apt-get update && sudo apt-get install -y jq
-
-      - name: Aguardar nova versão entrar em produção
-        env:
-          EXPECTED_COMMIT: ${{ github.sha }}
+      - name: Aguardar troca de instância do Render
         run: |
-  
-          echo "Commit esperado:"
-          echo $EXPECTED_COMMIT
-  
-          SHORT_COMMIT=$(echo $EXPECTED_COMMIT | cut -c1-7)
-  
-          echo "Esperando produção rodar commit: $SHORT_COMMIT"
-  
-          for i in {1..40}
-          do
-            echo "Tentativa $i..."
-  
-            RESPONSE=$(curl -s https://ps-empresa.onrender.com/actuator/info)
-  
-            RUNNING_COMMIT=$(echo $RESPONSE | jq -r '.git.commit.id // empty')
-  
-            echo "Produção rodando: $RUNNING_COMMIT"
-  
-            if [ "$RUNNING_COMMIT" = "$SHORT_COMMIT" ]; then
-              echo "Nova versão está no ar!"
-              exit 0
-            fi
-  
-            echo "Ainda não atualizou... aguardando 20s"
-            sleep 20
-          done
-  
-          echo "Timeout esperando deploy do Render"
-          exit 1
+          echo "Esperando Render trocar para nova instância..."
 
+          echo "Aguardando a API cair (swap)..."
+          until ! curl -s --max-time 5 https://ps-empresa.onrender.com/actuator/health > /dev/null; do
+            echo "Ainda respondendo (instância antiga)..."
+            sleep 5
+          done
+
+          echo "Instância antiga caiu. Aguardando nova subir..."
+
+          until curl -s https://ps-empresa.onrender.com/actuator/health | grep '"status":"UP"'; do
+            echo "Nova instância ainda iniciando..."
+            sleep 10
+          done
+
+          echo "Nova versão ONLINE!"
+  
+  
 
   # ---------------- SMOKE TEST ----------------
   smoke:
