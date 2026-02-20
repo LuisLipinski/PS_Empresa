@@ -17,33 +17,20 @@ server:
   port: 8081
 
 management:
+  server:
+    port: 8081
 
   endpoints:
     web:
       base-path: /actuator
       exposure:
-        include: health,info,metrics,prometheus
+        include: "*"
 
   endpoint:
     health:
       show-details: always
-      probes:
-        enabled: true
-
-  health:
-    livenessstate:
-      enabled: true
-    readinessstate:
-      enabled: true
-    db:
-      enabled: true
-    diskspace:
-      enabled: true
 
   metrics:
     enable:
-      process: true
-      system: true
-      jvm: true
-    tags:
-      application: ps-empresa
+      all: true
+
