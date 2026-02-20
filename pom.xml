@@ -131,6 +131,7 @@
 				<groupId>pl.project13.maven</groupId>
 				<artifactId>git-commit-id-plugin</artifactId>
 				<version>4.9.10</version>
+
 				<executions>
 					<execution>
 						<goals>
@@ -138,8 +139,25 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
 
+				<configuration>
+
+					<!-- ESSENCIAL -->
+					<failOnNoGitDirectory>false</failOnNoGitDirectory>
+
+					<!-- não quebra build em Docker -->
+					<failOnUnableToExtractRepoInfo>false</failOnUnableToExtractRepoInfo>
+
+					<!-- gera o git.properties mesmo sem git -->
+					<generateGitPropertiesFile>true</generateGitPropertiesFile>
+
+					<!-- caminho correto do spring -->
+					<generateGitPropertiesFilename>
+						${project.build.outputDirectory}/git.properties
+					</generateGitPropertiesFilename>
+
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
