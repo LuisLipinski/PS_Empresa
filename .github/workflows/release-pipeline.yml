@@ -59,24 +59,35 @@ jobs:
     needs: deploy-render
 
     steps:
-      - name: Aguardar troca de instância do Render
-        run: |
-          echo "Esperando Render trocar para nova instância..."
+    - name: Aguardar nova versão no Render
+      run: |
+        echo "Esperando Render publicar nova versão..."
+        
+        EXPECTED_COMMIT=${{ github.sha }}
+        MAX_ATTEMPTS=90
+        ATTEMPT=0
+        
+        while true; do
+          RESPONSE=$(curl -s https://ps-empresa.onrender.com/version)
+        
+          echo "Servidor está rodando commit: $RESPONSE"
+          echo "Esperado: $EXPECTED_COMMIT"
+        
+          if [[ "$RESPONSE" == "$EXPECTED_COMMIT" ]]; then
+            echo "Nova versão publicada!"
+            break
+          fi
+        
+          ATTEMPT=$((ATTEMPT+1))
+        
+          if [ "$ATTEMPT" -ge "$MAX_ATTEMPTS" ]; then
+            echo "Timeout aguardando nova versão do Render"
+            exit 1
+          fi
+        
+          sleep 10
+        done
 
-          echo "Aguardando a API cair (swap)..."
-          until ! curl -s --max-time 5 https://ps-empresa.onrender.com/actuator/health > /dev/null; do
-            echo "Ainda respondendo (instância antiga)..."
-            sleep 5
-          done
-
-          echo "Instância antiga caiu. Aguardando nova subir..."
-
-          until curl -s https://ps-empresa.onrender.com/actuator/health | grep '"status":"UP"'; do
-            echo "Nova instância ainda iniciando..."
-            sleep 10
-          done
-
-          echo "Nova versão ONLINE!"
   
   
 
