@@ -115,10 +115,9 @@ public class EmpresaController {
             @ApiResponse(responseCode = "404", description = "Empresa não encontrada")
     })
     @PutMapping("editEmpresa/{id}")
-    public ResponseEntity<EmpresaResponseDTO> editEmpresaById(@PathVariable("id") UUID empresaId, @Valid @RequestBody UpdateEmpresaRequestDto updateEmpresa) {
+    public ResponseEntity<EmpresaResponseDTO> editEmpresaById(@PathVariable("id") UUID empresaId, @RequestBody(required = false) UpdateEmpresaRequestDto updateEmpresa) {
 
         log.info("Recebendo requisição para editar empresa com id {}", empresaId);
-
 
         if (updateEmpresa == null) {
             updateEmpresa = new UpdateEmpresaRequestDto();
