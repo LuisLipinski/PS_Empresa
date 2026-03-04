@@ -1,16 +1,10 @@
 package com.mypetadmin.ps_empresa.service.impl;
 
-import com.mypetadmin.ps_empresa.dto.EmpresaRequestDTO;
-import com.mypetadmin.ps_empresa.dto.EmpresaResponseDTO;
-import com.mypetadmin.ps_empresa.dto.PageResponse;
-import com.mypetadmin.ps_empresa.dto.UpdateEmpresaRequestDto;
+import com.mypetadmin.ps_empresa.dto.*;
 import com.mypetadmin.ps_empresa.enums.DirectionField;
 import com.mypetadmin.ps_empresa.enums.SortField;
 import com.mypetadmin.ps_empresa.enums.StatusEmpresa;
-import com.mypetadmin.ps_empresa.exception.CnpjInvalidException;
-import com.mypetadmin.ps_empresa.exception.EmailExistenteException;
-import com.mypetadmin.ps_empresa.exception.EmpresaExistenteException;
-import com.mypetadmin.ps_empresa.exception.EmpresaNaoEncontradaException;
+import com.mypetadmin.ps_empresa.exception.*;
 import com.mypetadmin.ps_empresa.helper.EmpresaSpecification;
 import com.mypetadmin.ps_empresa.mapper.EmpresaMapper;
 import com.mypetadmin.ps_empresa.mapper.EmpresaUpdateMapper;
@@ -60,27 +54,39 @@ public class EmpresaServiceImpl implements EmpresaService {
             throw new EmailExistenteException("Email já cadastrado no sistema, informe outro email.");
         }
         Empresa empresa = mapper.toEntity(dto);
-        empresa.setStatus(StatusEmpresa.AGUARDANDO_PAGAMENTO);
+        empresa.setStatus(StatusEmpresa.AGUARDANDO_CONTRATO);
         Empresa salva = empresaRepository.save(empresa);
         log.info("Empresa salva no banco com ID: {}", salva.getId());
         return mapper.toResponseDto(salva);
     }
 
-    @Override
     @Transactional
-    public void atualizarStatus(UUID empresaId, StatusEmpresa novoStatus) {
+    public void sincronizarStatusComContrato(EmpresaContratoStatusDTO dto) {
+        Empresa empresa = empresaRepository.findById(dto.getEmpresaId()).orElseThrow(() -> new EmpresaNaoEncontradaException("Empresa não encontrada"));
 
-        Objects.requireNonNull(novoStatus, "Novo status não pode ser nulo");
-        Empresa empresa = empresaRepository.findById(empresaId)
-                .orElseThrow(() -> new EmpresaNaoEncontradaException("Empresa não encontrada"));
+        switch (dto.getStatusContrato()) {
 
-        if (!empresa.getStatus().equals(novoStatus)) {
-            empresa.setStatus(novoStatus);
-            empresa.setDataAtualizacaoStatus(LocalDateTime.now());
-            log.info("Status da empresa {} atualizado para {}", empresaId, novoStatus);
-        } else {
-            log.warn("O status da empresa {} já está definido como {}", empresaId, novoStatus);
+            case "ATIVO":
+                empresa.setStatus(StatusEmpresa.ATIVO);
+                break;
+
+            case "AGUARDANDO_PAGAMENTO":
+                empresa.setStatus(StatusEmpresa.AGUARDANDO_CONTRATO);
+                break;
+
+            case "PENDENTE_PAGAMENTO":
+                if (empresa.getStatus() != StatusEmpresa.ATIVO) {
+                    empresa.setStatus(StatusEmpresa.ATIVO);
+                }
+                break;
+
+            case "INATIVO":
+                empresa.setStatus(StatusEmpresa.INATIVO);
+                break;
         }
+
+        empresa.setDataAtualizacaoStatus(LocalDateTime.now());
+        empresaRepository.save(empresa);
     }
 
     public PageResponse<EmpresaResponseDTO> getAllEmpresaSorted(

@@ -11,6 +11,7 @@ import com.mypetadmin.ps_empresa.service.EmpresaService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -23,6 +24,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(controllers = EmpresaController.class)
 public class GlobalExceptionHandlerIntegrationTest {
 
@@ -59,7 +61,7 @@ public class GlobalExceptionHandlerIntegrationTest {
         EmpresaResponseDTO responseDTO = new EmpresaResponseDTO();
         responseDTO.setId(UUID.randomUUID());
         responseDTO.setDocumentNumber(dto.getDocumentNumber());
-        responseDTO.setStatus(StatusEmpresa.AGUARDANDO_PAGAMENTO);
+        responseDTO.setStatus(StatusEmpresa.AGUARDANDO_CONTRATO);
         responseDTO.setRazaoSocial(dto.getRazaoSocial());
         responseDTO.setNomeFantasia(dto.getNomeFantasia());
         responseDTO.setEmail(dto.getEmail());
@@ -77,7 +79,7 @@ public class GlobalExceptionHandlerIntegrationTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(responseDTO.getId().toString()))
                 .andExpect(jsonPath("$.documentNumber").value(dto.getDocumentNumber()))
-                .andExpect(jsonPath("$.status").value("AGUARDANDO_PAGAMENTO"));
+                .andExpect(jsonPath("$.status").value("AGUARDANDO_CONTRATO"));
     }
 
     @Test

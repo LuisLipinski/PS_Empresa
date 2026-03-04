@@ -22,6 +22,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(EmpresaExistenteException.class)
     public ResponseEntity<ErrorResponse> handleEmpresaExistente(EmpresaExistenteException ex, HttpServletRequest request) {
+        log.warn("Erro de negócio: {}", ex.getMessage());
         ErrorResponse error = new ErrorResponse(
                 ex.getMessage(),
                 HttpStatus.BAD_REQUEST.value(),
@@ -33,9 +34,15 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(EmailExistenteException.class)
-    public ResponseEntity<String> handleEmailExistebre(EmailExistenteException ex) {
+    public ResponseEntity<ErrorResponse> handleEmailExistebre(EmailExistenteException ex, HttpServletRequest request) {
         log.warn("Erro de negócio: {}", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        ErrorResponse error = new ErrorResponse(
+                ex.getMessage(),
+                HttpStatus.BAD_REQUEST.value(),
+                request.getRequestURI()
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
     @ExceptionHandler(EmpresaNaoEncontradaException.class)
@@ -51,6 +58,14 @@ public class GlobalExceptionHandler {
         Map<String, String> body = new HashMap<>();
         body.put("error", ex.getMessage());
         log.warn("Cnpj com formato invalido deve ter 14 caracteres e ser valido: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(body);
+    }
+
+    @ExceptionHandler(StatusInvalidException.class)
+    public ResponseEntity<Map<String, String>> handleStatusInvalido(StatusInvalidException ex) {
+        Map<String, String> body = new HashMap<>();
+        body.put("error", ex.getMessage());
+        log.warn("Não pode ser alterado para esse status: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(body);
     }
 

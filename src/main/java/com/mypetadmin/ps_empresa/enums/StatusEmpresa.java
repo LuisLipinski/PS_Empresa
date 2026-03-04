@@ -2,7 +2,7 @@ package com.mypetadmin.ps_empresa.enums;
 
 public enum StatusEmpresa {
     ATIVO("Ativo"),
-    AGUARDANDO_PAGAMENTO("Aguardando pagamento"),
+    AGUARDANDO_CONTRATO("Aguardando contrato"),
     INATIVO("Inativo");
 
     private final String descricao;
