@@ -55,7 +55,7 @@ class EmpresaServiceImplTest {
 
         entity = new Empresa();
         entity.setId(UUID.randomUUID());
-        entity.setStatus(StatusEmpresa.AGUARDANDO_PAGAMENTO);
+        entity.setStatus(StatusEmpresa.AGUARDANDO_CONTRATO);
 
         response = new EmpresaResponseDTO();
         response.setId(entity.getId());
@@ -75,6 +75,27 @@ class EmpresaServiceImplTest {
         assertThat(resultado.getId()).isEqualTo(entity.getId());
         verify(empresaRepository).save(entity);
     }
+
+    @Test
+    void cadastrarEmpresa_deveIniciarComAguardandoContrato() {
+
+        when(empresaRepository.existsByDocumentNumber(dto.getDocumentNumber())).thenReturn(false);
+        when(empresaRepository.existsByEmail(dto.getEmail())).thenReturn(false);
+        when(mapper.toEntity(dto)).thenReturn(entity);
+        when(empresaRepository.save(any(Empresa.class))).thenReturn(entity);
+        when(mapper.toResponseDto(any(Empresa.class))).thenAnswer(invocation -> {
+            Empresa emp = invocation.getArgument(0);
+            EmpresaResponseDTO resp = new EmpresaResponseDTO();
+            resp.setStatus(emp.getStatus());
+            return resp;
+        });
+
+        EmpresaResponseDTO response = empresaService.cadastrarEmpresa(dto);
+
+        assertEquals(StatusEmpresa.AGUARDANDO_CONTRATO, response.getStatus());
+    }
+
+
 
     @Test
     void deveLancarExcecaoCnpjExistente() {
@@ -121,48 +142,6 @@ class EmpresaServiceImplTest {
                     .isInstanceOf(CnpjInvalidException.class)
                     .hasMessageContaining("CNPJ inválido");
         }
-    }
-
-    @Test
-    void atualizarStatus_quandoEmpresaNaoExiste_entaoLancaExcecao() {
-        when(empresaRepository.findById(entity.getId())).thenReturn(Optional.empty());
-
-        EmpresaNaoEncontradaException exception = assertThrows(
-                EmpresaNaoEncontradaException.class,
-                () -> empresaService.atualizarStatus(entity.getId(), StatusEmpresa.ATIVO)
-        );
-
-        assertEquals("Empresa não encontrada", exception.getMessage());
-        verify(empresaRepository,never()).save(any());
-    }
-
-    @Test
-    void atualizarStatus_quandoNovoStatusDiferente_entaoAtualizaStatus() {
-        when(empresaRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
-
-        empresaService.atualizarStatus(entity.getId(), StatusEmpresa.ATIVO);
-
-        assertEquals(StatusEmpresa.ATIVO, entity.getStatus());
-        assertNotNull(entity.getDataAtualizacaoStatus());
-        verify(empresaRepository, never()).save(any());
-    }
-
-    @Test
-    void atualizarStatus_quandoNovoStatusIgual_entaoNaoAtualiza() {
-        when(empresaRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
-
-        empresaService.atualizarStatus(entity.getId(), StatusEmpresa.AGUARDANDO_PAGAMENTO);
-
-        assertEquals(StatusEmpresa.AGUARDANDO_PAGAMENTO, entity.getStatus());
-        assertNull(entity.getDataAtualizacaoStatus());
-        verify(empresaRepository, never()).save(any());
-    }
-
-    @Test
-    void atualizarStatus_quandoStatusNulo_entaoLancaNullPointerException() {
-
-        assertThrows(NullPointerException.class,
-                () -> empresaService.atualizarStatus(entity.getId(), null));
     }
 
     @Test

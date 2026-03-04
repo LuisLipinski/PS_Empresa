@@ -62,31 +62,6 @@ public class EmpresaController {
 
     }
 
-    @Operation(summary = "Atualiza o status de uma empresa sem a necessidade de token")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Status atualizado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Requisição invalida"),
-            @ApiResponse(responseCode = "404", description = "Empresa não encontrada")
-    })
-    @PutMapping("/atualizarStatus")
-    public ResponseEntity<AtualizacaoStatusResponseDTO> atualizarStatus(@RequestParam @Valid UUID empresaId,
-                                                                        @RequestParam @Valid StatusEmpresa novoStatus) {
-        log.info("Recebendo requisição para atualização do status da empresa com id ${} para o status ${}.", empresaId, novoStatus);
-
-        try {
-            empresaService.atualizarStatus(empresaId, novoStatus);
-            log.info("Status da empresa com o id ${} foi alterado para ${} com sucesso.", empresaId, novoStatus);
-            AtualizacaoStatusResponseDTO response = AtualizacaoStatusResponseDTO.builder()
-                    .message("Status atualizado com sucesso")
-                    .statusCode(HttpStatus.OK.value())
-                    .build();
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            log.error("Error ao atualizar o status: {}", e.getMessage(), e);
-            throw e;
-        }
-    }
-
     @Operation(summary = "Buscar as empresas por cnpj, razão social, email, ou/e status")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Buscado a empresa com sucesso"),

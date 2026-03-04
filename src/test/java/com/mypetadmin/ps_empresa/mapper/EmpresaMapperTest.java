@@ -43,7 +43,7 @@ public class EmpresaMapperTest {
         assertThat(entity.getCidade()).isEqualTo(dto.getCidade());
         assertThat(entity.getEstado()).isEqualTo(dto.getEstado());
         assertThat(entity.getEndereco()).isEqualTo("Rua dos Pets, 123 - Sala 1, Centro");
-        assertThat(entity.getStatus()).isEqualTo(StatusEmpresa.AGUARDANDO_PAGAMENTO);
+        assertThat(entity.getStatus()).isEqualTo(StatusEmpresa.AGUARDANDO_CONTRATO);
         assertThat(entity.getDataCriacao()).isNotNull();
     }
 
@@ -74,7 +74,7 @@ public class EmpresaMapperTest {
         assertThat(entity.getCidade()).isEqualTo(dto.getCidade());
         assertThat(entity.getEstado()).isEqualTo(dto.getEstado());
         assertThat(entity.getEndereco()).isEqualTo("Rua dos Pets, 123, Centro");
-        assertThat(entity.getStatus()).isEqualTo(StatusEmpresa.AGUARDANDO_PAGAMENTO);
+        assertThat(entity.getStatus()).isEqualTo(StatusEmpresa.AGUARDANDO_CONTRATO);
         assertThat(entity.getDataCriacao()).isNotNull();
     }
 
@@ -95,7 +95,7 @@ public class EmpresaMapperTest {
                 .cidade("São Paulo")
                 .estado("SP")
                 .endereco("Rua dos Pets, 123 - Sala 1, Centro")
-                .status(StatusEmpresa.AGUARDANDO_PAGAMENTO)
+                .status(StatusEmpresa.AGUARDANDO_CONTRATO)
                 .build();
 
         EmpresaResponseDTO responseDTO = empresaMapper.toResponseDto(entity);
@@ -111,6 +111,6 @@ public class EmpresaMapperTest {
         assertThat(responseDTO.getCidade()).isEqualTo("São Paulo");
         assertThat(responseDTO.getEstado()).isEqualTo("SP");
         assertThat(responseDTO.getEndereco()).isEqualTo("Rua dos Pets, 123 - Sala 1, Centro");
-        assertThat(responseDTO.getStatus()).isEqualTo(StatusEmpresa.AGUARDANDO_PAGAMENTO);
+        assertThat(responseDTO.getStatus()).isEqualTo(StatusEmpresa.AGUARDANDO_CONTRATO);
     }
 }

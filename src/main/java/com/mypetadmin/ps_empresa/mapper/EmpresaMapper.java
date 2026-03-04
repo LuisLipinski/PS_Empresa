@@ -31,7 +31,7 @@ public class EmpresaMapper {
                 )
                 .cidade(dto.getCidade())
                 .estado(dto.getEstado())
-                .status(StatusEmpresa.AGUARDANDO_PAGAMENTO)
+                .status(StatusEmpresa.AGUARDANDO_CONTRATO)
                 .dataCriacao(LocalDateTime.now())
                 .build();
 

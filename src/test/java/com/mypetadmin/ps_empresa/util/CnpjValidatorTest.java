@@ -30,26 +30,31 @@ public class CnpjValidatorTest {
         assertFalse(CnpjValidator.isCnpjValid(null));
     }
 
+    @Test
     void deveRetornarFalseParaCnpjComCaracteresEspeciais() {
         String cnpjComCaracteresEspeciais = "46017245000$%@";
         assertFalse(CnpjValidator.isCnpjValid(cnpjComCaracteresEspeciais));
     }
 
+    @Test
     void deveRetornarFalseComCnpjComMaisDe14Caracteres() {
         String cnpjComMaisCaracteres = "460172450001222";
         assertFalse(CnpjValidator.isCnpjValid(cnpjComMaisCaracteres));
     }
 
+    @Test
     void deveRetornarFalseQuandoO13DigitoInvalido() {
         String cnpjInvalido = "46017245000152";
         assertFalse(CnpjValidator.isCnpjValid(cnpjInvalido));
     }
 
+    @Test
     void deveRetornarFalseQuandoO14DigitoInvalido() {
         String cnpjInvalido = "46017245000125";
         assertFalse(CnpjValidator.isCnpjValid(cnpjInvalido));
     }
 
+    @Test
     void deveRetornarFalseQuandoOCampoVazio() {
         String cnpjVazio = "";
         assertFalse(CnpjValidator.isCnpjValid(cnpjVazio));
