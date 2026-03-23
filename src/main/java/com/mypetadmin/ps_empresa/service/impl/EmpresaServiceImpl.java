@@ -169,8 +169,14 @@ public class EmpresaServiceImpl implements EmpresaService {
         log.info("buscando a empresa com o id " + empresaId);
         Empresa empresa = empresaRepository.findById(empresaId)
                 .orElseThrow(() -> new EmpresaNaoEncontradaException("Empresa não encontrada com o id: " + empresaId));
+        if (empresaRepository.existsByEmail(updateEmpresa.getEmail())) {
+            log.warn("Tentativa de edição com email já existente: {}", updateEmpresa.getEmail());
+            throw new EmailExistenteException("Email já cadastrado no sistema, informe outro email.");
+        }
         try {
             log.info("Atualizando a empresa {} com os dados fornecidos", empresaId);
+            log.info("DTO TELEFONE: {}", updateEmpresa.getTelefone());
+            log.info("DTO EMAIL: {}", updateEmpresa.getEmail());
 
             EmpresaUpdateMapper.updateEntityFromDto(empresa, updateEmpresa);
 
