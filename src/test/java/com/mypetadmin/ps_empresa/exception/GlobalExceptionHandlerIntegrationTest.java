@@ -3,10 +3,6 @@ package com.mypetadmin.ps_empresa.exception;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mypetadmin.ps_empresa.controller.EmpresaController;
 import com.mypetadmin.ps_empresa.dto.EmpresaRequestDTO;
-import com.mypetadmin.ps_empresa.dto.EmpresaResponseDTO;
-import com.mypetadmin.ps_empresa.enums.StatusEmpresa;
-import com.mypetadmin.ps_empresa.exception.GlobalExceptionHandler;
-import com.mypetadmin.ps_empresa.exception.*;
 import com.mypetadmin.ps_empresa.service.EmpresaService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -17,8 +13,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.UUID;
-
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -26,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(controllers = EmpresaController.class)
-public class GlobalExceptionHandlerIntegrationTest {
+class GlobalExceptionHandlerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -43,8 +37,6 @@ public class GlobalExceptionHandlerIntegrationTest {
         dto.setRazaoSocial("Empresa Teste Ltda");
         dto.setNomeFantasia("Empresa Teste");
         dto.setTelefone("11999999999");
-        dto.setEmail("empresa@teste.com");
-        dto.setNomeTitular("Teste Nome");
         dto.setRua("Rua Teste");
         dto.setNumero("100");
         dto.setComplemento("Sala 1");
@@ -56,34 +48,7 @@ public class GlobalExceptionHandlerIntegrationTest {
     }
 
     @Test
-    public void testCadastroEmpresa_Sucesso() throws Exception {
-        EmpresaRequestDTO dto = createValidEmpresaRequest();
-        EmpresaResponseDTO responseDTO = new EmpresaResponseDTO();
-        responseDTO.setId(UUID.randomUUID());
-        responseDTO.setDocumentNumber(dto.getDocumentNumber());
-        responseDTO.setStatus(StatusEmpresa.AGUARDANDO_CONTRATO);
-        responseDTO.setRazaoSocial(dto.getRazaoSocial());
-        responseDTO.setNomeFantasia(dto.getNomeFantasia());
-        responseDTO.setEmail(dto.getEmail());
-        responseDTO.setTelefone(dto.getTelefone());
-        responseDTO.setCep(dto.getCep());
-        responseDTO.setCidade(dto.getCidade());
-        responseDTO.setEstado(dto.getEstado());
-        responseDTO.setEndereco(dto.getRua() + ", " + dto.getNumero() + (dto.getComplemento() != null ? " " + dto.getComplemento() : "") + ", " + dto.getBairro());
-
-        Mockito.when(empresaService.cadastrarEmpresa(any(EmpresaRequestDTO.class))).thenReturn(responseDTO);
-
-        mockMvc.perform(post("/empresas/createEmpresas")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(dto)))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(responseDTO.getId().toString()))
-                .andExpect(jsonPath("$.documentNumber").value(dto.getDocumentNumber()))
-                .andExpect(jsonPath("$.status").value("AGUARDANDO_CONTRATO"));
-    }
-
-    @Test
-    public void testCadastroEmpresa_EmpresaExistenteException() throws Exception {
+    void deveRetornar400QuandoEmpresaExistenteException() throws Exception {
         EmpresaRequestDTO dto = createValidEmpresaRequest();
 
         Mockito.when(empresaService.cadastrarEmpresa(any(EmpresaRequestDTO.class)))
@@ -97,21 +62,7 @@ public class GlobalExceptionHandlerIntegrationTest {
     }
 
     @Test
-    public void testCadastroEmpresa_EmailExistenteException() throws Exception {
-        EmpresaRequestDTO dto = createValidEmpresaRequest();
-
-        Mockito.when(empresaService.cadastrarEmpresa(any(EmpresaRequestDTO.class)))
-                .thenThrow(new EmailExistenteException("Email já cadastrado no sistema, informe outro email."));
-
-        mockMvc.perform(post("/empresas/createEmpresas")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(dto)))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string(containsString("Email já cadastrado no sistema, informe outro email.")));
-    }
-
-    @Test
-    public void testCadastroEmpresa_IllegalArgumentException() throws Exception {
+    void deveRetornar400QuandoIllegalArgumentException() throws Exception {
         EmpresaRequestDTO dto = createValidEmpresaRequest();
 
         Mockito.when(empresaService.cadastrarEmpresa(any(EmpresaRequestDTO.class)))
@@ -125,7 +76,7 @@ public class GlobalExceptionHandlerIntegrationTest {
     }
 
     @Test
-    public void testCadastroEmpresa_GenericException() throws Exception {
+    void deveRetornar500QuandoRuntimeExceptionGenerica() throws Exception {
         EmpresaRequestDTO dto = createValidEmpresaRequest();
 
         Mockito.when(empresaService.cadastrarEmpresa(any(EmpresaRequestDTO.class)))
@@ -139,7 +90,7 @@ public class GlobalExceptionHandlerIntegrationTest {
     }
 
     @Test
-    public void testCadastroEmpresa_CnpjInvalidException() throws Exception {
+    void deveRetornar400QuandoCnpjInvalidException() throws Exception {
         EmpresaRequestDTO dto = createValidEmpresaRequest();
 
         Mockito.when(empresaService.cadastrarEmpresa(any(EmpresaRequestDTO.class)))
@@ -153,19 +104,7 @@ public class GlobalExceptionHandlerIntegrationTest {
     }
 
     @Test
-    public void testCadastroEmpresa_MethodArgumentNotValidException() throws Exception {
-        EmpresaRequestDTO dto = createValidEmpresaRequest();
-        dto.setEmail("email-invalido");
-
-        mockMvc.perform(post("/empresas/createEmpresas")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(dto)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.email").value("Email inválido: deve ter ao menos 3 caracteres antes do @ e um domínio válido (ex: .com, .org)"));
-    }
-
-    @Test
-    public void testCadastroEmpresa_MissingServletRequestParameterException() throws Exception {
+    void deveRetornar400QuandoCorpoDaRequisicaoAusenteOuInvalido() throws Exception {
         mockMvc.perform(post("/empresas/createEmpresas")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())

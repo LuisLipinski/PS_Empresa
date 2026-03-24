@@ -1,8 +1,6 @@
 package com.mypetadmin.ps_empresa.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -24,20 +22,6 @@ public class UpdateEmpresaRequestDto {
     @Pattern(regexp = "\\d{11}", message = "O telefone deve conter apenas números e ter 11 digitos.")
     @Schema(description = "Numero do telefone da empresa com DDD", example = "41999999999")
     private String telefone;
-
-    @Email(message = "Email inválido: deve ter ao menos 3 caracteres antes do @ e um domínio válido (ex: .com, .org)")
-    @Pattern(
-            regexp = "^[\\w.%+-]{3,}@[\\w.-]+\\.[a-zA-Z]{2,}$",
-            message = "Email inválido: deve ter ao menos 3 caracteres antes do @ e um domínio válido (ex: .com, .org)"
-    )
-    @Schema(description = "Email comercial da empresa", example = "exemplo@empresa.com")
-    private String email;
-
-    @Pattern(regexp = "^([A-Za-zÀ-ÿ]{3,}) ([A-Za-zÀ-ÿ]{3,})$", message = "O nome do titular da conta não deve ter numeros " +
-            "ou carcateres especiais, precisa ser nome completo (Nome e sobrenome), " +
-            "e cada palavra não pode ter menos que 3 caracteres")
-    @Schema(description = "Nome completo do titular da conta", example = "João Teste")
-    private String nomeTitular;
 
     @Size(min = 3, max = 200)
     @Pattern(regexp = "^[a-zA-ZÀ-ÿ0-9 ]+$", message = "A rua não pode conter caracteres especiais.")

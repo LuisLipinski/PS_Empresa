@@ -1,8 +1,9 @@
 package com.mypetadmin.ps_empresa.security;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.mock.web.*;
 import jakarta.servlet.FilterChain;
+import org.junit.jupiter.api.Test;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,6 +24,18 @@ class InternalRequestFilterTest {
         filter.doFilter(request, response, chain);
 
         assertThat(response.getStatus()).isEqualTo(200);
+    }
+
+    @Test
+    void deveBloquearQuandoHeaderAusente() throws Exception {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setRequestURI("/internal/contratos/status");
+
+        MockHttpServletResponse response = new MockHttpServletResponse();
+
+        filter.doFilter(request, response, (req, res) -> {});
+
+        assertThat(response.getStatus()).isEqualTo(403);
     }
 
     @Test

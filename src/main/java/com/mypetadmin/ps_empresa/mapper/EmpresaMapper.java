@@ -17,8 +17,6 @@ public class EmpresaMapper {
                 .razaoSocial(dto.getRazaoSocial())
                 .nomeFantasia(dto.getNomeFantasia())
                 .telefone(dto.getTelefone())
-                .email(dto.getEmail())
-                .nomeTitular((dto.getNomeTitular()))
                 .cep(dto.getCep())
                 .endereco(String.format("%s, %s%s%s",
                         dto.getRua(),
@@ -44,8 +42,6 @@ public class EmpresaMapper {
                 .razaoSocial(empresa.getRazaoSocial())
                 .nomeFantasia(empresa.getNomeFantasia())
                 .telefone(empresa.getTelefone())
-                .email(empresa.getEmail())
-                .nomeTitular(empresa.getNomeTitular())
                 .cep(empresa.getCep())
                 .endereco(empresa.getEndereco())
                 .cidade(empresa.getCidade())

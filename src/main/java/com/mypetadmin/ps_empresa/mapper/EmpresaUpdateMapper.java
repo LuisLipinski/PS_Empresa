@@ -11,8 +11,6 @@ public class EmpresaUpdateMapper {
     public static void updateEntityFromDto(Empresa empresa, UpdateEmpresaRequestDto dto) {
         UpdateHelper.applyUpdates(empresa::getNomeFantasia, dto.getNomeFantasia(), empresa::setNomeFantasia);
         UpdateHelper.applyUpdates(empresa::getTelefone, dto.getTelefone(), empresa::setTelefone);
-        UpdateHelper.applyUpdates(empresa::getEmail, dto.getEmail(), empresa::setEmail);
-        UpdateHelper.applyUpdates(empresa::getNomeTitular, dto.getNomeTitular(), empresa::setNomeTitular);
         UpdateHelper.applyUpdates(empresa::getCep, dto.getCep(), empresa::setCep);
         UpdateHelper.applyUpdates(empresa::getCidade, dto.getCidade(), empresa::setCidade);
         UpdateHelper.applyUpdates(empresa::getEstado, dto.getEstado(), empresa::setEstado);

@@ -4,11 +4,15 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class VersionControllerTest {
+class VersionControllerTest {
 
     @Test
-    void deveExecutarSemErro() {
+    void deveRetornarValorDaVariavelDeAmbienteOuNullQuandoNaoDefinida() {
         VersionController controller = new VersionController();
-        controller.version(); // se não lançar exceção, passou
+
+        String resultado = controller.version();
+        String esperado = System.getenv("RENDER_GIT_COMMIT");
+
+        assertThat(resultado).isEqualTo(esperado);
     }
 }

@@ -23,10 +23,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -49,10 +46,6 @@ public class EmpresaServiceImpl implements EmpresaService {
             throw new CnpjInvalidException("CNPJ inválido.");
         }
 
-        if (empresaRepository.existsByEmail(dto.getEmail())) {
-            log.warn("Tentativa de cadastro com email já existente: {}", dto.getEmail());
-            throw new EmailExistenteException("Email já cadastrado no sistema, informe outro email.");
-        }
         Empresa empresa = mapper.toEntity(dto);
         empresa.setStatus(StatusEmpresa.AGUARDANDO_CONTRATO);
         Empresa salva = empresaRepository.save(empresa);
@@ -83,6 +76,8 @@ public class EmpresaServiceImpl implements EmpresaService {
             case "INATIVO":
                 empresa.setStatus(StatusEmpresa.INATIVO);
                 break;
+
+            default:throw new StatusInvalidException("Status do contrato inválido: " + dto.getStatusContrato());
         }
 
         empresa.setDataAtualizacaoStatus(LocalDateTime.now());
@@ -92,7 +87,6 @@ public class EmpresaServiceImpl implements EmpresaService {
     public PageResponse<EmpresaResponseDTO> getAllEmpresaSorted(
             String documentNumber,
             String razaoSocial,
-            String email,
             StatusEmpresa status,
             int page,
             int size,
@@ -101,7 +95,6 @@ public class EmpresaServiceImpl implements EmpresaService {
     ) {
         documentNumber = normalize(documentNumber);
         razaoSocial = normalize(razaoSocial);
-        email = normalize(email);
         Sort sort = Sort.by(Sort.Direction.fromString(directionField.getDirectionField()), sortField.getSortField());
 
         Pageable pageable = PageRequest.of(page, size, sort);
@@ -113,7 +106,6 @@ public class EmpresaServiceImpl implements EmpresaService {
         }
         Specification<Empresa> spec = EmpresaSpecification.hasDocumentNumber(documentNumber)
                 .and(EmpresaSpecification.hasRazaoSocial(razaoSocial))
-                .and(EmpresaSpecification.hasEmail(email))
                 .and(EmpresaSpecification.hasStatus(status));
         Page<Empresa> empresas = empresaRepository.findAll(spec, pageable);
         Page<EmpresaResponseDTO> pageDto =
@@ -122,7 +114,6 @@ public class EmpresaServiceImpl implements EmpresaService {
         StringBuilder logMessage = new StringBuilder("Busca de empresas realizada com filtros: ");
         if (documentNumber != null) logMessage.append("CNPJ=").append(documentNumber).append(" ");
         if (razaoSocial != null) logMessage.append("Razão Social=").append(razaoSocial).append(" ");
-        if (email != null) logMessage.append("Email=").append(email).append(" ");
         if (status != null) logMessage.append("Status=").append(status).append(" ");
         logMessage.append("| Total resultados: ").append(empresas.getTotalElements());
 
@@ -166,28 +157,20 @@ public class EmpresaServiceImpl implements EmpresaService {
     @Override
     @Transactional
     public EmpresaResponseDTO editEmpresaById(UUID empresaId, UpdateEmpresaRequestDto updateEmpresa) {
-        log.info("buscando a empresa com o id " + empresaId);
+        if (empresaId == null || updateEmpresa == null) {
+            throw new IllegalArgumentException("empresaId e updateEmpresa não podem ser nulos");
+        }
+
+        log.info("Buscando a empresa com o id: {}", empresaId);
         Empresa empresa = empresaRepository.findById(empresaId)
                 .orElseThrow(() -> new EmpresaNaoEncontradaException("Empresa não encontrada com o id: " + empresaId));
-        if (empresaRepository.existsByEmail(updateEmpresa.getEmail())) {
-            log.warn("Tentativa de edição com email já existente: {}", updateEmpresa.getEmail());
-            throw new EmailExistenteException("Email já cadastrado no sistema, informe outro email.");
-        }
-        try {
-            log.info("Atualizando a empresa {} com os dados fornecidos", empresaId);
-            log.info("DTO TELEFONE: {}", updateEmpresa.getTelefone());
-            log.info("DTO EMAIL: {}", updateEmpresa.getEmail());
 
-            EmpresaUpdateMapper.updateEntityFromDto(empresa, updateEmpresa);
+        log.debug("Atualizando a empresa {} com os dados fornecidos", empresaId);
+        EmpresaUpdateMapper.updateEntityFromDto(empresa, updateEmpresa);
 
-            log.info("Salvando os dados no banco de dados");
-            Empresa empresaAtualizada = empresaRepository.save(empresa);
-            log.info("Empresa {} atualizada com sucesso.", empresaId);
+        Empresa empresaAtualizada = empresaRepository.save(empresa);
+        log.info("Empresa {} atualizada com sucesso", empresaId);
 
-            return mapper.toResponseDto(empresaAtualizada);
-        } catch (Exception e) {
-            log.error("Falha ao editar a empresa: {}", e.getMessage());
-            throw e;
-        }
+        return mapper.toResponseDto(empresaAtualizada);
     }
 }

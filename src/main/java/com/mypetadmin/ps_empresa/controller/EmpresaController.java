@@ -39,10 +39,10 @@ public class EmpresaController {
     })
     @PostMapping("/createEmpresas")
     public ResponseEntity<EmpresaResponseDTO>cadastrarEmpresa(@Valid @RequestBody EmpresaRequestDTO empresaRequestDTO) {
-        log.info("Recebendo requisição para cadastrar empresa: CNPJ={}, Razão Social={}, Nome Fantasia={}, Telefone={}, Email={}, " +
+        log.info("Recebendo requisição para cadastrar empresa: CNPJ={}, Razão Social={}, Nome Fantasia={}, Telefone={}, " +
                         "Endereco={}, {}, {}, {}, Cidade={}, Estado={}, CEP={}",
                 empresaRequestDTO.getDocumentNumber(), empresaRequestDTO.getRazaoSocial(), empresaRequestDTO.getNomeFantasia(),
-                empresaRequestDTO.getTelefone(), empresaRequestDTO.getEmail(), empresaRequestDTO.getRua(), empresaRequestDTO.getNumero(),
+                empresaRequestDTO.getTelefone(), empresaRequestDTO.getRua(), empresaRequestDTO.getNumero(),
                 empresaRequestDTO.getComplemento(), empresaRequestDTO.getBairro(), empresaRequestDTO.getCidade(), empresaRequestDTO.getEstado(),
                 empresaRequestDTO.getCep());
         try {
@@ -51,7 +51,7 @@ public class EmpresaController {
                     empresaCadastrada.getId(), empresaCadastrada.getDocumentNumber(), empresaCadastrada.getStatus());
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
-                    .path("/{id")
+                    .path("/{id}")
                     .buildAndExpand(empresaCadastrada.getId())
                     .toUri();
             return ResponseEntity.created(location).body(empresaCadastrada);
@@ -62,7 +62,7 @@ public class EmpresaController {
 
     }
 
-    @Operation(summary = "Buscar as empresas por cnpj, razão social, email, ou/e status")
+    @Operation(summary = "Buscar as empresas por cnpj, razão social, ou/e status")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Buscado a empresa com sucesso"),
             @ApiResponse(responseCode = "404", description = "Não foi encontrado nenhuma empresa")
@@ -70,7 +70,6 @@ public class EmpresaController {
     @GetMapping("/buscaEmpresas")
     public ResponseEntity<PageResponse<EmpresaResponseDTO>>buscarEmpresas(@RequestParam (required = false) String documentNumber,
                                                                   @RequestParam (required = false) String razaoSocial,
-                                                                  @RequestParam (required = false) String email,
                                                                   @RequestParam (required = false) StatusEmpresa status,
                                                                   @RequestParam(defaultValue = "0") int page,
                                                                   @RequestParam(defaultValue = "10") int size,
@@ -80,7 +79,7 @@ public class EmpresaController {
 
         log.info("Iniciado a busca por empresas no banco de dados");
 
-        PageResponse<EmpresaResponseDTO> dto = empresaService.getAllEmpresaSorted(documentNumber, razaoSocial, email, status, page, size, sortField, directionField);
+        PageResponse<EmpresaResponseDTO> dto = empresaService.getAllEmpresaSorted(documentNumber, razaoSocial, status, page, size, sortField, directionField);
         return ResponseEntity.ok(dto);
     }
 
@@ -115,7 +114,7 @@ public class EmpresaController {
             @ApiResponse(responseCode = "404", description = "Empresa não encontrada")
     })
     @PutMapping("editEmpresa/{id}")
-    public ResponseEntity<EmpresaResponseDTO> editEmpresaById(@PathVariable("id") UUID empresaId, @RequestBody(required = false) UpdateEmpresaRequestDto updateEmpresa) {
+    public ResponseEntity<EmpresaResponseDTO> editEmpresaById(@PathVariable("id") UUID empresaId, @Valid @RequestBody(required = false) UpdateEmpresaRequestDto updateEmpresa) {
 
         log.info("Recebendo requisição para editar empresa com id {}", empresaId);
 

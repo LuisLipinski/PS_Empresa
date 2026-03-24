@@ -5,65 +5,108 @@ import com.mypetadmin.ps_empresa.model.Empresa;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.time.LocalDateTime;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class EmpresaSpecificationTest {
-    @Test
-    void hasDocumentNumber_naoLancaErro() {
-        Specification<Empresa> spec = EmpresaSpecification.hasDocumentNumber(null);
-        assertThat(spec).isNotNull();
+class EmpresaSpecificationTest {
 
-        spec = EmpresaSpecification.hasDocumentNumber("12345678901234");
-        assertThat(spec).isNotNull();
+    @Test
+    void deveCriarSpecificationParaDocumentNumber() {
+        Specification<Empresa> specNull = EmpresaSpecification.hasDocumentNumber(null);
+        Specification<Empresa> specValue = EmpresaSpecification.hasDocumentNumber("34222351000169");
+
+        assertThat(specNull).isNotNull();
+        assertThat(specValue).isNotNull();
     }
 
     @Test
-    void hasDocumentNumber_quandoValorValido_naoRetornaNull() {
-        Specification<Empresa> spec = EmpresaSpecification.hasDocumentNumber("34222351000169");
-        assertThat(spec).isNotNull();
+    void deveCriarSpecificationParaRazaoSocial() {
+        Specification<Empresa> specNull = EmpresaSpecification.hasRazaoSocial(null);
+        Specification<Empresa> specValue = EmpresaSpecification.hasRazaoSocial("Pet Shop");
+
+        assertThat(specNull).isNotNull();
+        assertThat(specValue).isNotNull();
     }
 
     @Test
-    void hasRazaoSocial_naoLancaErro() {
-        Specification<Empresa> spec = EmpresaSpecification.hasRazaoSocial(null);
-        assertThat(spec).isNotNull();
+    void deveCriarSpecificationParaNomeFantasia() {
+        Specification<Empresa> specNull = EmpresaSpecification.hasNomeFantasia(null);
+        Specification<Empresa> specValue = EmpresaSpecification.hasNomeFantasia("Pet Shop Dogão");
 
-        spec = EmpresaSpecification.hasRazaoSocial("Pet Shop");
-        assertThat(spec).isNotNull();
+        assertThat(specNull).isNotNull();
+        assertThat(specValue).isNotNull();
     }
 
     @Test
-    void hasRazaoSocial_quandoValorValido_naoRetornaNull() {
-        Specification<Empresa> spec = EmpresaSpecification.hasRazaoSocial("Pet Shop");
-        assertThat(spec).isNotNull();
+    void deveCriarSpecificationParaCep() {
+        Specification<Empresa> specNull = EmpresaSpecification.hasCep(null);
+        Specification<Empresa> specValue = EmpresaSpecification.hasCep("99999999");
+
+        assertThat(specNull).isNotNull();
+        assertThat(specValue).isNotNull();
     }
 
     @Test
-    void hasEmail_naoLancaErro() {
-        Specification<Empresa> spec = EmpresaSpecification.hasEmail(null);
-        assertThat(spec).isNotNull();
+    void deveCriarSpecificationParaEndereco() {
+        Specification<Empresa> specNull = EmpresaSpecification.hasEndereco(null);
+        Specification<Empresa> specValue = EmpresaSpecification.hasEndereco("Rua Exemplo");
 
-        spec = EmpresaSpecification.hasEmail("teste@empresa.com");
-        assertThat(spec).isNotNull();
+        assertThat(specNull).isNotNull();
+        assertThat(specValue).isNotNull();
     }
 
     @Test
-    void hasEmail_quandoValorValido_naoRetornaNull() {
-        Specification<Empresa> spec = EmpresaSpecification.hasEmail("teste@empresa.com");
-        assertThat(spec).isNotNull();
+    void deveCriarSpecificationParaCidade() {
+        Specification<Empresa> specNull = EmpresaSpecification.hasCidade(null);
+        Specification<Empresa> specValue = EmpresaSpecification.hasCidade("Curitiba");
+
+        assertThat(specNull).isNotNull();
+        assertThat(specValue).isNotNull();
     }
 
     @Test
-    void hasStatus_naoLancaErro() {
-        Specification<Empresa> spec = EmpresaSpecification.hasStatus(null);
-        assertThat(spec).isNotNull();
+    void deveCriarSpecificationParaEstado() {
+        Specification<Empresa> specNull = EmpresaSpecification.hasEstado(null);
+        Specification<Empresa> specValue = EmpresaSpecification.hasEstado("PR");
 
-        spec = EmpresaSpecification.hasStatus(StatusEmpresa.ATIVO);
-        assertThat(spec).isNotNull();
+        assertThat(specNull).isNotNull();
+        assertThat(specValue).isNotNull();
     }
+
     @Test
-    void hasStatus_quandoValorValido_naoRetornaNull() {
-        Specification<Empresa> spec = EmpresaSpecification.hasStatus(StatusEmpresa.ATIVO);
-        assertThat(spec).isNotNull();
+    void deveCriarSpecificationParaTelefone() {
+        Specification<Empresa> specNull = EmpresaSpecification.hasTelefone(null);
+        Specification<Empresa> specValue = EmpresaSpecification.hasTelefone("41999999999");
+
+        assertThat(specNull).isNotNull();
+        assertThat(specValue).isNotNull();
+    }
+
+    @Test
+    void deveCriarSpecificationParaDataAtualizacaoStatusAfter() {
+        Specification<Empresa> specNull = EmpresaSpecification.hasDataAtualizacaoStatusAfter(null);
+        Specification<Empresa> specValue = EmpresaSpecification.hasDataAtualizacaoStatusAfter(LocalDateTime.now());
+
+        assertThat(specNull).isNotNull();
+        assertThat(specValue).isNotNull();
+    }
+
+    @Test
+    void deveCriarSpecificationParaDataCriacaoAfter() {
+        Specification<Empresa> specNull = EmpresaSpecification.hasDataCriacaoAfter(null);
+        Specification<Empresa> specValue = EmpresaSpecification.hasDataCriacaoAfter(LocalDateTime.now());
+
+        assertThat(specNull).isNotNull();
+        assertThat(specValue).isNotNull();
+    }
+
+    @Test
+    void deveCriarSpecificationParaStatus() {
+        Specification<Empresa> specNull = EmpresaSpecification.hasStatus(null);
+        Specification<Empresa> specValue = EmpresaSpecification.hasStatus(StatusEmpresa.ATIVO);
+
+        assertThat(specNull).isNotNull();
+        assertThat(specValue).isNotNull();
     }
 }

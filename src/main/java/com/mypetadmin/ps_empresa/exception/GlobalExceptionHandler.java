@@ -33,17 +33,6 @@ public class GlobalExceptionHandler {
 
     }
 
-    @ExceptionHandler(EmailExistenteException.class)
-    public ResponseEntity<ErrorResponse> handleEmailExistebre(EmailExistenteException ex, HttpServletRequest request) {
-        log.warn("Erro de negócio: {}", ex.getMessage());
-        ErrorResponse error = new ErrorResponse(
-                ex.getMessage(),
-                HttpStatus.BAD_REQUEST.value(),
-                request.getRequestURI()
-        );
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-    }
 
     @ExceptionHandler(EmpresaNaoEncontradaException.class)
     public ResponseEntity<Map<String, String>> handleEmpresaNaoEncontrada(EmpresaNaoEncontradaException ex) {

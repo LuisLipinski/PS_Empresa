@@ -3,8 +3,10 @@ package com.mypetadmin.ps_empresa.service.impl;
 import com.mypetadmin.ps_empresa.dto.EmpresaContratoStatusDTO;
 import com.mypetadmin.ps_empresa.enums.StatusEmpresa;
 import com.mypetadmin.ps_empresa.exception.EmpresaNaoEncontradaException;
+import com.mypetadmin.ps_empresa.exception.StatusInvalidException;
 import com.mypetadmin.ps_empresa.model.Empresa;
 import com.mypetadmin.ps_empresa.repository.EmpresaRepository;
+import com.mypetadmin.ps_empresa.mapper.EmpresaMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,11 +19,10 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class EmpresaServiceImplSimcronizarStatusTest {
+class EmpresaServiceImplSincronizarStatusTest {
 
     @InjectMocks
     private EmpresaServiceImpl service;
@@ -30,7 +31,7 @@ public class EmpresaServiceImplSimcronizarStatusTest {
     private EmpresaRepository repository;
 
     @Mock
-    private com.mypetadmin.ps_empresa.mapper.EmpresaMapper mapper;
+    private EmpresaMapper mapper;
 
     private Empresa empresa;
     private UUID empresaId;
@@ -58,7 +59,7 @@ public class EmpresaServiceImplSimcronizarStatusTest {
     }
 
     @Test
-    void deveAtualizarParaAguardandoContrato() {
+    void deveAtualizarParaAguardandoContratoQuandoReceberAguardandoPagamento() {
         EmpresaContratoStatusDTO dto = new EmpresaContratoStatusDTO();
         dto.setEmpresaId(empresaId);
         dto.setStatusContrato("AGUARDANDO_PAGAMENTO");
@@ -68,10 +69,11 @@ public class EmpresaServiceImplSimcronizarStatusTest {
         service.sincronizarStatusComContrato(dto);
 
         assertThat(empresa.getStatus()).isEqualTo(StatusEmpresa.AGUARDANDO_CONTRATO);
+        verify(repository).save(empresa);
     }
 
     @Test
-    void deveManterAtivoQuandoPendentePagamento() {
+    void deveManterAtivoQuandoReceberPendentePagamentoEEmpresaJaEstiverAtiva() {
         empresa.setStatus(StatusEmpresa.ATIVO);
 
         EmpresaContratoStatusDTO dto = new EmpresaContratoStatusDTO();
@@ -83,6 +85,7 @@ public class EmpresaServiceImplSimcronizarStatusTest {
         service.sincronizarStatusComContrato(dto);
 
         assertThat(empresa.getStatus()).isEqualTo(StatusEmpresa.ATIVO);
+        verify(repository).save(empresa);
     }
 
     @Test
@@ -96,6 +99,7 @@ public class EmpresaServiceImplSimcronizarStatusTest {
         service.sincronizarStatusComContrato(dto);
 
         assertThat(empresa.getStatus()).isEqualTo(StatusEmpresa.INATIVO);
+        verify(repository).save(empresa);
     }
 
     @Test
@@ -107,5 +111,21 @@ public class EmpresaServiceImplSimcronizarStatusTest {
 
         assertThatThrownBy(() -> service.sincronizarStatusComContrato(dto))
                 .isInstanceOf(EmpresaNaoEncontradaException.class);
+
+        verify(repository, never()).save(any());
+    }
+
+    @Test
+    void deveLancarExcecaoQuandoStatusContratoForInvalido() {
+        EmpresaContratoStatusDTO dto = new EmpresaContratoStatusDTO();
+        dto.setEmpresaId(empresaId);
+        dto.setStatusContrato("STATUS_QUALQUER");
+
+        when(repository.findById(empresaId)).thenReturn(Optional.of(empresa));
+
+        assertThatThrownBy(() -> service.sincronizarStatusComContrato(dto))
+                .isInstanceOf(StatusInvalidException.class);
+
+        verify(repository, never()).save(any());
     }
 }

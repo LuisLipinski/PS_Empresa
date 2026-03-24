@@ -44,11 +44,6 @@ public class Empresa {
     @Column(name = "telefone", nullable = false)
     private String telefone;
 
-    @Column(name = "email", unique = true, nullable = false)
-    private String email;
-
-    @Column(name = "NomeTitular", nullable = false)
-    private String nomeTitular;
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)

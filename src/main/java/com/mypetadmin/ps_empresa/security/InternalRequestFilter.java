@@ -11,7 +11,7 @@ import java.io.IOException;
 
 @Component
 public class InternalRequestFilter extends OncePerRequestFilter {
-    private static final String INTERNAL_KEY = "mypetadmin-secret";
+    private static final String INTERNAL_KEY = "mypetadmin-secret"; //TODO: mover para variavel de ambiente
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,

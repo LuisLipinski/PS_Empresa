@@ -28,7 +28,6 @@ ps_empresa/
 │   ├── EmpresaRequestDTO.java
 │   └── EmpresaResponseDTO.java
 ├── exception/
-│   ├── EmailExistenteException.java
 │   ├── EmpresaExistenteException.java
 │   ├── EmpresaNaoEncontradaException.java
 │   └── GlobalExceptionHandler.java

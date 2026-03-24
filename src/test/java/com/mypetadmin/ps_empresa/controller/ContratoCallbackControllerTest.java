@@ -17,6 +17,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -36,14 +37,13 @@ class ContratoCallbackControllerTest {
 
     @Test
     void deveSincronizarStatusDaEmpresaComContrato() throws Exception {
-
         UUID empresaId = UUID.randomUUID();
 
         EmpresaContratoStatusDTO dto = new EmpresaContratoStatusDTO();
         dto.setEmpresaId(empresaId);
         dto.setStatusContrato("ATIVO");
 
-        doNothing().when(empresaService).sincronizarStatusComContrato(any());
+        doNothing().when(empresaService).sincronizarStatusComContrato(any(EmpresaContratoStatusDTO.class));
 
         mockMvc.perform(patch("/internal/contratos/status")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -53,7 +53,7 @@ class ContratoCallbackControllerTest {
         ArgumentCaptor<EmpresaContratoStatusDTO> captor =
                 ArgumentCaptor.forClass(EmpresaContratoStatusDTO.class);
 
-        verify(empresaService).sincronizarStatusComContrato(captor.capture());
+        verify(empresaService, times(1)).sincronizarStatusComContrato(captor.capture());
 
         assertEquals(empresaId, captor.getValue().getEmpresaId());
         assertEquals("ATIVO", captor.getValue().getStatusContrato());
@@ -61,7 +61,6 @@ class ContratoCallbackControllerTest {
 
     @Test
     void deveRetornar400QuandoJsonInvalido() throws Exception {
-
         mockMvc.perform(patch("/internal/contratos/status")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{ json-invalido }"))

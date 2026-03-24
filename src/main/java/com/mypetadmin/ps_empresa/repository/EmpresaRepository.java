@@ -10,6 +10,4 @@ import java.util.UUID;
 
 public interface EmpresaRepository extends JpaRepository<Empresa, UUID>, JpaSpecificationExecutor<Empresa> {
     boolean existsByDocumentNumber(String documentNumber);
-
-    boolean existsByEmail(String email);
 }

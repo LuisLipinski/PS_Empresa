@@ -10,11 +10,11 @@ import com.mypetadmin.ps_empresa.exception.EmpresaNaoEncontradaException;
 import com.mypetadmin.ps_empresa.service.EmpresaService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.http.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
@@ -22,15 +22,18 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(EmpresaController.class)
-public class EmpresaControllerTest {
+class EmpresaControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -41,16 +44,12 @@ public class EmpresaControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-
-    @Test
-    void deveCriarEmpresaERetornarCreated() throws Exception {
+    private EmpresaRequestDTO buildValidRequest() {
         EmpresaRequestDTO requestDTO = new EmpresaRequestDTO();
         requestDTO.setDocumentNumber("17395568000151");
         requestDTO.setRazaoSocial("Empresa Teste");
         requestDTO.setNomeFantasia("Fantasia Teste");
         requestDTO.setTelefone("41999999999");
-        requestDTO.setEmail("teste@empresa.com");
-        requestDTO.setNomeTitular("Teste Titular");
         requestDTO.setRua("Rua A");
         requestDTO.setNumero("123");
         requestDTO.setComplemento("Bloco A");
@@ -58,23 +57,50 @@ public class EmpresaControllerTest {
         requestDTO.setCidade("Curitiba");
         requestDTO.setEstado("PR");
         requestDTO.setCep("01001000");
+        return requestDTO;
+    }
+
+    @Test
+    void deveCriarEmpresaERetornarCreated() throws Exception {
+        EmpresaRequestDTO requestDTO = buildValidRequest();
+        UUID empresaId = UUID.randomUUID();
 
         EmpresaResponseDTO responseDTO = new EmpresaResponseDTO(
-                UUID.randomUUID(), requestDTO.getDocumentNumber(), requestDTO.getRazaoSocial(), requestDTO.getNomeFantasia(), requestDTO.getTelefone(),
-                requestDTO.getEmail(), requestDTO.getNomeTitular(), requestDTO.getCep(), requestDTO.getCidade(), requestDTO.getEstado(),
-                "Rua A, 123, Bloco B - Bairro Central", StatusEmpresa.AGUARDANDO_CONTRATO
+                empresaId,
+                requestDTO.getDocumentNumber(),
+                requestDTO.getRazaoSocial(),
+                requestDTO.getNomeFantasia(),
+                requestDTO.getTelefone(),
+                requestDTO.getCep(),
+                requestDTO.getCidade(),
+                requestDTO.getEstado(),
+                "Rua A, 123 - Bloco A, Bairro Central",
+                StatusEmpresa.AGUARDANDO_CONTRATO
         );
 
-        when(empresaService.cadastrarEmpresa(requestDTO)).thenReturn(responseDTO);
+        when(empresaService.cadastrarEmpresa(any(EmpresaRequestDTO.class))).thenReturn(responseDTO);
 
         mockMvc.perform(post("/empresas/createEmpresas")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(requestDTO)))
-                .andDo(print())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestDTO)))
                 .andExpect(status().isCreated())
+                .andExpect(header().string("Location", containsString(empresaId.toString())))
+                .andExpect(jsonPath("$.id").value(empresaId.toString()))
                 .andExpect(jsonPath("$.documentNumber").value("17395568000151"))
                 .andExpect(jsonPath("$.razaoSocial").value("Empresa Teste"))
+                .andExpect(jsonPath("$.nomeFantasia").value("Fantasia Teste"))
                 .andExpect(jsonPath("$.status").value(StatusEmpresa.AGUARDANDO_CONTRATO.name()));
+    }
+
+    @Test
+    void deveRetornar400QuandoPayloadDeCadastroForInvalido() throws Exception {
+        EmpresaRequestDTO requestDTO = buildValidRequest();
+        requestDTO.setDocumentNumber(null);
+
+        mockMvc.perform(post("/empresas/createEmpresas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestDTO)))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -93,12 +119,11 @@ public class EmpresaControllerTest {
 
         List<EmpresaResponseDTO> lista = Arrays.asList(empresa1, empresa2);
 
-
         PageResponse<EmpresaResponseDTO> empresas =
                 new PageResponse<>(lista, 0, 10, lista.size(), 1);
 
         when(empresaService.getAllEmpresaSorted(
-                any(), any(), any(), any(), anyInt(), anyInt(), any(), any()
+                any(), any(), any(), anyInt(), anyInt(), any(), any()
         )).thenReturn(empresas);
 
         mockMvc.perform(get("/empresas/buscaEmpresas")
@@ -115,11 +140,10 @@ public class EmpresaControllerTest {
 
     @Test
     void buscarEmpresas_semResultados_retornaListaVazia() throws Exception {
-
         PageResponse<EmpresaResponseDTO> page =
                 new PageResponse<>(Collections.emptyList(), 0, 10, 0, 0);
 
-        when(empresaService.getAllEmpresaSorted(any(), any(), any(), any(), anyInt(), anyInt(), any(), any()))
+        when(empresaService.getAllEmpresaSorted(any(), any(), any(), anyInt(), anyInt(), any(), any()))
                 .thenReturn(page);
 
         mockMvc.perform(get("/empresas/buscaEmpresas")
@@ -129,8 +153,6 @@ public class EmpresaControllerTest {
                 .andExpect(jsonPath("$.content.length()").value(0))
                 .andExpect(jsonPath("$.totalElements").value(0))
                 .andExpect(jsonPath("$.totalPages").value(0));
-
-
     }
 
     @Test
@@ -141,11 +163,9 @@ public class EmpresaControllerTest {
         responseDTO.setRazaoSocial("Pet Shop Teste");
         responseDTO.setDocumentNumber("12345678000199");
 
-
         when(empresaService.getEmpresaById(empresaId)).thenReturn(responseDTO);
 
-        mockMvc.perform(get("/empresas/buscaEmpresas/{id}", empresaId.toString())
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/empresas/buscaEmpresas/{id}", empresaId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(empresaId.toString()))
                 .andExpect(jsonPath("$.razaoSocial").value("Pet Shop Teste"))
@@ -155,11 +175,11 @@ public class EmpresaControllerTest {
     @Test
     void getEmpresaById_naoEncontrada_retorna404() throws Exception {
         UUID empresaId = UUID.randomUUID();
+
         when(empresaService.getEmpresaById(empresaId))
                 .thenThrow(new EmpresaNaoEncontradaException("Empresa não encontrada"));
 
-        mockMvc.perform(get("/empresas/buscaEmpresas/{id}", empresaId.toString())
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/empresas/buscaEmpresas/{id}", empresaId))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.error").value("Empresa não encontrada"));
     }
@@ -170,9 +190,8 @@ public class EmpresaControllerTest {
 
         Mockito.doNothing().when(empresaService).deleteEmpresaById(empresaId);
 
-        mockMvc.perform(delete("/empresas/excluirEmpresa/{id}", empresaId.toString())
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNoContent()); // 204
+        mockMvc.perform(delete("/empresas/excluirEmpresa/{id}", empresaId))
+                .andExpect(status().isNoContent());
     }
 
     @Test
@@ -182,8 +201,7 @@ public class EmpresaControllerTest {
         Mockito.doThrow(new EmpresaNaoEncontradaException("Empresa não encontrada com o id: " + empresaId))
                 .when(empresaService).deleteEmpresaById(empresaId);
 
-        mockMvc.perform(delete("/empresas/excluirEmpresa/{id}", empresaId.toString())
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(delete("/empresas/excluirEmpresa/{id}", empresaId))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.error").value("Empresa não encontrada com o id: " + empresaId));
     }
@@ -195,7 +213,6 @@ public class EmpresaControllerTest {
         UpdateEmpresaRequestDto updateDto = new UpdateEmpresaRequestDto();
         updateDto.setNomeFantasia("PetShop Atualizado");
         updateDto.setTelefone("41999999999");
-        updateDto.setEmail("novoemail@teste.com");
         updateDto.setRua("Rua Nova");
         updateDto.setNumero("123");
         updateDto.setComplemento("Sala 2");
@@ -210,8 +227,6 @@ public class EmpresaControllerTest {
                 "Razão Social LTDA",
                 "PetShop Atualizado",
                 "41999999999",
-                "novoemail@teste.com",
-                "João",
                 "80000000",
                 "Curitiba",
                 "PR",
@@ -229,7 +244,6 @@ public class EmpresaControllerTest {
                 .andExpect(jsonPath("$.id").value(empresaId.toString()))
                 .andExpect(jsonPath("$.nomeFantasia").value("PetShop Atualizado"))
                 .andExpect(jsonPath("$.telefone").value("41999999999"))
-                .andExpect(jsonPath("$.email").value("novoemail@teste.com"))
                 .andExpect(jsonPath("$.endereco").value("Rua Nova, 123 - Sala 2, Centro"));
     }
 
@@ -249,26 +263,4 @@ public class EmpresaControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.error").value("Empresa não encontrada"));
     }
-
-    @Test
-    void editEmpresaById_quandoRequestBodyNulo_entaoAceitaERetorna200() throws Exception {
-        UUID empresaId = UUID.randomUUID();
-
-        EmpresaResponseDTO responseDto = new EmpresaResponseDTO();
-        responseDto.setId(empresaId);
-        responseDto.setNomeFantasia("Empresa Existente");
-        responseDto.setStatus(StatusEmpresa.ATIVO);
-
-        when(empresaService.editEmpresaById(eq(empresaId), any(UpdateEmpresaRequestDto.class)))
-                .thenReturn(responseDto);
-
-        mockMvc.perform(put("/empresas/editEmpresa/{id}", empresaId)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(empresaId.toString()))
-                .andExpect(jsonPath("$.nomeFantasia").value("Empresa Existente"));
-    }
-
-
-
 }
