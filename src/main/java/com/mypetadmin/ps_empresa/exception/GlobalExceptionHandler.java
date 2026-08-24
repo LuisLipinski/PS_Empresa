@@ -63,7 +63,7 @@ public class GlobalExceptionHandler {
             errors.putIfAbsent(error.getField(), error.getDefaultMessage());
         }
 
-        log.warn("Falha de validação em {}: {}", request.getRequestURI(), errors.keySet());
+        log.warn("validation.failed method={} path={} fields={}", request.getMethod(), request.getRequestURI(), errors.keySet());
         return ResponseEntity.badRequest().body(
                 ErrorResponse.validation(
                         "Um ou mais campos são inválidos.",
@@ -88,7 +88,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
                                                                        HttpServletRequest request) {
-        log.warn("Corpo de requisição inválido em {}", request.getRequestURI());
         return build(
                 HttpStatus.BAD_REQUEST,
                 "INVALID_REQUEST_BODY",
@@ -100,7 +99,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErrorResponse> handleDataIntegrity(DataIntegrityViolationException ex,
                                                               HttpServletRequest request) {
-        log.warn("Conflito de integridade em {}", request.getRequestURI());
         return build(
                 HttpStatus.CONFLICT,
                 "DATA_CONFLICT",
@@ -112,7 +110,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneric(Exception ex,
                                                         HttpServletRequest request) {
-        log.error("Erro inesperado em {}", request.getRequestURI(), ex);
+        log.error("request.unexpected-error method={} path={}", request.getMethod(), request.getRequestURI(), ex);
         return build(
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 "INTERNAL_ERROR",
@@ -126,7 +124,7 @@ public class GlobalExceptionHandler {
                                                 String message,
                                                 HttpServletRequest request) {
         if (status.is4xxClientError()) {
-            log.warn("{} em {}: {}", code, request.getRequestURI(), message);
+            log.warn("request.rejected code={} method={} path={} message={}", code, request.getMethod(), request.getRequestURI(), message);
         }
         return ResponseEntity.status(status).body(
                 ErrorResponse.of(code, message, status.value(), request.getRequestURI())
