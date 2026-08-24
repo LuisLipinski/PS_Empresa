@@ -87,10 +87,11 @@ jobs:
           cat app.log
           exit 1
 
-      - name: Checkout automation
+      - name: Checkout automation hardening
         uses: actions/checkout@v4
         with:
           repository: LuisLipinski/ps_automacao_backend
+          ref: feature/ps-empresa-hardening-v1
           path: qa-tests
           token: ${{ secrets.GH_TOKEN }}
 
