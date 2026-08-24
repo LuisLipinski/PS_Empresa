@@ -18,6 +18,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.util.Collections;
 import java.util.List;
 
@@ -26,11 +28,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final ObjectMapper objectMapper;
     private final String jwtSecret;
+    private final String internalKey;
 
     public JwtAuthenticationFilter(ObjectMapper objectMapper,
-                                   @Value("${security.jwt.secret}") String jwtSecret) {
+                                   @Value("${security.jwt.secret}") String jwtSecret,
+                                   @Value("${security.internal.key}") String internalKey) {
         this.objectMapper = objectMapper;
         this.jwtSecret = jwtSecret;
+        this.internalKey = internalKey;
     }
 
     @Override
@@ -47,8 +52,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        String authorization = request.getHeader("Authorization");
+        if (hasValidInternalCredential(request)) {
+            var authentication = new UsernamePasswordAuthenticationToken(
+                    "internal-service",
+                    null,
+                    List.of(new SimpleGrantedAuthority("ROLE_INTERNAL"))
+            );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            filterChain.doFilter(request, response);
+            return;
+        }
 
+        String authorization = request.getHeader("Authorization");
         if (authorization == null || !authorization.startsWith("Bearer ")) {
             writeUnauthorized(response, request, "Token de autenticação ausente ou inválido.");
             return;
@@ -83,6 +98,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             SecurityContextHolder.clearContext();
             writeUnauthorized(response, request, "Token de autenticação expirado ou inválido.");
         }
+    }
+
+    private boolean hasValidInternalCredential(HttpServletRequest request) {
+        String providedKey = request.getHeader("X-Internal-Key");
+        if (providedKey == null || internalKey == null) {
+            return false;
+        }
+        return MessageDigest.isEqual(
+                internalKey.getBytes(StandardCharsets.UTF_8),
+                providedKey.getBytes(StandardCharsets.UTF_8)
+        );
     }
 
     private void writeUnauthorized(HttpServletResponse response,
