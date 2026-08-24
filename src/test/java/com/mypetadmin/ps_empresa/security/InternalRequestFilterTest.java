@@ -10,7 +10,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class InternalRequestFilterTest {
 
-    private final InternalRequestFilter filter = new InternalRequestFilter("test-internal-key", new ObjectMapper());
+    private final InternalRequestFilter filter = new InternalRequestFilter(
+            "test-internal-key",
+            new ObjectMapper().findAndRegisterModules()
+    );
 
     @Test
     void devePermitirRequisicaoComHeaderCorreto() throws Exception {
