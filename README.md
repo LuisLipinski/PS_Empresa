@@ -51,7 +51,7 @@ Onboarding Orchestrator
    `----> PS_Contrato
 ```
 
-O **API Gateway** deve cuidar de entrada, roteamento e políticas transversais. O **Orchestrator** deve cuidar do workflow de negócio do onboarding.
+O **API Gateway** cuida de entrada, autenticação, roteamento e políticas transversais. O **Orchestrator** cuida do workflow de negócio do onboarding e da composição das respostas dos microsserviços.
 
 O cadastro da empresa é feito internamente pelo orchestrator em:
 
@@ -87,9 +87,9 @@ Assim cada microsserviço continua dono do seu próprio domínio.
 
 ## Segurança
 
-### APIs internas
+### APIs internas e chamadas service-to-service
 
-Rotas `/internal/**` exigem:
+A credencial interna é enviada no header:
 
 `X-Internal-Key`
 
@@ -97,11 +97,13 @@ O valor vem da variável de ambiente:
 
 `INTERNAL_API_KEY`
 
+Rotas `/internal/**` exigem obrigatoriamente essa credencial. Rotas autenticadas `/empresas/**` também aceitam a credencial interna para chamadas confiáveis de gateway/orchestrator e para testes de integração isolados do PS_Login.
+
 Nenhum segredo de produção é mantido no código-fonte.
 
-### APIs autenticadas
+### APIs de usuário autenticado
 
-Rotas `/empresas/**` exigem JWT no header:
+Rotas `/empresas/**` aceitam JWT no header:
 
 `Authorization: Bearer <token>`
 
@@ -109,7 +111,9 @@ Nesta versão o PS_Empresa valida os tokens HS256 atualmente emitidos pelo PS_Lo
 
 `JWT_SECRET_KEY`
 
-O contrato atual do PS_Login contém `subject` e `roles`. A inclusão de `userId`/`empresaId` no token deve ser tratada em uma evolução coordenada do fluxo de autenticação, e não inferida dentro do PS_Empresa.
+O contrato atual do PS_Login contém `subject` e `roles`. A inclusão de `userId`/`empresaId` no token deve ser tratada em uma evolução coordenada do fluxo de autenticação.
+
+> **Importante para multi-tenant:** autenticação JWT sozinha não resolve isolamento entre empresas. Antes da comercialização, o fluxo de autorização deve garantir que o usuário só consiga acessar a empresa associada a ele. A solução recomendada é o PS_User resolver o vínculo `userId -> empresaId` e o gateway/orchestrator propagar somente chamadas autorizadas, ou evoluir o token para carregar um `empresaId` confiável e validado.
 
 ## Endpoints
 
@@ -178,6 +182,8 @@ JaCoCo executa no `verify` e aplica quality gate de cobertura de linhas.
 ```bash
 ./mvnw clean verify
 ```
+
+Além dos unitários, o CI sobe PostgreSQL real e executa a regressão Playwright do `ps_automacao_backend` contra a aplicação iniciada localmente.
 
 ## Execução local
 
