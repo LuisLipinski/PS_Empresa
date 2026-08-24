@@ -1,8 +1,10 @@
 package com.mypetadmin.ps_empresa.service.impl;
 
 import com.mypetadmin.ps_empresa.dto.EmpresaContratoStatusDTO;
+import com.mypetadmin.ps_empresa.enums.StatusContrato;
 import com.mypetadmin.ps_empresa.enums.StatusEmpresa;
 import com.mypetadmin.ps_empresa.exception.EmpresaNaoEncontradaException;
+import com.mypetadmin.ps_empresa.mapper.EmpresaMapper;
 import com.mypetadmin.ps_empresa.model.Empresa;
 import com.mypetadmin.ps_empresa.repository.EmpresaRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +23,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class EmpresaServiceImplSimcronizarStatusTest {
+class EmpresaServiceImplSimcronizarStatusTest {
 
     @InjectMocks
     private EmpresaServiceImpl service;
@@ -30,7 +32,7 @@ public class EmpresaServiceImplSimcronizarStatusTest {
     private EmpresaRepository repository;
 
     @Mock
-    private com.mypetadmin.ps_empresa.mapper.EmpresaMapper mapper;
+    private EmpresaMapper mapper;
 
     private Empresa empresa;
     private UUID empresaId;
@@ -45,24 +47,20 @@ public class EmpresaServiceImplSimcronizarStatusTest {
 
     @Test
     void deveAtualizarParaAtivo() {
-        EmpresaContratoStatusDTO dto = new EmpresaContratoStatusDTO();
-        dto.setEmpresaId(empresaId);
-        dto.setStatusContrato("ATIVO");
-
+        EmpresaContratoStatusDTO dto = dto(StatusContrato.ATIVO);
         when(repository.findById(empresaId)).thenReturn(Optional.of(empresa));
 
         service.sincronizarStatusComContrato(dto);
 
         assertThat(empresa.getStatus()).isEqualTo(StatusEmpresa.ATIVO);
+        assertThat(empresa.getDataAtualizacaoStatus()).isNotNull();
         verify(repository).save(empresa);
     }
 
     @Test
     void deveAtualizarParaAguardandoContrato() {
-        EmpresaContratoStatusDTO dto = new EmpresaContratoStatusDTO();
-        dto.setEmpresaId(empresaId);
-        dto.setStatusContrato("AGUARDANDO_PAGAMENTO");
-
+        empresa.setStatus(StatusEmpresa.ATIVO);
+        EmpresaContratoStatusDTO dto = dto(StatusContrato.AGUARDANDO_PAGAMENTO);
         when(repository.findById(empresaId)).thenReturn(Optional.of(empresa));
 
         service.sincronizarStatusComContrato(dto);
@@ -71,13 +69,9 @@ public class EmpresaServiceImplSimcronizarStatusTest {
     }
 
     @Test
-    void deveManterAtivoQuandoPendentePagamento() {
+    void deveManterAtivoQuandoPendentePagamentoEJaEstiverAtivo() {
         empresa.setStatus(StatusEmpresa.ATIVO);
-
-        EmpresaContratoStatusDTO dto = new EmpresaContratoStatusDTO();
-        dto.setEmpresaId(empresaId);
-        dto.setStatusContrato("PENDENTE_PAGAMENTO");
-
+        EmpresaContratoStatusDTO dto = dto(StatusContrato.PENDENTE_PAGAMENTO);
         when(repository.findById(empresaId)).thenReturn(Optional.of(empresa));
 
         service.sincronizarStatusComContrato(dto);
@@ -86,11 +80,18 @@ public class EmpresaServiceImplSimcronizarStatusTest {
     }
 
     @Test
-    void deveAtualizarParaInativo() {
-        EmpresaContratoStatusDTO dto = new EmpresaContratoStatusDTO();
-        dto.setEmpresaId(empresaId);
-        dto.setStatusContrato("INATIVO");
+    void naoDeveAtivarQuandoPendentePagamentoEEmpresaAindaAguardandoContrato() {
+        EmpresaContratoStatusDTO dto = dto(StatusContrato.PENDENTE_PAGAMENTO);
+        when(repository.findById(empresaId)).thenReturn(Optional.of(empresa));
 
+        service.sincronizarStatusComContrato(dto);
+
+        assertThat(empresa.getStatus()).isEqualTo(StatusEmpresa.AGUARDANDO_CONTRATO);
+    }
+
+    @Test
+    void deveAtualizarParaInativo() {
+        EmpresaContratoStatusDTO dto = dto(StatusContrato.INATIVO);
         when(repository.findById(empresaId)).thenReturn(Optional.of(empresa));
 
         service.sincronizarStatusComContrato(dto);
@@ -100,12 +101,17 @@ public class EmpresaServiceImplSimcronizarStatusTest {
 
     @Test
     void deveLancarExcecaoQuandoEmpresaNaoExiste() {
-        EmpresaContratoStatusDTO dto = new EmpresaContratoStatusDTO();
-        dto.setEmpresaId(empresaId);
-
+        EmpresaContratoStatusDTO dto = dto(StatusContrato.ATIVO);
         when(repository.findById(empresaId)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> service.sincronizarStatusComContrato(dto))
                 .isInstanceOf(EmpresaNaoEncontradaException.class);
+    }
+
+    private EmpresaContratoStatusDTO dto(StatusContrato status) {
+        EmpresaContratoStatusDTO dto = new EmpresaContratoStatusDTO();
+        dto.setEmpresaId(empresaId);
+        dto.setStatusContrato(status);
+        return dto;
     }
 }
