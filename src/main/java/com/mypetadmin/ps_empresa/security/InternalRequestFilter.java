@@ -6,6 +6,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 
 @Component
+@Slf4j
 public class InternalRequestFilter extends OncePerRequestFilter {
 
     private final String internalKey;
@@ -39,6 +41,7 @@ public class InternalRequestFilter extends OncePerRequestFilter {
         String providedKey = request.getHeader("X-Internal-Key");
 
         if (!isValid(providedKey)) {
+            log.warn("internal.request denied method={} path={}", request.getMethod(), request.getRequestURI());
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             objectMapper.writeValue(
