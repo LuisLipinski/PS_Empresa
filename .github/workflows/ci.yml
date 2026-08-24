@@ -18,12 +18,22 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
+          cache: maven
 
       - name: Permissão Maven
         run: chmod +x ./mvnw
 
-      - name: Rodar unitários
-        run: ./mvnw -B clean test
+      - name: Unitários e quality gate
+        run: ./mvnw -B clean verify
+
+      - name: Publicar relatório JaCoCo
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: target/site/jacoco
+          if-no-files-found: ignore
+
   core-regression:
     needs: unit-tests
     runs-on: ubuntu-latest
@@ -44,7 +54,6 @@ jobs:
           --health-retries=5
 
     steps:
-      # Backend
       - name: Checkout backend
         uses: actions/checkout@v4
 
@@ -53,11 +62,15 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
+          cache: maven
 
       - name: Build jar
         run: ./mvnw -B clean package -DskipTests
 
       - name: Start API
+        env:
+          INTERNAL_API_KEY: mypetadmin-ci-internal-key
+          JWT_SECRET_KEY: mypetadmin-ci-jwt-secret-key-32chars
         run: |
           nohup java -jar target/*.jar --spring.profiles.active=ci > app.log 2>&1 &
 
@@ -74,7 +87,6 @@ jobs:
           cat app.log
           exit 1
 
-      # Automation
       - name: Checkout automation
         uses: actions/checkout@v4
         with:
@@ -86,10 +98,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
+          cache-dependency-path: qa-tests/package-lock.json
 
       - name: Install dependencies
         working-directory: qa-tests
-        run: npm install
+        run: npm ci
 
       - name: Install Playwright
         working-directory: qa-tests
@@ -99,4 +113,5 @@ jobs:
         working-directory: qa-tests
         env:
           PS_EMPRESA_URL: http://localhost:8081
+          PS_EMPRESA_INTERNAL_KEY: mypetadmin-ci-internal-key
         run: npm run empresa:regression:local
