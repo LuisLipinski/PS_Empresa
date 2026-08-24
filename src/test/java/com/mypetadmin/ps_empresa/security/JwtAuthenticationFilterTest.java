@@ -20,7 +20,7 @@ class JwtAuthenticationFilterTest {
     private static final String JWT_SECRET = "mypetadmin-test-jwt-secret-key-32chars";
     private static final String INTERNAL_KEY = "test-internal-key";
     private final JwtAuthenticationFilter filter = new JwtAuthenticationFilter(
-            new ObjectMapper(), JWT_SECRET, INTERNAL_KEY
+            new ObjectMapper().findAndRegisterModules(), JWT_SECRET, INTERNAL_KEY
     );
 
     @AfterEach
