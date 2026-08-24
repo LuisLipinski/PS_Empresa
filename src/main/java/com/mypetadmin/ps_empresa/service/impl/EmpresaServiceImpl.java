@@ -45,7 +45,7 @@ public class EmpresaServiceImpl implements EmpresaService {
     @Override
     @Transactional
     public EmpresaResponseDTO cadastrarEmpresa(EmpresaRequestDTO dto) {
-        log.info("empresa.create requested document={}", maskDocument(dto.getDocumentNumber()));
+        log.debug("empresa.create requested");
 
         if (empresaRepository.existsByDocumentNumber(dto.getDocumentNumber())) {
             throw new EmpresaExistenteException("CNPJ já cadastrado no sistema.");
@@ -87,10 +87,17 @@ public class EmpresaServiceImpl implements EmpresaService {
         empresa.setDataAtualizacaoStatus(LocalDateTime.now());
         empresaRepository.save(empresa);
 
-        log.info(
-                "empresa.contract-status synchronized empresaId={} contractStatus={} previousStatus={} currentStatus={}",
-                empresa.getId(), dto.getStatusContrato(), statusAnterior, empresa.getStatus()
-        );
+        if (statusAnterior == empresa.getStatus()) {
+            log.debug(
+                    "empresa.contract-status processed empresaId={} contractStatus={} statusUnchanged={}",
+                    empresa.getId(), dto.getStatusContrato(), empresa.getStatus()
+            );
+        } else {
+            log.info(
+                    "empresa.contract-status changed empresaId={} contractStatus={} previousStatus={} currentStatus={}",
+                    empresa.getId(), dto.getStatusContrato(), statusAnterior, empresa.getStatus()
+            );
+        }
     }
 
     @Override
@@ -132,7 +139,7 @@ public class EmpresaServiceImpl implements EmpresaService {
 
         Page<EmpresaResponseDTO> pageDto = empresaRepository.findAll(spec, pageable).map(mapper::toResponseDto);
 
-        log.info(
+        log.debug(
                 "empresa.search success page={} size={} total={} filteredByDocument={} filteredByRazaoSocial={} filteredByEmail={} filteredByStatus={}",
                 pageDto.getNumber(),
                 pageDto.getSize(),
@@ -156,12 +163,14 @@ public class EmpresaServiceImpl implements EmpresaService {
     public EmpresaResponseDTO getEmpresaById(UUID id) {
         Empresa empresa = empresaRepository.findById(id)
                 .orElseThrow(() -> new EmpresaNaoEncontradaException("Empresa não encontrada com o id: " + id));
+        log.debug("empresa.get success empresaId={} status={}", empresa.getId(), empresa.getStatus());
         return mapper.toResponseDto(empresa);
     }
 
     @Override
     @Transactional
     public void deleteEmpresaById(UUID id) {
+        log.debug("empresa.delete requested empresaId={}", id);
         Empresa empresa = empresaRepository.findById(id)
                 .orElseThrow(() -> new EmpresaNaoEncontradaException("Empresa não encontrada com o id: " + id));
         empresaRepository.delete(empresa);
@@ -171,6 +180,7 @@ public class EmpresaServiceImpl implements EmpresaService {
     @Override
     @Transactional
     public EmpresaResponseDTO editEmpresaById(UUID empresaId, UpdateEmpresaRequestDto updateEmpresa) {
+        log.debug("empresa.update requested empresaId={}", empresaId);
         Empresa empresa = empresaRepository.findById(empresaId)
                 .orElseThrow(() -> new EmpresaNaoEncontradaException("Empresa não encontrada com o id: " + empresaId));
 
@@ -187,12 +197,5 @@ public class EmpresaServiceImpl implements EmpresaService {
 
     private String normalize(String value) {
         return value == null || value.trim().isEmpty() ? null : value.trim();
-    }
-
-    private String maskDocument(String documentNumber) {
-        if (documentNumber == null || documentNumber.length() < 4) {
-            return "****";
-        }
-        return "**********" + documentNumber.substring(documentNumber.length() - 4);
     }
 }
