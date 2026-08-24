@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +27,6 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/empresas")
 @RequiredArgsConstructor
-@Slf4j
 public class EmpresaController {
 
     private final EmpresaService empresaService;
@@ -87,7 +85,6 @@ public class EmpresaController {
     public ResponseEntity<EmpresaResponseDTO> editEmpresaById(
             @PathVariable UUID id,
             @Valid @RequestBody UpdateEmpresaRequestDto updateEmpresa) {
-        log.info("empresa.update requested empresaId={}", id);
         return ResponseEntity.ok(empresaService.editEmpresaById(id, updateEmpresa));
     }
 
@@ -99,7 +96,6 @@ public class EmpresaController {
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEmpresaById(@PathVariable UUID id) {
-        log.info("empresa.delete requested empresaId={}", id);
         empresaService.deleteEmpresaById(id);
         return ResponseEntity.noContent().build();
     }
