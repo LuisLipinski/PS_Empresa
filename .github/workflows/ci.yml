@@ -93,12 +93,11 @@ jobs:
           repository: LuisLipinski/ps_automacao_backend
           ref: feature/ps-empresa-hardening-v1
           path: qa-tests
-          token: ${{ secrets.GH_TOKEN }}
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
           cache-dependency-path: qa-tests/package-lock.json
 
@@ -106,13 +105,9 @@ jobs:
         working-directory: qa-tests
         run: npm ci
 
-      - name: Install Playwright
-        working-directory: qa-tests
-        run: npx playwright install --with-deps
-
       - name: Run Core Regression
         working-directory: qa-tests
         env:
           PS_EMPRESA_URL: http://localhost:8081
           PS_EMPRESA_INTERNAL_KEY: mypetadmin-ci-internal-key
-        run: npm run empresa:regression:local
+        run: npm run empresa:regression
