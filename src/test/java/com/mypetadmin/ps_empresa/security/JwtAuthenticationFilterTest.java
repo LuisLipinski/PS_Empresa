@@ -17,8 +17,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class JwtAuthenticationFilterTest {
 
-    private static final String SECRET = "mypetadmin-test-jwt-secret-key-32chars";
-    private final JwtAuthenticationFilter filter = new JwtAuthenticationFilter(new ObjectMapper(), SECRET);
+    private static final String JWT_SECRET = "mypetadmin-test-jwt-secret-key-32chars";
+    private static final String INTERNAL_KEY = "test-internal-key";
+    private final JwtAuthenticationFilter filter = new JwtAuthenticationFilter(
+            new ObjectMapper(), JWT_SECRET, INTERNAL_KEY
+    );
 
     @AfterEach
     void clearContext() {
@@ -36,7 +39,6 @@ class JwtAuthenticationFilterTest {
         filter.doFilter(request, response, chain);
 
         assertThat(response.getStatus()).isEqualTo(200);
-        assertThat(SecurityContextHolder.getContext().getAuthentication()).isNotNull();
         assertThat(SecurityContextHolder.getContext().getAuthentication().getName()).isEqualTo("usuario@teste.com");
         assertThat(SecurityContextHolder.getContext().getAuthentication().getAuthorities())
                 .extracting(Object::toString)
@@ -44,7 +46,24 @@ class JwtAuthenticationFilterTest {
     }
 
     @Test
-    void deveRetornar401SemToken() throws Exception {
+    void deveAutenticarServicoComChaveInterna() throws Exception {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setRequestURI("/empresas");
+        request.addHeader("X-Internal-Key", INTERNAL_KEY);
+        MockHttpServletResponse response = new MockHttpServletResponse();
+
+        FilterChain chain = (req, res) -> ((MockHttpServletResponse) res).setStatus(200);
+        filter.doFilter(request, response, chain);
+
+        assertThat(response.getStatus()).isEqualTo(200);
+        assertThat(SecurityContextHolder.getContext().getAuthentication().getName()).isEqualTo("internal-service");
+        assertThat(SecurityContextHolder.getContext().getAuthentication().getAuthorities())
+                .extracting(Object::toString)
+                .contains("ROLE_INTERNAL");
+    }
+
+    @Test
+    void deveRetornar401SemCredencial() throws Exception {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.setRequestURI("/empresas");
         MockHttpServletResponse response = new MockHttpServletResponse();
@@ -73,7 +92,7 @@ class JwtAuthenticationFilterTest {
                 .claim("roles", List.of("ROLE_ADMIN"))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 60_000))
-                .signWith(SignatureAlgorithm.HS256, SECRET)
+                .signWith(SignatureAlgorithm.HS256, JWT_SECRET)
                 .compact();
     }
 }
