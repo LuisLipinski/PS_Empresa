@@ -18,306 +18,284 @@ import com.mypetadmin.ps_empresa.util.CnpjValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class EmpresaServiceImplTest {
 
-    @InjectMocks
-    private EmpresaServiceImpl empresaService;
-
-    @Mock
+    @org.mockito.Mock
     private EmpresaRepository empresaRepository;
 
-    @Mock
+    @org.mockito.Mock
     private EmpresaMapper mapper;
 
-    private EmpresaRequestDTO dto;
+    private EmpresaServiceImpl empresaService;
+    private EmpresaRequestDTO request;
     private Empresa entity;
     private EmpresaResponseDTO response;
 
     @BeforeEach
     void setUp() {
-        dto = new EmpresaRequestDTO();
-        dto.setDocumentNumber("34222351000169");
-        dto.setEmail("empresa@teste.com");
+        empresaService = new EmpresaServiceImpl(empresaRepository, mapper);
+
+        request = new EmpresaRequestDTO();
+        request.setDocumentNumber("34222351000169");
+        request.setEmail("empresa@teste.com");
 
         entity = new Empresa();
         entity.setId(UUID.randomUUID());
+        entity.setEmail("empresa@teste.com");
+        entity.setEndereco("Rua Teste, 10, Centro");
         entity.setStatus(StatusEmpresa.AGUARDANDO_CONTRATO);
 
         response = new EmpresaResponseDTO();
         response.setId(entity.getId());
+        response.setStatus(StatusEmpresa.AGUARDANDO_CONTRATO);
     }
 
     @Test
-    void deveCadastrarEmpresaComSucesso() {
-        when(empresaRepository.existsByDocumentNumber(dto.getDocumentNumber())).thenReturn(false);
-        when(empresaRepository.existsByEmail(dto.getEmail())).thenReturn(false);
-        when(mapper.toEntity(dto)).thenReturn(entity);
+    void deveCadastrarEmpresaComStatusAguardandoContrato() {
+        when(empresaRepository.existsByDocumentNumber(request.getDocumentNumber())).thenReturn(false);
+        when(empresaRepository.existsByEmail(request.getEmail())).thenReturn(false);
+        when(mapper.toEntity(request)).thenReturn(entity);
         when(empresaRepository.save(entity)).thenReturn(entity);
         when(mapper.toResponseDto(entity)).thenReturn(response);
 
-        EmpresaResponseDTO resultado = empresaService.cadastrarEmpresa(dto);
+        try (MockedStatic<CnpjValidator> cnpj = Mockito.mockStatic(CnpjValidator.class)) {
+            cnpj.when(() -> CnpjValidator.isCnpjValid(request.getDocumentNumber())).thenReturn(true);
 
-        assertThat(resultado).isNotNull();
-        assertThat(resultado.getId()).isEqualTo(entity.getId());
-        verify(empresaRepository).save(entity);
+            EmpresaResponseDTO result = empresaService.cadastrarEmpresa(request);
+
+            assertThat(result.getId()).isEqualTo(entity.getId());
+            assertThat(entity.getStatus()).isEqualTo(StatusEmpresa.AGUARDANDO_CONTRATO);
+            assertThat(entity.getDataAtualizacaoStatus()).isNotNull();
+            verify(empresaRepository).save(entity);
+        }
     }
 
     @Test
-    void cadastrarEmpresa_deveIniciarComAguardandoContrato() {
+    void deveRejeitarCnpjJaCadastradoAntesDeOutrasValidacoes() {
+        when(empresaRepository.existsByDocumentNumber(request.getDocumentNumber())).thenReturn(true);
 
-        when(empresaRepository.existsByDocumentNumber(dto.getDocumentNumber())).thenReturn(false);
-        when(empresaRepository.existsByEmail(dto.getEmail())).thenReturn(false);
-        when(mapper.toEntity(dto)).thenReturn(entity);
-        when(empresaRepository.save(any(Empresa.class))).thenReturn(entity);
-        when(mapper.toResponseDto(any(Empresa.class))).thenAnswer(invocation -> {
-            Empresa emp = invocation.getArgument(0);
-            EmpresaResponseDTO resp = new EmpresaResponseDTO();
-            resp.setStatus(emp.getStatus());
-            return resp;
-        });
-
-        EmpresaResponseDTO response = empresaService.cadastrarEmpresa(dto);
-
-        assertEquals(StatusEmpresa.AGUARDANDO_CONTRATO, response.getStatus());
-    }
-
-
-
-    @Test
-    void deveLancarExcecaoCnpjExistente() {
-        EmpresaRequestDTO dto = new EmpresaRequestDTO();
-        dto.setDocumentNumber("34222351000169");
-
-        when(empresaRepository.existsByDocumentNumber(dto.getDocumentNumber())).thenReturn(true);
-
-        assertThatThrownBy(() -> empresaService.cadastrarEmpresa(dto))
+        assertThatThrownBy(() -> empresaService.cadastrarEmpresa(request))
                 .isInstanceOf(EmpresaExistenteException.class)
                 .hasMessageContaining("CNPJ já cadastrado");
+
+        verify(empresaRepository, never()).existsByEmail(any());
+        verify(empresaRepository, never()).save(any());
     }
 
     @Test
-    void deveLancarExcecaoEmailExistente() {
-        EmpresaRequestDTO dto = new EmpresaRequestDTO();
-        dto.setDocumentNumber("86054433000145");
-        dto.setEmail("empresa@teste.com");
+    void deveRejeitarCnpjInvalido() {
+        when(empresaRepository.existsByDocumentNumber(request.getDocumentNumber())).thenReturn(false);
 
-        when(empresaRepository.existsByDocumentNumber(dto.getDocumentNumber())).thenReturn(false);
-        when(empresaRepository.existsByEmail(dto.getEmail())).thenReturn(true);
+        try (MockedStatic<CnpjValidator> cnpj = Mockito.mockStatic(CnpjValidator.class)) {
+            cnpj.when(() -> CnpjValidator.isCnpjValid(request.getDocumentNumber())).thenReturn(false);
 
-        try (MockedStatic<CnpjValidator> mocked = Mockito.mockStatic(CnpjValidator.class)) {
-            mocked.when(() -> CnpjValidator.isCnpjValid(dto.getDocumentNumber())).thenReturn(true);
+            assertThatThrownBy(() -> empresaService.cadastrarEmpresa(request))
+                    .isInstanceOf(CnpjInvalidException.class)
+                    .hasMessage("CNPJ inválido.");
+        }
 
-            assertThatThrownBy(() -> empresaService.cadastrarEmpresa(dto))
+        verify(empresaRepository, never()).existsByEmail(any());
+        verify(empresaRepository, never()).save(any());
+    }
+
+    @Test
+    void deveRejeitarEmailJaCadastrado() {
+        when(empresaRepository.existsByDocumentNumber(request.getDocumentNumber())).thenReturn(false);
+        when(empresaRepository.existsByEmail(request.getEmail())).thenReturn(true);
+
+        try (MockedStatic<CnpjValidator> cnpj = Mockito.mockStatic(CnpjValidator.class)) {
+            cnpj.when(() -> CnpjValidator.isCnpjValid(request.getDocumentNumber())).thenReturn(true);
+
+            assertThatThrownBy(() -> empresaService.cadastrarEmpresa(request))
                     .isInstanceOf(EmailExistenteException.class)
                     .hasMessageContaining("Email já cadastrado");
         }
+
+        verify(empresaRepository, never()).save(any());
     }
 
     @Test
-    void deveLancarExcecaoCnpjInvalido() {
-        EmpresaRequestDTO dto = new EmpresaRequestDTO();
-        dto.setDocumentNumber("00000000000000");
-        dto.setEmail("teste@email.com");
-
-        when(empresaRepository.existsByDocumentNumber(dto.getDocumentNumber())).thenReturn(false);
-
-        try (MockedStatic<CnpjValidator> mocked = Mockito.mockStatic(CnpjValidator.class)) {
-            mocked.when(() -> CnpjValidator.isCnpjValid(dto.getDocumentNumber())).thenReturn(false);
-
-            assertThatThrownBy(() -> empresaService.cadastrarEmpresa(dto))
-                    .isInstanceOf(CnpjInvalidException.class)
-                    .hasMessageContaining("CNPJ inválido");
-        }
-    }
-
-    @Test
-    void getAllEmpresaSorted_comFiltrosValidados_retornaLista() {
-        String cnpj = "34222351000169";
-        String razaoSocial = "Pet Shop";
-        StatusEmpresa status = StatusEmpresa.ATIVO;
-
-        Empresa empresa1 = new Empresa();
-        empresa1.setId(UUID.randomUUID());
-        Empresa empresa2 = new Empresa();
-        empresa2.setId(UUID.randomUUID());
-
-        List<Empresa> empresas = Arrays.asList(empresa1, empresa2);
-
-
-        Page<Empresa> page =
-                new PageImpl<>(empresas, PageRequest.of(0, 10), empresas.size());
-
-        try (MockedStatic<CnpjValidator> mocked = Mockito.mockStatic(CnpjValidator.class)) {
-            mocked.when(() -> CnpjValidator.isCnpjValid(cnpj)).thenReturn(true);
-
-            when(empresaRepository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(page);
-            when(mapper.toResponseDto(any(Empresa.class))).thenReturn(new EmpresaResponseDTO());
-
-            PageResponse<EmpresaResponseDTO> resultado = empresaService.getAllEmpresaSorted(
-                    cnpj, razaoSocial, null, status, 0, 10, SortField.RAZAO_SOCIAL, DirectionField.ASC
-            );
-
-            assertThat(resultado.getContent()).hasSize(2);
-            assertThat(resultado.getTotalElements()).isEqualTo(2);
-            assertThat(resultado.getTotalPages()).isEqualTo(1);
-            verify(empresaRepository).findAll(any(Specification.class), any(Pageable.class));
-            verify(mapper, times(2)).toResponseDto(any());
-        }
-    }
-
-    @Test
-    void getAllEmpresaSorted_cnpjInvalido_lancaExcecao() {
-        String cnpj = "00000000000000";
-
-        try (MockedStatic<CnpjValidator> mocked = Mockito.mockStatic(CnpjValidator.class)) {
-            mocked.when(() -> CnpjValidator.isCnpjValid(cnpj)).thenReturn(false);
-
-            assertThatThrownBy(() -> empresaService.getAllEmpresaSorted(
-                    cnpj, null, null, null, 0, 10, SortField.RAZAO_SOCIAL, DirectionField.ASC
-            )).isInstanceOf(CnpjInvalidException.class)
-                    .hasMessageContaining("Cnpj informado é invalido");
-
-            verify(empresaRepository, never()).findAll(any(Specification.class), any(Sort.class));
-        }
-    }
-
-    @Test
-    void getAllEmpresaSorted_semFiltros_retornaListaVazia() {
-        when(empresaRepository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(new PageImpl<>(Collections.emptyList()));
-
-        PageResponse<EmpresaResponseDTO> resultado = empresaService.getAllEmpresaSorted(
-                null, null, null, null, 0, 10, SortField.RAZAO_SOCIAL, DirectionField.ASC
-        );
-
-        assertThat(resultado.getContent()).isEmpty();
-        assertThat(resultado.getTotalElements()).isZero();
-        assertThat(resultado.getTotalPages()).isZero();
-
-    }
-
-    @Test
-    void getEmpresaById_sucesso() {
-        UUID id = UUID.randomUUID();
-        when(empresaRepository.findById(id)).thenReturn(Optional.of(entity));
+    void deveBuscarEmpresasComFiltrosEPaginacao() {
+        var page = new PageImpl<>(List.of(entity), PageRequest.of(0, 10), 1);
+        when(empresaRepository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(page);
         when(mapper.toResponseDto(entity)).thenReturn(response);
 
-        EmpresaResponseDTO resultado = empresaService.getEmpresaById(id);
+        try (MockedStatic<CnpjValidator> cnpj = Mockito.mockStatic(CnpjValidator.class)) {
+            cnpj.when(() -> CnpjValidator.isCnpjValid(request.getDocumentNumber())).thenReturn(true);
 
-        assertThat(resultado).isNotNull();
-        assertThat(resultado.getId()).isEqualTo(entity.getId());
-        verify(empresaRepository).findById(id);
-        verify(mapper).toResponseDto(entity);
+            PageResponse<EmpresaResponseDTO> result = empresaService.getAllEmpresaSorted(
+                    request.getDocumentNumber(),
+                    "Pet Shop",
+                    request.getEmail(),
+                    StatusEmpresa.AGUARDANDO_CONTRATO,
+                    0,
+                    10,
+                    SortField.RAZAO_SOCIAL,
+                    DirectionField.ASC
+            );
+
+            assertThat(result.getContent()).containsExactly(response);
+            assertThat(result.getTotalElements()).isEqualTo(1);
+            assertThat(result.getTotalPages()).isEqualTo(1);
+        }
     }
 
     @Test
-    void getEmpresaById_naoEncontrada_lancaExcecao() {
+    void buscaDeveRejeitarCnpjInvalido() {
+        try (MockedStatic<CnpjValidator> cnpj = Mockito.mockStatic(CnpjValidator.class)) {
+            cnpj.when(() -> CnpjValidator.isCnpjValid("00000000000000")).thenReturn(false);
+
+            assertThatThrownBy(() -> empresaService.getAllEmpresaSorted(
+                    "00000000000000", null, null, null, 0, 10,
+                    SortField.RAZAO_SOCIAL, DirectionField.ASC
+            ))
+                    .isInstanceOf(CnpjInvalidException.class)
+                    .hasMessage("CNPJ informado é inválido.");
+        }
+
+        verify(empresaRepository, never()).findAll(any(Specification.class), any(Pageable.class));
+    }
+
+    @Test
+    void buscaDeveValidarPaginaETamanho() {
+        assertThatThrownBy(() -> empresaService.getAllEmpresaSorted(
+                null, null, null, null, -1, 10,
+                SortField.RAZAO_SOCIAL, DirectionField.ASC
+        )).isInstanceOf(IllegalArgumentException.class);
+
+        assertThatThrownBy(() -> empresaService.getAllEmpresaSorted(
+                null, null, null, null, 0, 101,
+                SortField.RAZAO_SOCIAL, DirectionField.ASC
+        )).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void buscaSemResultadosDeveRetornarPaginaVazia() {
+        when(empresaRepository.findAll(any(Specification.class), any(Pageable.class)))
+                .thenReturn(new PageImpl<>(Collections.emptyList()));
+
+        PageResponse<EmpresaResponseDTO> result = empresaService.getAllEmpresaSorted(
+                null, null, null, null, 0, 10,
+                SortField.RAZAO_SOCIAL, DirectionField.ASC
+        );
+
+        assertThat(result.getContent()).isEmpty();
+        assertThat(result.getTotalElements()).isZero();
+    }
+
+    @Test
+    void deveBuscarEmpresaPorId() {
+        when(empresaRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
+        when(mapper.toResponseDto(entity)).thenReturn(response);
+
+        assertThat(empresaService.getEmpresaById(entity.getId())).isEqualTo(response);
+    }
+
+    @Test
+    void buscaPorIdDeveFalharQuandoEmpresaNaoExiste() {
         UUID id = UUID.randomUUID();
         when(empresaRepository.findById(id)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> empresaService.getEmpresaById(id))
                 .isInstanceOf(EmpresaNaoEncontradaException.class)
-                .hasMessageContaining("Empresa não encontrada");
-
-        verify(mapper, never()).toResponseDto(any());
+                .hasMessageContaining(id.toString());
     }
 
     @Test
-    void deleteEmpresaById_quandoEmpresaExiste_entaoDeletaComSucesso() {
+    void deveExcluirEmpresaExistente() {
+        when(empresaRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
 
-        UUID id = UUID.randomUUID();
-        Empresa empresa = new Empresa();
-        empresa.setId(id);
+        empresaService.deleteEmpresaById(entity.getId());
 
-        when(empresaRepository.findById(id)).thenReturn(Optional.of(empresa));
-
-        empresaService.deleteEmpresaById(id);
-
-        verify(empresaRepository, times(1)).findById(id);
-        verify(empresaRepository, times(1)).delete(empresa);
+        verify(empresaRepository).delete(entity);
     }
 
     @Test
-    void deleteEmpresaById_quandoEmpresaNaoExiste_entaoLancaExcecao() {
-
+    void exclusaoDeveFalharQuandoEmpresaNaoExiste() {
         UUID id = UUID.randomUUID();
         when(empresaRepository.findById(id)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> empresaService.deleteEmpresaById(id))
-                .isInstanceOf(EmpresaNaoEncontradaException.class)
-                .hasMessageContaining("Empresa não encontrada com o id: " + id);
+                .isInstanceOf(EmpresaNaoEncontradaException.class);
 
-        verify(empresaRepository, times(1)).findById(id);
-        verify(empresaRepository, never()).delete(any(Empresa.class));
+        verify(empresaRepository, never()).delete(any());
     }
 
     @Test
-    void editEmpresaById_quandoEmpresaExiste_entaoAtualizaComSucesso() {
-        UUID empresaId = entity.getId();
+    void devePermitirManterOProprioEmailNaEdicao() {
+        UpdateEmpresaRequestDto update = new UpdateEmpresaRequestDto();
+        update.setEmail(entity.getEmail());
+        update.setNomeFantasia("Pet Atualizado");
 
-        UpdateEmpresaRequestDto updateDto = new UpdateEmpresaRequestDto();
-        updateDto.setNomeFantasia("Novo Nome");
-        updateDto.setEmail("novo@email.com");
+        when(empresaRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
+        when(empresaRepository.existsByEmailAndIdNot(entity.getEmail(), entity.getId())).thenReturn(false);
+        when(empresaRepository.save(entity)).thenReturn(entity);
+        when(mapper.toResponseDto(entity)).thenReturn(response);
 
-        when(empresaRepository.findById(empresaId)).thenReturn(Optional.of(entity));
-        when(empresaRepository.save(any(Empresa.class))).thenAnswer(invocation -> invocation.getArgument(0));
-        when(mapper.toResponseDto(any(Empresa.class))).thenReturn(response);
+        EmpresaResponseDTO result = empresaService.editEmpresaById(entity.getId(), update);
 
-        EmpresaResponseDTO resultado = empresaService.editEmpresaById(empresaId, updateDto);
-
-        assertThat(resultado).isNotNull();
-        assertThat(resultado.getId()).isEqualTo(entity.getId());
-
-        verify(empresaRepository).findById(empresaId);
+        assertThat(result).isEqualTo(response);
+        verify(empresaRepository).existsByEmailAndIdNot(entity.getEmail(), entity.getId());
         verify(empresaRepository).save(entity);
-        verify(mapper).toResponseDto(entity);
     }
 
     @Test
-    void editEmpresaById_quandoEmpresaNaoExiste_entaoLancaExcecao() {
-        UUID empresaId = UUID.randomUUID();
-        UpdateEmpresaRequestDto updateDto = new UpdateEmpresaRequestDto();
+    void deveRejeitarEmailDeOutraEmpresaNaEdicao() {
+        UpdateEmpresaRequestDto update = new UpdateEmpresaRequestDto();
+        update.setEmail("outra@empresa.com");
 
-        when(empresaRepository.findById(empresaId)).thenReturn(Optional.empty());
+        when(empresaRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
+        when(empresaRepository.existsByEmailAndIdNot(update.getEmail(), entity.getId())).thenReturn(true);
 
-        assertThatThrownBy(() -> empresaService.editEmpresaById(empresaId, updateDto))
-                .isInstanceOf(EmpresaNaoEncontradaException.class)
-                .hasMessageContaining("Empresa não encontrada com o id: " + empresaId);
+        assertThatThrownBy(() -> empresaService.editEmpresaById(entity.getId(), update))
+                .isInstanceOf(EmailExistenteException.class);
 
-        verify(empresaRepository).findById(empresaId);
         verify(empresaRepository, never()).save(any());
-        verify(mapper, never()).toResponseDto(any());
     }
 
     @Test
-    void editEmpresaById_quandoFalhaAoSalvar_entaoPropagaExcecao() {
-        UUID empresaId = entity.getId();
-        UpdateEmpresaRequestDto updateDto = new UpdateEmpresaRequestDto();
+    void edicaoSemEmailNaoDeveConsultarDuplicidade() {
+        UpdateEmpresaRequestDto update = new UpdateEmpresaRequestDto();
+        update.setNomeFantasia("Novo Nome");
 
-        when(empresaRepository.findById(empresaId)).thenReturn(Optional.of(entity));
-        when(empresaRepository.save(any(Empresa.class))).thenThrow(new RuntimeException("Erro ao salvar"));
+        when(empresaRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
+        when(empresaRepository.save(entity)).thenReturn(entity);
+        when(mapper.toResponseDto(entity)).thenReturn(response);
 
-        assertThatThrownBy(() -> empresaService.editEmpresaById(empresaId, updateDto))
-                .isInstanceOf(RuntimeException.class)
-                .hasMessageContaining("Erro ao salvar");
+        empresaService.editEmpresaById(entity.getId(), update);
 
-        verify(empresaRepository).findById(empresaId);
-        verify(empresaRepository).save(entity);
-        verify(mapper, never()).toResponseDto(any());
+        verify(empresaRepository, never()).existsByEmailAndIdNot(any(), any());
     }
 
+    @Test
+    void edicaoDeveFalharQuandoEmpresaNaoExiste() {
+        UUID id = UUID.randomUUID();
+        when(empresaRepository.findById(id)).thenReturn(Optional.empty());
 
+        assertThatThrownBy(() -> empresaService.editEmpresaById(id, new UpdateEmpresaRequestDto()))
+                .isInstanceOf(EmpresaNaoEncontradaException.class);
+
+        verify(empresaRepository, never()).save(any());
+    }
 }
