@@ -1,12 +1,11 @@
 package com.mypetadmin.ps_empresa.util;
 
-import lombok.extern.slf4j.Slf4j;
+public final class CnpjValidator {
 
-@Slf4j
-public class CnpjValidator {
+    private CnpjValidator() {
+    }
 
     public static boolean isCnpjValid(String cnpj) {
-        log.debug("Validando CNPJ: {}", cnpj);
         if (cnpj == null || !cnpj.matches("\\d{14}")) {
             return false;
         }

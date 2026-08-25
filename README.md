@@ -1,137 +1,242 @@
-# 🐾 My Pet Admin – MS: Empresa
+# 🐾 My Pet Admin — PS_Empresa
 
-Este microsserviço faz parte da aplicação **My Pet Admin**, sendo responsável pela gestão de **empresas (Petshops)**. Inclui operações de cadastro, listagem, edição e exclusão lógica de empresas, além da integração com o microsserviço de contratos.
+Microsserviço responsável pelo **domínio de empresas (petshops)** do My Pet Admin.
 
----
+O PS_Empresa mantém os dados cadastrais e o status operacional da empresa. Ele **não orquestra** criação de usuário, contrato ou login. Essas coordenações pertencem a uma camada externa de orquestração.
 
-## 📦 Funcionalidades
+## Responsabilidades
 
-- ✅ Cadastro de nova empresa
-- 🔍 Listagem de empresas por:
-    - ID
-    - CNPJ
-- ✏️ Atualização de dados da empresa
-- 🗑️ Exclusão lógica (alteração de status para `DESATIVADO`)
-- 🔐 Criação automática do **usuário master** ao cadastrar uma nova empresa (via MS externo)
-- 🤝 Integração com MS de contrato (criação automática de contrato ao cadastrar empresa)
+- cadastrar uma empresa;
+- consultar empresas com filtros, paginação e ordenação;
+- consultar empresa por ID;
+- atualizar parcialmente dados cadastrais;
+- excluir uma empresa;
+- manter o status da empresa;
+- receber do PS_Contrato alterações de status;
+- disponibilizar contrato interno mínimo para consulta do status da empresa.
 
----
+## Regra de status
 
-## 🧱 Estrutura do Projeto
+Toda nova empresa nasce como:
 
-ps_empresa/
-├── config/
-│   └── SwaggerConfig.java
-├── controller/
-│   └── EmpresaController.java
-├── dto/
-│   ├── EmpresaRequestDTO.java
-│   └── EmpresaResponseDTO.java
-├── exception/
-│   ├── EmailExistenteException.java
-│   ├── EmpresaExistenteException.java
-│   ├── EmpresaNaoEncontradaException.java
-│   └── GlobalExceptionHandler.java
-├── mapper/
-│   └── EmpresaMapper.java
-├── model/
-│   └── Empresa.java
-├── service/
-│   └── EmpresaServiceImpl.java
-└── util/
-└── CnpjValidator.java
+`AGUARDANDO_CONTRATO`
 
+O PS_Empresa não ativa a empresa durante o cadastro. O status é atualizado somente a partir de informações recebidas do PS_Contrato.
 
----
+| Status recebido do contrato | Status da empresa |
+| --- | --- |
+| `ATIVO` | `ATIVO` |
+| `AGUARDANDO_PAGAMENTO` | `AGUARDANDO_CONTRATO` |
+| `PENDENTE_PAGAMENTO` | mantém o status atual; se já estiver `ATIVO`, permanece `ATIVO` |
+| `INATIVO` | `INATIVO` |
 
-## ⚙️ Tecnologias Utilizadas
+## Arquitetura de integração
 
-- Java 21+
-- Spring Boot 3.x
+### Onboarding
+
+O frontend não deve coordenar microsserviços diretamente.
+
+Fluxo recomendado:
+
+```text
+Frontend
+   |
+   v
+API Gateway
+   |
+   v
+Onboarding Orchestrator
+   |----> PS_Empresa
+   |----> PS_User
+   `----> PS_Contrato
+```
+
+O **API Gateway** cuida de entrada, autenticação, roteamento e políticas transversais. O **Orchestrator** cuida do workflow de negócio do onboarding e da composição das respostas dos microsserviços.
+
+O cadastro da empresa é feito internamente pelo orchestrator em:
+
+`POST /internal/empresas`
+
+### Login e vínculo usuário → empresa
+
+O PS_Empresa não deve armazenar a relação de pertencimento do usuário apenas para resolver login.
+
+Fluxo recomendado:
+
+```text
+PS_Login / Login Orchestrator
+        |
+        | userId
+        v
+     PS_User
+        |
+        | empresaId
+        v
+   PS_Empresa
+        |
+        | status
+        v
+ decisão de login
+```
+
+O PS_User resolve a empresa à qual o usuário pertence. O PS_Empresa responde pelo estado da empresa por meio de:
+
+`GET /internal/empresas/{empresaId}/status`
+
+Assim cada microsserviço continua dono do seu próprio domínio.
+
+## Segurança
+
+### APIs internas e chamadas service-to-service
+
+A credencial interna é enviada no header:
+
+`X-Internal-Key`
+
+O valor vem da variável de ambiente:
+
+`INTERNAL_API_KEY`
+
+Rotas `/internal/**` exigem obrigatoriamente essa credencial. Rotas autenticadas `/empresas/**` também aceitam a credencial interna para chamadas confiáveis de gateway/orchestrator e para testes de integração isolados do PS_Login.
+
+Nenhum segredo de produção é mantido no código-fonte.
+
+### APIs de usuário autenticado
+
+Rotas `/empresas/**` aceitam JWT no header:
+
+`Authorization: Bearer <token>`
+
+Nesta versão o PS_Empresa valida os tokens HS256 atualmente emitidos pelo PS_Login usando:
+
+`JWT_SECRET_KEY`
+
+O contrato atual do PS_Login contém `subject` e `roles`. A inclusão de `userId`/`empresaId` no token deve ser tratada em uma evolução coordenada do fluxo de autenticação.
+
+> **Importante para multi-tenant:** autenticação JWT sozinha não resolve isolamento entre empresas. Antes da comercialização, o fluxo de autorização deve garantir que o usuário só consiga acessar a empresa associada a ele. A solução recomendada é o PS_User resolver o vínculo `userId -> empresaId` e o gateway/orchestrator propagar somente chamadas autorizadas, ou evoluir o token para carregar um `empresaId` confiável e validado.
+
+## Endpoints
+
+### Internos
+
+| Método | Endpoint | Responsabilidade |
+| --- | --- | --- |
+| POST | `/internal/empresas` | cadastrar empresa durante onboarding |
+| GET | `/internal/empresas/{id}/status` | consultar somente o status |
+| PATCH | `/internal/contratos/status` | sincronizar status vindo do PS_Contrato |
+
+### Autenticados
+
+| Método | Endpoint | Responsabilidade |
+| --- | --- | --- |
+| GET | `/empresas` | listar/filtrar empresas |
+| GET | `/empresas/{id}` | buscar por ID |
+| PATCH | `/empresas/{id}` | atualização parcial |
+| DELETE | `/empresas/{id}` | excluir empresa |
+
+## Banco de dados
+
+PostgreSQL é o banco de produção.
+
+O schema é versionado com **Flyway** em:
+
+`src/main/resources/db/migration`
+
+Em produção o Hibernate usa:
+
+`spring.jpa.hibernate.ddl-auto=validate`
+
+Hibernate valida o schema; alterações estruturais devem entrar como migrations.
+
+## Observabilidade
+
+- Spring Boot Actuator;
+- health probes;
+- Micrometer/Prometheus;
+- logs em stdout, adequados para containers;
+- `X-Correlation-Id` propagado/gerado por requisição;
+- logs de negócio evitam registrar e-mail, telefone e endereço completos.
+
+## Stack
+
+- Java 21
+- Spring Boot 3.5.x
 - Spring Web
+- Spring Security
 - Spring Data JPA
-- Hibernate
-- PostgreSQL (produção)
-- H2 (testes)
-- Lombok
+- Bean Validation
+- PostgreSQL
+- Flyway
 - OpenAPI / Swagger
-- JUnit 5 + MockMvc
+- Micrometer / Prometheus
+- JUnit 5 / MockMvc / Mockito
 - Maven
+- Docker
 
----
+## Testes e qualidade
 
-## 🧪 Testes
+A suíte possui testes de controller, service, mappers, helpers, validação de CNPJ, tratamento de exceções e filtros de segurança.
 
-- `@SpringBootTest` para testes de contexto
-- `@WebMvcTest` com `MockMvc` no `EmpresaController`
-- Testes unitários para `CnpjValidator`
-- Cobertura monitorada via JaCoCo
-
----
-
-## 🔐 Regras de Negócio
-
-- CNPJ deve ter exatamente 14 dígitos e ser válido conforme cálculo de dígitos verificadores.
-- E-mail e CNPJ devem ser únicos por empresa.
-- O campo `endereco` é montado dinamicamente a partir de `rua`, `número`, `complemento` e `bairro`.
-- Status padrão ao cadastrar: `ATIVO`
-- Exclusão é lógica, alterando o status para `DESATIVADO`.
-
----
-
-## 🚀 Executando Localmente
-
-### Pré-requisitos
-
-- Java 21+
-- Maven 3.8+
-- PostgreSQL rodando com banco `mypetadmin`
-
-### Executar com perfil local (PostgreSQL)
+JaCoCo executa no `verify` e aplica quality gate de cobertura de linhas.
 
 ```bash
-mvn spring-boot:run -Dspring-boot.run.profiles=dev
+./mvnw clean verify
+```
 
+Além dos unitários, o CI sobe PostgreSQL real e executa a regressão Playwright do `ps_automacao_backend` contra a aplicação iniciada localmente.
 
-### Executar testes com H2 (perfil test)
+## Execução local
 
-mvn test
+Variáveis principais:
 
+```text
+DB_URL
+DB_USERNAME
+DB_PASSWORD
+INTERNAL_API_KEY
+JWT_SECRET_KEY
+```
 
-### 📁 Endpoints Disponíveis
+Executar:
 
-Método	URL	Descrição
-POST	/empresas/createEmpresas	Cadastra uma nova empresa
-GET	/empresas/{id}	Busca empresa por ID
-GET	/empresas/cnpj/{cnpj}	Busca empresa por CNPJ
-PUT	/empresas/{id}	Atualiza empresa
-DELETE	/empresas/{id}	Desativa (exclusão lógica)
+```bash
+./mvnw spring-boot:run
+```
 
-## A documentação completa pode ser acessada via:
+Swagger:
 
-http://localhost:8080/swagger-ui.html
+`http://localhost:8081/swagger-ui/index.html`
 
+Health:
 
-### 🧩 Integrações
+`http://localhost:8081/actuator/health`
 
-- 📄 Ao cadastrar uma empresa, um contrato é gerado automaticamente (via MS ps_contrato)
+## Produção / Render
 
-- 👤 Usuário master criado automaticamente (via MS ps_user)
+Ative explicitamente o profile de produção:
 
-### Convenções
+```text
+SPRING_PROFILES_ACTIVE=prod
+```
 
-- DTOs com validação via jakarta.validation
+Configure no serviço:
 
-- Mapper responsável por converter DTO ↔️ Entity
+```text
+DB_URL=jdbc:postgresql://<host>:5432/<database>
+DB_USERNAME=<database-user>
+DB_PASSWORD=<database-password>
+INTERNAL_API_KEY=<shared-internal-secret>
+JWT_SECRET_KEY=<jwt-secret>
+```
 
-- Exceptions personalizadas com tratamento global via @ControllerAdvice
+`PORT` é lido automaticamente pela aplicação através da variável fornecida pelo Render e não precisa ser fixado manualmente.
 
-### Desenvolvedores
+Enquanto a autenticação service-to-service por chave estiver em uso, `INTERNAL_API_KEY` deve possuir exatamente o mesmo valor no PS_Empresa e no PS_Contrato.
 
-- 👨‍💻 Backend: Luis Lipinski
+Para recursos hospedados no mesmo workspace e região do Render, prefira a rede privada para PostgreSQL e comunicação entre microsserviços.
 
-- 📅 Projeto educacional com fins de aprendizado e futura comercialização.
+Health check recomendado:
 
-### Licença
-
-Este projeto é de uso educacional. O código está aberto para estudo, mas a comercialização depende de autorização dos autores.
+```text
+/actuator/health
+```

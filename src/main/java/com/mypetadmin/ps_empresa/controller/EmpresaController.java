@@ -1,136 +1,102 @@
 package com.mypetadmin.ps_empresa.controller;
 
-import com.mypetadmin.ps_empresa.dto.*;
+import com.mypetadmin.ps_empresa.dto.EmpresaResponseDTO;
+import com.mypetadmin.ps_empresa.dto.PageResponse;
+import com.mypetadmin.ps_empresa.dto.UpdateEmpresaRequestDto;
 import com.mypetadmin.ps_empresa.enums.DirectionField;
 import com.mypetadmin.ps_empresa.enums.SortField;
 import com.mypetadmin.ps_empresa.enums.StatusEmpresa;
 import com.mypetadmin.ps_empresa.service.EmpresaService;
-import com.mypetadmin.ps_empresa.util.CnpjValidator;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/empresas")
 @RequiredArgsConstructor
-@Slf4j
 public class EmpresaController {
 
     private final EmpresaService empresaService;
 
-    @Operation(summary = "Cadastra nova empresa sem a necessidade de token")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Empresa criada com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Requisição invalida")
+    @Operation(summary = "Busca empresas com filtros, paginação e ordenação")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Parâmetros inválidos"),
+            @ApiResponse(responseCode = "401", description = "Não autenticado")
     })
-    @PostMapping("/createEmpresas")
-    public ResponseEntity<EmpresaResponseDTO>cadastrarEmpresa(@Valid @RequestBody EmpresaRequestDTO empresaRequestDTO) {
-        log.info("Recebendo requisição para cadastrar empresa: CNPJ={}, Razão Social={}, Nome Fantasia={}, Telefone={}, Email={}, " +
-                        "Endereco={}, {}, {}, {}, Cidade={}, Estado={}, CEP={}",
-                empresaRequestDTO.getDocumentNumber(), empresaRequestDTO.getRazaoSocial(), empresaRequestDTO.getNomeFantasia(),
-                empresaRequestDTO.getTelefone(), empresaRequestDTO.getEmail(), empresaRequestDTO.getRua(), empresaRequestDTO.getNumero(),
-                empresaRequestDTO.getComplemento(), empresaRequestDTO.getBairro(), empresaRequestDTO.getCidade(), empresaRequestDTO.getEstado(),
-                empresaRequestDTO.getCep());
-        try {
-            EmpresaResponseDTO empresaCadastrada = empresaService.cadastrarEmpresa(empresaRequestDTO);
-            log.info("Empresa cadastrada com sucesso: id={}, CNPJ={}, Status={}",
-                    empresaCadastrada.getId(), empresaCadastrada.getDocumentNumber(), empresaCadastrada.getStatus());
-            URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest()
-                    .path("/{id")
-                    .buildAndExpand(empresaCadastrada.getId())
-                    .toUri();
-            return ResponseEntity.created(location).body(empresaCadastrada);
-        } catch (Exception e) {
-            log.error("Error ao cadastrar empresa: {}", e.getMessage(), e);
-            throw e;
-        }
+    @GetMapping
+    public ResponseEntity<PageResponse<EmpresaResponseDTO>> buscarEmpresas(
+            @RequestParam(required = false) String documentNumber,
+            @RequestParam(required = false) String razaoSocial,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) StatusEmpresa status,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "DOCUMENT_NUMBER") SortField sortField,
+            @RequestParam(defaultValue = "ASC") DirectionField directionField) {
 
+        return ResponseEntity.ok(
+                empresaService.getAllEmpresaSorted(
+                        documentNumber,
+                        razaoSocial,
+                        email,
+                        status,
+                        page,
+                        size,
+                        sortField,
+                        directionField
+                )
+        );
     }
 
-    @Operation(summary = "Buscar as empresas por cnpj, razão social, email, ou/e status")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Buscado a empresa com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Não foi encontrado nenhuma empresa")
-    })
-    @GetMapping("/buscaEmpresas")
-    public ResponseEntity<PageResponse<EmpresaResponseDTO>>buscarEmpresas(@RequestParam (required = false) String documentNumber,
-                                                                  @RequestParam (required = false) String razaoSocial,
-                                                                  @RequestParam (required = false) String email,
-                                                                  @RequestParam (required = false) StatusEmpresa status,
-                                                                  @RequestParam(defaultValue = "0") int page,
-                                                                  @RequestParam(defaultValue = "10") int size,
-                                                                  @RequestParam (required = false, defaultValue = "DOCUMENT_NUMBER") SortField sortField,
-                                                                  @RequestParam (required = false, defaultValue = "ASC") DirectionField directionField) {
-
-
-        log.info("Iniciado a busca por empresas no banco de dados");
-
-        PageResponse<EmpresaResponseDTO> dto = empresaService.getAllEmpresaSorted(documentNumber, razaoSocial, email, status, page, size, sortField, directionField);
-        return ResponseEntity.ok(dto);
-    }
-
-    @Operation(summary = "Buscar empresa por id.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Buscado a empresa com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Não foi encontrado a empresa com o id informado")
-    })
-    @GetMapping("buscaEmpresas/{id}")
-    public ResponseEntity<EmpresaResponseDTO> getEmpresaById(@PathVariable UUID id) {
-        log.info("Iniciado a busca pela empresa com id: {}", id);
-        EmpresaResponseDTO dto = empresaService.getEmpresaById(id);
-        return ResponseEntity.ok(dto);
-    }
-
-    @Operation(summary = "Exclui a empresa pelo id")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "empresa excluida com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Não foi encontrado a empresa com o id informado")
-    })
-    @DeleteMapping("excluirEmpresa/{id}")
-    public ResponseEntity<Void> deleteEmpresaById(@PathVariable UUID id) {
-        log.info("Buscando empresa com id {} para excluir.", id);
-        empresaService.deleteEmpresaById(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    @Operation(summary = "Atualiza os dados de uma empresa")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Empresa atualizado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Requisição invalida"),
+    @Operation(summary = "Busca uma empresa pelo id")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Empresa encontrada"),
+            @ApiResponse(responseCode = "401", description = "Não autenticado"),
             @ApiResponse(responseCode = "404", description = "Empresa não encontrada")
     })
-    @PutMapping("editEmpresa/{id}")
-    public ResponseEntity<EmpresaResponseDTO> editEmpresaById(@PathVariable("id") UUID empresaId, @RequestBody(required = false) UpdateEmpresaRequestDto updateEmpresa) {
+    @GetMapping("/{id}")
+    public ResponseEntity<EmpresaResponseDTO> getEmpresaById(@PathVariable UUID id) {
+        return ResponseEntity.ok(empresaService.getEmpresaById(id));
+    }
 
-        log.info("Recebendo requisição para editar empresa com id {}", empresaId);
+    @Operation(summary = "Atualiza parcialmente os dados de uma empresa")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Empresa atualizada"),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos"),
+            @ApiResponse(responseCode = "401", description = "Não autenticado"),
+            @ApiResponse(responseCode = "404", description = "Empresa não encontrada"),
+            @ApiResponse(responseCode = "409", description = "Conflito de dados")
+    })
+    @PatchMapping("/{id}")
+    public ResponseEntity<EmpresaResponseDTO> editEmpresaById(
+            @PathVariable UUID id,
+            @Valid @RequestBody UpdateEmpresaRequestDto updateEmpresa) {
+        return ResponseEntity.ok(empresaService.editEmpresaById(id, updateEmpresa));
+    }
 
-        if (updateEmpresa == null) {
-            updateEmpresa = new UpdateEmpresaRequestDto();
-        }
-
-        try {
-
-            EmpresaResponseDTO empresaAtualizada = empresaService.editEmpresaById(empresaId, updateEmpresa);
-            log.info("Empresa com o id {} foi atualizado com sucesso", empresaId);
-            return ResponseEntity.ok(empresaAtualizada);
-        } catch (Exception e) {
-            log.error("Error ao atualizar empresa: {}", e.getMessage(), e);
-            throw e;
-        }
+    @Operation(summary = "Exclui uma empresa pelo id")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Empresa excluída"),
+            @ApiResponse(responseCode = "401", description = "Não autenticado"),
+            @ApiResponse(responseCode = "404", description = "Empresa não encontrada")
+    })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteEmpresaById(@PathVariable UUID id) {
+        empresaService.deleteEmpresaById(id);
+        return ResponseEntity.noContent().build();
     }
 }

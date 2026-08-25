@@ -1,23 +1,42 @@
 package com.mypetadmin.ps_empresa.exception;
 
-import java.time.LocalDateTime;
+import lombok.Getter;
 
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.Map;
+
+@Getter
 public class ErrorResponse {
 
-    private String message;
-    private int status;
-    private LocalDateTime timestamp;
-    private String path;
+    private final String code;
+    private final String message;
+    private final int status;
+    private final LocalDateTime timestamp;
+    private final String path;
+    private final Map<String, String> errors;
 
-    public ErrorResponse(String message, int status, String path) {
+    public ErrorResponse(String code,
+                         String message,
+                         int status,
+                         String path,
+                         Map<String, String> errors) {
+        this.code = code;
         this.message = message;
         this.status = status;
         this.path = path;
+        this.errors = errors == null ? Collections.emptyMap() : errors;
         this.timestamp = LocalDateTime.now();
     }
 
-    public String getMessage() { return message; }
-    public int getStatus() { return status; }
-    public LocalDateTime getTimestamp() { return timestamp; }
-    public String getPath() { return path; }
+    public static ErrorResponse of(String code, String message, int status, String path) {
+        return new ErrorResponse(code, message, status, path, Collections.emptyMap());
+    }
+
+    public static ErrorResponse validation(String message,
+                                           int status,
+                                           String path,
+                                           Map<String, String> errors) {
+        return new ErrorResponse("VALIDATION_ERROR", message, status, path, errors);
+    }
 }

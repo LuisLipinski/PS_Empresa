@@ -1,27 +1,20 @@
-# ---------- STAGE 1 : BUILD ----------
-FROM maven:3.9.9-eclipse-temurin-17 AS build
+# ---------- STAGE 1: BUILD ----------
+FROM maven:3.9.9-eclipse-temurin-21 AS build
 
 WORKDIR /app
-
-# Copia apenas dependências primeiro (cache inteligente)
 COPY pom.xml .
-RUN mvn -B -q -e -DskipTests dependency:go-offline
-
-# Copia o resto do código
+RUN mvn -B -q -DskipTests dependency:go-offline
 COPY src ./src
+RUN mvn -B clean package -DskipTests
 
-# Gera o jar
-RUN mvn clean package -DskipTests
-
-
-# ---------- STAGE 2 : RUNTIME ----------
-FROM eclipse-temurin:17-jdk-jammy
+# ---------- STAGE 2: RUNTIME ----------
+FROM eclipse-temurin:21-jre-jammy
 
 WORKDIR /app
+RUN groupadd --system app && useradd --system --gid app app
+COPY --from=build --chown=app:app /app/target/*.jar /app/app.jar
 
-# Copia o jar gerado no estágio anterior
-COPY --from=build /app/target/*.jar app.jar
-
-EXPOSE 8080
+USER app
+EXPOSE 8081
 
 ENTRYPOINT ["java","-jar","/app/app.jar"]

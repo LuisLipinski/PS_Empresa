@@ -2,8 +2,8 @@ package com.mypetadmin.ps_empresa.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
@@ -12,8 +12,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.lang.reflect.Field;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @RestControllerAdvice
@@ -21,91 +20,114 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(EmpresaExistenteException.class)
-    public ResponseEntity<ErrorResponse> handleEmpresaExistente(EmpresaExistenteException ex, HttpServletRequest request) {
-        log.warn("Erro de negócio: {}", ex.getMessage());
-        ErrorResponse error = new ErrorResponse(
-                ex.getMessage(),
-                HttpStatus.BAD_REQUEST.value(),
-                request.getRequestURI()
-        );
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-
+    public ResponseEntity<ErrorResponse> handleEmpresaExistente(EmpresaExistenteException ex,
+                                                                 HttpServletRequest request) {
+        return build(HttpStatus.CONFLICT, "EMPRESA_ALREADY_EXISTS", ex.getMessage(), request);
     }
 
     @ExceptionHandler(EmailExistenteException.class)
-    public ResponseEntity<ErrorResponse> handleEmailExistebre(EmailExistenteException ex, HttpServletRequest request) {
-        log.warn("Erro de negócio: {}", ex.getMessage());
-        ErrorResponse error = new ErrorResponse(
-                ex.getMessage(),
-                HttpStatus.BAD_REQUEST.value(),
-                request.getRequestURI()
-        );
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    public ResponseEntity<ErrorResponse> handleEmailExistente(EmailExistenteException ex,
+                                                               HttpServletRequest request) {
+        return build(HttpStatus.CONFLICT, "EMAIL_ALREADY_EXISTS", ex.getMessage(), request);
     }
 
     @ExceptionHandler(EmpresaNaoEncontradaException.class)
-    public ResponseEntity<Map<String, String>> handleEmpresaNaoEncontrada(EmpresaNaoEncontradaException ex) {
-        Map<String, String> body = new HashMap<>();
-        body.put("error", ex.getMessage());
-        log.warn("Empresa não encontrada: {}", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(body);
+    public ResponseEntity<ErrorResponse> handleEmpresaNaoEncontrada(EmpresaNaoEncontradaException ex,
+                                                                     HttpServletRequest request) {
+        return build(HttpStatus.NOT_FOUND, "EMPRESA_NOT_FOUND", ex.getMessage(), request);
     }
 
     @ExceptionHandler(CnpjInvalidException.class)
-    public ResponseEntity<Map<String, String>> handleCnpjInvalido(CnpjInvalidException ex) {
-        Map<String, String> body = new HashMap<>();
-        body.put("error", ex.getMessage());
-        log.warn("Cnpj com formato invalido deve ter 14 caracteres e ser valido: {}", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(body);
+    public ResponseEntity<ErrorResponse> handleCnpjInvalido(CnpjInvalidException ex,
+                                                             HttpServletRequest request) {
+        return build(HttpStatus.BAD_REQUEST, "INVALID_CNPJ", ex.getMessage(), request);
     }
 
     @ExceptionHandler(StatusInvalidException.class)
-    public ResponseEntity<Map<String, String>> handleStatusInvalido(StatusInvalidException ex) {
-        Map<String, String> body = new HashMap<>();
-        body.put("error", ex.getMessage());
-        log.warn("Não pode ser alterado para esse status: {}", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(body);
+    public ResponseEntity<ErrorResponse> handleStatusInvalido(StatusInvalidException ex,
+                                                               HttpServletRequest request) {
+        return build(HttpStatus.BAD_REQUEST, "INVALID_STATUS", ex.getMessage(), request);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> handleIllegalArgument(IllegalArgumentException ex) {
-        log.warn("Argumento inválido: {}", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-    }
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleGeneric(Exception ex) {
-        log.error("Erro inesperado: {}", ex.getMessage(), ex);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Erro interno no servidor. Tente novamente mais tarde.");
+    public ResponseEntity<ErrorResponse> handleIllegalArgument(IllegalArgumentException ex,
+                                                                HttpServletRequest request) {
+        return build(HttpStatus.BAD_REQUEST, "INVALID_ARGUMENT", ex.getMessage(), request);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidationErrors(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
+    public ResponseEntity<ErrorResponse> handleValidationErrors(MethodArgumentNotValidException ex,
+                                                                 HttpServletRequest request) {
+        Map<String, String> errors = new LinkedHashMap<>();
         for (FieldError error : ex.getBindingResult().getFieldErrors()) {
-            String field = error.getField();
-            String message = error.getDefaultMessage();
-            errors.put(field, message);
-            log.warn("Validação falhou para campo '{}': {}", field, message);
+            errors.putIfAbsent(error.getField(), error.getDefaultMessage());
         }
-        return ResponseEntity.badRequest().body(errors);
+
+        log.warn("validation.failed method={} path={} fields={}", request.getMethod(), request.getRequestURI(), errors.keySet());
+        return ResponseEntity.badRequest().body(
+                ErrorResponse.validation(
+                        "Um ou mais campos são inválidos.",
+                        HttpStatus.BAD_REQUEST.value(),
+                        request.getRequestURI(),
+                        errors
+                )
+        );
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
-    public ResponseEntity<Map<String, String>> handleMissingParams(MissingServletRequestParameterException ex) {
-        Map<String, String> error = new HashMap<>();
-        error.put("error", "Parâmetro ausente: " + ex.getParameterName());
-        return ResponseEntity.badRequest().body(error);
+    public ResponseEntity<ErrorResponse> handleMissingParams(MissingServletRequestParameterException ex,
+                                                              HttpServletRequest request) {
+        return build(
+                HttpStatus.BAD_REQUEST,
+                "MISSING_PARAMETER",
+                "Parâmetro ausente: " + ex.getParameterName(),
+                request
+        );
     }
 
-    @ExceptionHandler(org.springframework.http.converter.HttpMessageNotReadableException.class)
-    public ResponseEntity<Map<String, String>> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
-        Map<String, String> body = new HashMap<>();
-        body.put("error", "Corpo da requisição ausente ou inválido.");
-        log.warn("Falha na leitura do corpo da requisição: {}", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(body);
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponse> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
+                                                                       HttpServletRequest request) {
+        return build(
+                HttpStatus.BAD_REQUEST,
+                "INVALID_REQUEST_BODY",
+                "Corpo da requisição ausente ou inválido.",
+                request
+        );
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponse> handleDataIntegrity(DataIntegrityViolationException ex,
+                                                              HttpServletRequest request) {
+        return build(
+                HttpStatus.CONFLICT,
+                "DATA_CONFLICT",
+                "Os dados informados conflitam com um registro existente.",
+                request
+        );
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleGeneric(Exception ex,
+                                                        HttpServletRequest request) {
+        log.error("request.unexpected-error method={} path={}", request.getMethod(), request.getRequestURI(), ex);
+        return build(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "INTERNAL_ERROR",
+                "Erro interno no servidor. Tente novamente mais tarde.",
+                request
+        );
+    }
+
+    private ResponseEntity<ErrorResponse> build(HttpStatus status,
+                                                String code,
+                                                String message,
+                                                HttpServletRequest request) {
+        if (status.is4xxClientError()) {
+            log.warn("request.rejected code={} method={} path={} message={}", code, request.getMethod(), request.getRequestURI(), message);
+        }
+        return ResponseEntity.status(status).body(
+                ErrorResponse.of(code, message, status.value(), request.getRequestURI())
+        );
     }
 }

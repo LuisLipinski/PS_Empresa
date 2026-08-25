@@ -2,6 +2,7 @@ package com.mypetadmin.ps_empresa.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mypetadmin.ps_empresa.dto.EmpresaContratoStatusDTO;
+import com.mypetadmin.ps_empresa.enums.StatusContrato;
 import com.mypetadmin.ps_empresa.service.EmpresaService;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -36,35 +37,42 @@ class ContratoCallbackControllerTest {
 
     @Test
     void deveSincronizarStatusDaEmpresaComContrato() throws Exception {
-
         UUID empresaId = UUID.randomUUID();
 
         EmpresaContratoStatusDTO dto = new EmpresaContratoStatusDTO();
         dto.setEmpresaId(empresaId);
-        dto.setStatusContrato("ATIVO");
+        dto.setStatusContrato(StatusContrato.ATIVO);
 
         doNothing().when(empresaService).sincronizarStatusComContrato(any());
 
         mockMvc.perform(patch("/internal/contratos/status")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
 
-        ArgumentCaptor<EmpresaContratoStatusDTO> captor =
-                ArgumentCaptor.forClass(EmpresaContratoStatusDTO.class);
-
+        ArgumentCaptor<EmpresaContratoStatusDTO> captor = ArgumentCaptor.forClass(EmpresaContratoStatusDTO.class);
         verify(empresaService).sincronizarStatusComContrato(captor.capture());
 
         assertEquals(empresaId, captor.getValue().getEmpresaId());
-        assertEquals("ATIVO", captor.getValue().getStatusContrato());
+        assertEquals(StatusContrato.ATIVO, captor.getValue().getStatusContrato());
     }
 
     @Test
     void deveRetornar400QuandoJsonInvalido() throws Exception {
-
         mockMvc.perform(patch("/internal/contratos/status")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{ json-invalido }"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void deveRetornar400QuandoStatusAusente() throws Exception {
+        EmpresaContratoStatusDTO dto = new EmpresaContratoStatusDTO();
+        dto.setEmpresaId(UUID.randomUUID());
+
+        mockMvc.perform(patch("/internal/contratos/status")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isBadRequest());
     }
 }

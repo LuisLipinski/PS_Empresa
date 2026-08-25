@@ -4,25 +4,32 @@ spring:
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
-
   jpa:
     hibernate:
-      ddl-auto: update
-
-  sql:
-    init:
-      mode: always
+      ddl-auto: validate
+    open-in-view: false
+    show-sql: false
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
 
 server:
   port: 8081
+
+security:
+  internal:
+    key: ${INTERNAL_API_KEY:mypetadmin-ci-internal-key}
+  jwt:
+    secret: ${JWT_SECRET_KEY:mypetadmin-ci-jwt-secret-key-32chars}
 
 management:
   endpoints:
     web:
       exposure:
         include: health,info
+  endpoint:
+    health:
+      show-details: never
   info:
     git:
       mode: full
-
-
