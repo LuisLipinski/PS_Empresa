@@ -82,15 +82,12 @@ jobs:
     needs: wait-new-version
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          repository: LuisLipinski/ps_automacao_backend
-          path: qa-tests
-          token: ${{ secrets.GH_TOKEN }}
+      - name: Checkout automation
+        run: git clone --depth 1 --branch main https://github.com/LuisLipinski/ps_automacao_backend.git qa-tests
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
           cache-dependency-path: qa-tests/package-lock.json
 
@@ -113,15 +110,12 @@ jobs:
     needs: smoke
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          repository: LuisLipinski/ps_automacao_backend
-          path: qa-tests
-          token: ${{ secrets.GH_TOKEN }}
+      - name: Checkout automation
+        run: git clone --depth 1 --branch main https://github.com/LuisLipinski/ps_automacao_backend.git qa-tests
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
           cache-dependency-path: qa-tests/package-lock.json
 
