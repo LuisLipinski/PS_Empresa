@@ -210,3 +210,33 @@ Swagger:
 Health:
 
 `http://localhost:8081/actuator/health`
+
+## Produção / Render
+
+Ative explicitamente o profile de produção:
+
+```text
+SPRING_PROFILES_ACTIVE=prod
+```
+
+Configure no serviço:
+
+```text
+DB_URL=jdbc:postgresql://<host>:5432/<database>
+DB_USERNAME=<database-user>
+DB_PASSWORD=<database-password>
+INTERNAL_API_KEY=<shared-internal-secret>
+JWT_SECRET_KEY=<jwt-secret>
+```
+
+`PORT` é lido automaticamente pela aplicação através da variável fornecida pelo Render e não precisa ser fixado manualmente.
+
+Enquanto a autenticação service-to-service por chave estiver em uso, `INTERNAL_API_KEY` deve possuir exatamente o mesmo valor no PS_Empresa e no PS_Contrato.
+
+Para recursos hospedados no mesmo workspace e região do Render, prefira a rede privada para PostgreSQL e comunicação entre microsserviços.
+
+Health check recomendado:
+
+```text
+/actuator/health
+```
