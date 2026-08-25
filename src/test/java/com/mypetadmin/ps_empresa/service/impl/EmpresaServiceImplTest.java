@@ -239,7 +239,7 @@ class EmpresaServiceImplTest {
         assertThatThrownBy(() -> empresaService.deleteEmpresaById(id))
                 .isInstanceOf(EmpresaNaoEncontradaException.class);
 
-        verify(empresaRepository, never()).delete(any(Empresa.class));
+        verify(empresaRepository, never()).delete((Empresa) any());
     }
 
     @Test
