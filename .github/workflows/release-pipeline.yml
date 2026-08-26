@@ -104,7 +104,7 @@ jobs:
         env:
           PS_EMPRESA_URL: https://ps-empresa.onrender.com
           PS_EMPRESA_INTERNAL_KEY: ${{ secrets.INTERNAL_API_KEY }}
-        run: npm run empresa:smoke:render
+        run: npm run empresa:smoke
 
   core-regression:
     needs: smoke
@@ -132,7 +132,7 @@ jobs:
         env:
           PS_EMPRESA_URL: https://ps-empresa.onrender.com
           PS_EMPRESA_INTERNAL_KEY: ${{ secrets.INTERNAL_API_KEY }}
-        run: npm run empresa:regression:render
+        run: npm run empresa:regression
 
   release-production:
     needs: core-regression
