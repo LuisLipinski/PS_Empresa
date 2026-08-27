@@ -86,9 +86,10 @@
 			<version>3.1.0</version>
 		</dependency>
 
+		<!-- Spring Boot 4 modularizou a infraestrutura de testes por tecnologia. -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
+			<artifactId>spring-boot-starter-webmvc-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
