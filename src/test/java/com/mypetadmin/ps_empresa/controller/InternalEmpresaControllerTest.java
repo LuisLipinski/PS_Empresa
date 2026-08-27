@@ -1,6 +1,5 @@
 package com.mypetadmin.ps_empresa.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mypetadmin.ps_empresa.dto.EmpresaRequestDTO;
 import com.mypetadmin.ps_empresa.dto.EmpresaResponseDTO;
 import com.mypetadmin.ps_empresa.enums.StatusEmpresa;
@@ -12,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.UUID;
 
