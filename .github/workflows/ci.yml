@@ -24,7 +24,17 @@ jobs:
         run: chmod +x ./mvnw
 
       - name: Unitários e quality gate
-        run: ./mvnw -B clean verify
+        run: |
+          set -o pipefail
+          ./mvnw -B clean verify 2>&1 | tee mvn-verify.log
+
+      - name: Publicar log Maven
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: maven-verify-log
+          path: mvn-verify.log
+          if-no-files-found: warn
 
       - name: Publicar relatório JaCoCo
         if: always()
