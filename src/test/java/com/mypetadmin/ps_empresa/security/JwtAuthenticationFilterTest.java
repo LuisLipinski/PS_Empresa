@@ -1,6 +1,5 @@
 package com.mypetadmin.ps_empresa.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.FilterChain;
@@ -9,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.core.context.SecurityContextHolder;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.Date;
 import java.util.List;
@@ -20,7 +20,7 @@ class JwtAuthenticationFilterTest {
     private static final String JWT_SECRET = "mypetadmin-test-jwt-secret-key-32chars";
     private static final String INTERNAL_KEY = "test-internal-key";
     private final JwtAuthenticationFilter filter = new JwtAuthenticationFilter(
-            new ObjectMapper().findAndRegisterModules(), JWT_SECRET, INTERNAL_KEY
+            new ObjectMapper(), JWT_SECRET, INTERNAL_KEY
     );
 
     @AfterEach

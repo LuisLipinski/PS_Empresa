@@ -1,10 +1,10 @@
 package com.mypetadmin.ps_empresa.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
+import tools.jackson.databind.ObjectMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -12,7 +12,7 @@ class InternalRequestFilterTest {
 
     private final InternalRequestFilter filter = new InternalRequestFilter(
             "test-internal-key",
-            new ObjectMapper().findAndRegisterModules()
+            new ObjectMapper()
     );
 
     @Test
