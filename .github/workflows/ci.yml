@@ -97,6 +97,60 @@ jobs:
           cat app.log
           exit 1
 
+      - name: Validate idempotent onboarding on PostgreSQL
+        env:
+          INTERNAL_API_KEY: mypetadmin-ci-internal-key
+          ONBOARDING_ID: 99999999-9999-4999-8999-999999999999
+        run: |
+          set -euo pipefail
+
+          payload='{
+            "documentNumber":"17395568000151",
+            "razaoSocial":"My Pet Admin Onboarding CI LTDA",
+            "nomeFantasia":"My Pet Admin Onboarding CI",
+            "telefone":"41999999999",
+            "email":"onboarding-ci@mypetadmin.test",
+            "nomeTitular":"Master Onboarding",
+            "rua":"Rua A",
+            "numero":"100",
+            "complemento":"Casa",
+            "bairro":"Centro",
+            "cidade":"Curitiba",
+            "estado":"PR",
+            "cep":"01010100"
+          }'
+
+          first_status=$(curl -sS -o onboarding-first.json -w '%{http_code}' \
+            -X POST http://localhost:8081/internal/empresas/onboarding \
+            -H "X-Internal-Key: ${INTERNAL_API_KEY}" \
+            -H "X-Onboarding-Id: ${ONBOARDING_ID}" \
+            -H 'Content-Type: application/json' \
+            -d "$payload")
+          test "$first_status" = "201"
+
+          first_id=$(python3 -c 'import json; print(json.load(open("onboarding-first.json"))["id"])')
+
+          replay_status=$(curl -sS -o onboarding-replay.json -w '%{http_code}' \
+            -X POST http://localhost:8081/internal/empresas/onboarding \
+            -H "X-Internal-Key: ${INTERNAL_API_KEY}" \
+            -H "X-Onboarding-Id: ${ONBOARDING_ID}" \
+            -H 'Content-Type: application/json' \
+            -d "$payload")
+          test "$replay_status" = "201"
+
+          replay_id=$(python3 -c 'import json; print(json.load(open("onboarding-replay.json"))["id"])')
+          test "$first_id" = "$replay_id"
+
+          conflicting_payload=$(python3 -c 'import json; p=json.loads('"'"'"$payload"'"'"'); p["nomeFantasia"]="Outro Nome"; print(json.dumps(p))')
+          conflict_status=$(curl -sS -o onboarding-conflict.json -w '%{http_code}' \
+            -X POST http://localhost:8081/internal/empresas/onboarding \
+            -H "X-Internal-Key: ${INTERNAL_API_KEY}" \
+            -H "X-Onboarding-Id: ${ONBOARDING_ID}" \
+            -H 'Content-Type: application/json' \
+            -d "$conflicting_payload")
+          test "$conflict_status" = "409"
+          test "$(python3 -c 'import json; print(json.load(open("onboarding-conflict.json"))["code"])')" = "ONBOARDING_CONFLICT"
+
       - name: Checkout automation
         uses: actions/checkout@v4
         with:
