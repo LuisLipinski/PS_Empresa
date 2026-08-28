@@ -16,6 +16,7 @@ import tools.jackson.databind.ObjectMapper;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -40,11 +41,7 @@ class InternalEmpresaControllerTest {
     void deveCadastrarEmpresaParaOrquestrador() throws Exception {
         EmpresaRequestDTO request = requestValido();
         UUID empresaId = UUID.randomUUID();
-
-        EmpresaResponseDTO response = new EmpresaResponseDTO();
-        response.setId(empresaId);
-        response.setDocumentNumber(request.getDocumentNumber());
-        response.setStatus(StatusEmpresa.AGUARDANDO_CONTRATO);
+        EmpresaResponseDTO response = response(request, empresaId);
 
         when(empresaService.cadastrarEmpresa(any(EmpresaRequestDTO.class))).thenReturn(response);
 
@@ -55,6 +52,34 @@ class InternalEmpresaControllerTest {
                 .andExpect(header().string("Location", "http://localhost/internal/empresas/" + empresaId))
                 .andExpect(jsonPath("$.id").value(empresaId.toString()))
                 .andExpect(jsonPath("$.status").value("AGUARDANDO_CONTRATO"));
+    }
+
+    @Test
+    void deveCadastrarEmpresaComOnboardingId() throws Exception {
+        EmpresaRequestDTO request = requestValido();
+        UUID onboardingId = UUID.randomUUID();
+        UUID empresaId = UUID.randomUUID();
+        EmpresaResponseDTO response = response(request, empresaId);
+
+        when(empresaService.cadastrarEmpresaOnboarding(any(EmpresaRequestDTO.class), eq(onboardingId)))
+                .thenReturn(response);
+
+        mockMvc.perform(post("/internal/empresas/onboarding")
+                        .header("X-Onboarding-Id", onboardingId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isCreated())
+                .andExpect(header().string("Location", "http://localhost/internal/empresas/" + empresaId))
+                .andExpect(jsonPath("$.id").value(empresaId.toString()));
+    }
+
+    @Test
+    void onboardingDeveExigirHeader() throws Exception {
+        mockMvc.perform(post("/internal/empresas/onboarding")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestValido())))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("MISSING_HEADER"));
     }
 
     @Test
@@ -81,6 +106,14 @@ class InternalEmpresaControllerTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("VALIDATION_ERROR"));
+    }
+
+    private EmpresaResponseDTO response(EmpresaRequestDTO request, UUID empresaId) {
+        EmpresaResponseDTO response = new EmpresaResponseDTO();
+        response.setId(empresaId);
+        response.setDocumentNumber(request.getDocumentNumber());
+        response.setStatus(StatusEmpresa.AGUARDANDO_CONTRATO);
+        return response;
     }
 
     private EmpresaRequestDTO requestValido() {

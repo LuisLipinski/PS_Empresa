@@ -1,18 +1,20 @@
 package com.mypetadmin.ps_empresa.service;
 
-import com.mypetadmin.ps_empresa.dto.*;
+import com.mypetadmin.ps_empresa.dto.EmpresaContratoStatusDTO;
+import com.mypetadmin.ps_empresa.dto.EmpresaRequestDTO;
+import com.mypetadmin.ps_empresa.dto.EmpresaResponseDTO;
+import com.mypetadmin.ps_empresa.dto.PageResponse;
+import com.mypetadmin.ps_empresa.dto.UpdateEmpresaRequestDto;
 import com.mypetadmin.ps_empresa.enums.DirectionField;
 import com.mypetadmin.ps_empresa.enums.SortField;
 import com.mypetadmin.ps_empresa.enums.StatusEmpresa;
-import jakarta.validation.constraints.NotNull;
-import org.springframework.data.domain.Page;
 
-
-import java.util.List;
 import java.util.UUID;
 
 public interface EmpresaService {
     EmpresaResponseDTO cadastrarEmpresa(EmpresaRequestDTO dto);
+
+    EmpresaResponseDTO cadastrarEmpresaOnboarding(EmpresaRequestDTO dto, UUID onboardingId);
 
     void sincronizarStatusComContrato(EmpresaContratoStatusDTO dto);
 

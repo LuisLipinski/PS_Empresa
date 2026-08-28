@@ -53,9 +53,28 @@ Onboarding Orchestrator
 
 O **API Gateway** cuida de entrada, autenticação, roteamento e políticas transversais. O **Orchestrator** cuida do workflow de negócio do onboarding e da composição das respostas dos microsserviços.
 
-O cadastro da empresa é feito internamente pelo orchestrator em:
+Para o onboarding coordenado, o cadastro idempotente da empresa é feito em:
 
-`POST /internal/empresas`
+`POST /internal/empresas/onboarding`
+
+com o header obrigatório:
+
+`X-Onboarding-Id: <UUID>`
+
+O contrato interno anterior `POST /internal/empresas` permanece disponível por compatibilidade, mas não oferece a semântica de replay por `onboardingId`.
+
+#### Idempotência do onboarding
+
+O PS_Empresa persiste o `onboardingId` e um hash SHA-256 do payload normalizado para proteger retries do primeiro passo do fluxo.
+
+Regras:
+
+- o primeiro uso de um `onboardingId` cria a empresa;
+- replay com o mesmo `onboardingId` e o mesmo payload retorna a empresa já criada;
+- reutilização do mesmo `onboardingId` com payload diferente retorna `409 ONBOARDING_CONFLICT`;
+- um lock transacional PostgreSQL serializa requisições concorrentes com a mesma chave;
+- um índice único parcial protege a invariável de unicidade no banco;
+- empresas criadas fora do fluxo idempotente permanecem sem `onboardingId` técnico.
 
 ### Login e vínculo usuário → empresa
 
@@ -121,7 +140,8 @@ O contrato atual do PS_Login contém `subject` e `roles`. A inclusão de `userId
 
 | Método | Endpoint | Responsabilidade |
 | --- | --- | --- |
-| POST | `/internal/empresas` | cadastrar empresa durante onboarding |
+| POST | `/internal/empresas` | cadastro interno legado/compatibilidade |
+| POST | `/internal/empresas/onboarding` | cadastrar empresa de forma idempotente no onboarding (`X-Onboarding-Id`) |
 | GET | `/internal/empresas/{id}/status` | consultar somente o status |
 | PATCH | `/internal/contratos/status` | sincronizar status vindo do PS_Contrato |
 
