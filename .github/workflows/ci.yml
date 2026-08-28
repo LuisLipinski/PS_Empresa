@@ -141,7 +141,7 @@ jobs:
           replay_id=$(python3 -c 'import json; print(json.load(open("onboarding-replay.json"))["id"])')
           test "$first_id" = "$replay_id"
 
-          conflicting_payload=$(python3 -c 'import json; p=json.loads('"'"'"$payload"'"'"'); p["nomeFantasia"]="Outro Nome"; print(json.dumps(p))')
+          conflicting_payload=$(printf '%s' "$payload" | python3 -c 'import json,sys; p=json.load(sys.stdin); p["nomeFantasia"]="Outro Nome"; print(json.dumps(p))')
           conflict_status=$(curl -sS -o onboarding-conflict.json -w '%{http_code}' \
             -X POST http://localhost:8081/internal/empresas/onboarding \
             -H "X-Internal-Key: ${INTERNAL_API_KEY}" \
