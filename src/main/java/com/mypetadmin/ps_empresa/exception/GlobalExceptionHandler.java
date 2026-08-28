@@ -38,6 +38,12 @@ public class GlobalExceptionHandler {
         return build(HttpStatus.CONFLICT, "ONBOARDING_CONFLICT", ex.getMessage(), request);
     }
 
+    @ExceptionHandler(TenantAccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleTenantAccessDenied(TenantAccessDeniedException ex,
+                                                                   HttpServletRequest request) {
+        return build(HttpStatus.FORBIDDEN, "TENANT_ACCESS_DENIED", ex.getMessage(), request);
+    }
+
     @ExceptionHandler(EmpresaNaoEncontradaException.class)
     public ResponseEntity<ErrorResponse> handleEmpresaNaoEncontrada(EmpresaNaoEncontradaException ex,
                                                                      HttpServletRequest request) {
