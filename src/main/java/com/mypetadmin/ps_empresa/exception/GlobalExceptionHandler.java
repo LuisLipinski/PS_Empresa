@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -29,6 +30,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleEmailExistente(EmailExistenteException ex,
                                                                HttpServletRequest request) {
         return build(HttpStatus.CONFLICT, "EMAIL_ALREADY_EXISTS", ex.getMessage(), request);
+    }
+
+    @ExceptionHandler(OnboardingConflictException.class)
+    public ResponseEntity<ErrorResponse> handleOnboardingConflict(OnboardingConflictException ex,
+                                                                   HttpServletRequest request) {
+        return build(HttpStatus.CONFLICT, "ONBOARDING_CONFLICT", ex.getMessage(), request);
     }
 
     @ExceptionHandler(EmpresaNaoEncontradaException.class)
@@ -77,46 +84,32 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResponseEntity<ErrorResponse> handleMissingParams(MissingServletRequestParameterException ex,
                                                               HttpServletRequest request) {
-        return build(
-                HttpStatus.BAD_REQUEST,
-                "MISSING_PARAMETER",
-                "Parâmetro ausente: " + ex.getParameterName(),
-                request
-        );
+        return build(HttpStatus.BAD_REQUEST, "MISSING_PARAMETER", "Parâmetro ausente: " + ex.getParameterName(), request);
+    }
+
+    @ExceptionHandler(MissingRequestHeaderException.class)
+    public ResponseEntity<ErrorResponse> handleMissingHeader(MissingRequestHeaderException ex,
+                                                              HttpServletRequest request) {
+        return build(HttpStatus.BAD_REQUEST, "MISSING_HEADER", "Header ausente: " + ex.getHeaderName(), request);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
                                                                        HttpServletRequest request) {
-        return build(
-                HttpStatus.BAD_REQUEST,
-                "INVALID_REQUEST_BODY",
-                "Corpo da requisição ausente ou inválido.",
-                request
-        );
+        return build(HttpStatus.BAD_REQUEST, "INVALID_REQUEST_BODY", "Corpo da requisição ausente ou inválido.", request);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErrorResponse> handleDataIntegrity(DataIntegrityViolationException ex,
                                                               HttpServletRequest request) {
-        return build(
-                HttpStatus.CONFLICT,
-                "DATA_CONFLICT",
-                "Os dados informados conflitam com um registro existente.",
-                request
-        );
+        return build(HttpStatus.CONFLICT, "DATA_CONFLICT", "Os dados informados conflitam com um registro existente.", request);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneric(Exception ex,
                                                         HttpServletRequest request) {
         log.error("request.unexpected-error method={} path={}", request.getMethod(), request.getRequestURI(), ex);
-        return build(
-                HttpStatus.INTERNAL_SERVER_ERROR,
-                "INTERNAL_ERROR",
-                "Erro interno no servidor. Tente novamente mais tarde.",
-                request
-        );
+        return build(HttpStatus.INTERNAL_SERVER_ERROR, "INTERNAL_ERROR", "Erro interno no servidor. Tente novamente mais tarde.", request);
     }
 
     private ResponseEntity<ErrorResponse> build(HttpStatus status,

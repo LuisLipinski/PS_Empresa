@@ -12,6 +12,7 @@ import com.mypetadmin.ps_empresa.exception.CnpjInvalidException;
 import com.mypetadmin.ps_empresa.exception.EmailExistenteException;
 import com.mypetadmin.ps_empresa.exception.EmpresaExistenteException;
 import com.mypetadmin.ps_empresa.exception.EmpresaNaoEncontradaException;
+import com.mypetadmin.ps_empresa.exception.OnboardingConflictException;
 import com.mypetadmin.ps_empresa.helper.EmpresaSpecification;
 import com.mypetadmin.ps_empresa.mapper.EmpresaMapper;
 import com.mypetadmin.ps_empresa.mapper.EmpresaUpdateMapper;
@@ -29,7 +30,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
+import java.util.HexFormat;
+import java.util.Locale;
 import java.util.UUID;
 
 @Service
@@ -46,7 +52,33 @@ public class EmpresaServiceImpl implements EmpresaService {
     @Transactional
     public EmpresaResponseDTO cadastrarEmpresa(EmpresaRequestDTO dto) {
         log.debug("empresa.create requested");
+        return cadastrarNovaEmpresa(dto, null, null);
+    }
 
+    @Override
+    @Transactional
+    public EmpresaResponseDTO cadastrarEmpresaOnboarding(EmpresaRequestDTO dto, UUID onboardingId) {
+        if (onboardingId == null) {
+            throw new IllegalArgumentException("onboardingId é obrigatório.");
+        }
+
+        empresaRepository.lockOnboarding(onboardingId);
+        String requestHash = onboardingFingerprint(dto);
+
+        return empresaRepository.findByOnboardingId(onboardingId)
+                .map(existing -> {
+                    if (!requestHash.equals(existing.getOnboardingRequestHash())) {
+                        throw new OnboardingConflictException(
+                                "onboardingId já utilizado com dados diferentes."
+                        );
+                    }
+                    log.info("empresa.onboarding replay onboardingId={} empresaId={}", onboardingId, existing.getId());
+                    return mapper.toResponseDto(existing);
+                })
+                .orElseGet(() -> cadastrarNovaEmpresa(dto, onboardingId, requestHash));
+    }
+
+    private EmpresaResponseDTO cadastrarNovaEmpresa(EmpresaRequestDTO dto, UUID onboardingId, String requestHash) {
         if (empresaRepository.existsByDocumentNumber(dto.getDocumentNumber())) {
             throw new EmpresaExistenteException("CNPJ já cadastrado no sistema.");
         }
@@ -60,10 +92,42 @@ public class EmpresaServiceImpl implements EmpresaService {
         Empresa empresa = mapper.toEntity(dto);
         empresa.setStatus(StatusEmpresa.AGUARDANDO_CONTRATO);
         empresa.setDataAtualizacaoStatus(LocalDateTime.now());
+        empresa.setOnboardingId(onboardingId);
+        empresa.setOnboardingRequestHash(requestHash);
 
         Empresa salva = empresaRepository.save(empresa);
-        log.info("empresa.create success empresaId={} status={}", salva.getId(), salva.getStatus());
+        log.info("empresa.create success empresaId={} onboardingId={} status={}", salva.getId(), onboardingId, salva.getStatus());
         return mapper.toResponseDto(salva);
+    }
+
+    private String onboardingFingerprint(EmpresaRequestDTO dto) {
+        String canonical = String.join("\u001f",
+                canonical(dto.getDocumentNumber()),
+                canonical(dto.getRazaoSocial()),
+                canonical(dto.getNomeFantasia()),
+                canonical(dto.getTelefone()),
+                canonical(dto.getEmail()).toLowerCase(Locale.ROOT),
+                canonical(dto.getNomeTitular()),
+                canonical(dto.getRua()),
+                canonical(dto.getNumero()),
+                canonical(dto.getComplemento()),
+                canonical(dto.getBairro()),
+                canonical(dto.getCidade()),
+                canonical(dto.getEstado()).toUpperCase(Locale.ROOT),
+                canonical(dto.getCep())
+        );
+
+        try {
+            byte[] digest = MessageDigest.getInstance("SHA-256")
+                    .digest(canonical.getBytes(StandardCharsets.UTF_8));
+            return HexFormat.of().formatHex(digest);
+        } catch (NoSuchAlgorithmException ex) {
+            throw new IllegalStateException("SHA-256 indisponível no runtime.", ex);
+        }
+    }
+
+    private String canonical(String value) {
+        return value == null ? "" : value.trim();
     }
 
     @Override

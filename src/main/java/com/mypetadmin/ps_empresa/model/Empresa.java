@@ -65,6 +65,12 @@ public class Empresa {
     @Enumerated(EnumType.STRING)
     private StatusEmpresa status;
 
+    @Column(name = "onboarding_id")
+    private UUID onboardingId;
+
+    @Column(name = "onboarding_request_hash", length = 64)
+    private String onboardingRequestHash;
+
     @Column(name = "data_atualizacao_status")
     private LocalDateTime dataAtualizacaoStatus;
 
