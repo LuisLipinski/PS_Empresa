@@ -2,7 +2,7 @@
 
 Microsserviço responsável pelo **domínio de empresas (petshops)** do My Pet Admin.
 
-O PS_Empresa mantém os dados cadastrais e o status operacional da empresa. Ele **não orquestra** criação de usuário, contrato ou login. Essas coordenações pertencem a uma camada externa de orquestração.
+O PS_Empresa mantém os dados cadastrais e o status operacional da empresa. Ele **não orquestra** criação de usuário, contrato, convite de ativação ou login. Essas coordenações pertencem a uma camada externa de orquestração.
 
 ## Responsabilidades
 
@@ -48,7 +48,8 @@ API Gateway
 Onboarding Orchestrator
    |----> PS_Empresa
    |----> PS_User
-   `----> PS_Contrato
+   |----> PS_Contrato
+   `----> PS_Login (convite de ativação após criação da identidade)
 ```
 
 O **API Gateway** cuida de entrada, autenticação, roteamento e políticas transversais. O **Orchestrator** cuida do workflow de negócio do onboarding e da composição das respostas dos microsserviços.
@@ -76,33 +77,36 @@ Regras:
 - um índice único parcial protege a invariável de unicidade no banco;
 - empresas criadas fora do fluxo idempotente permanecem sem `onboardingId` técnico.
 
+A criação do primeiro MASTER ocorre no PS_User. Depois que a identidade existir, o orchestrator solicita ao PS_Login o convite de ativação. O PS_User não deve assumir responsabilidade por senha ou envio de e-mail de ativação.
+
 ### Login e vínculo usuário → empresa
 
 O PS_Empresa não deve armazenar a relação de pertencimento do usuário apenas para resolver login.
 
-Fluxo recomendado:
+Fluxo atual:
 
 ```text
-PS_Login / Login Orchestrator
-        |
-        | userId
-        v
-     PS_User
-        |
-        | empresaId
-        v
-   PS_Empresa
-        |
-        | status
-        v
- decisão de login
+Frontend
+   |
+   v
+PS_Login
+   |
+   | email / userId
+   v
+PS_User
+   |
+   | empresaId + status + roles
+   v
+PS_Login
+   |
+   `--> access JWT
 ```
 
-O PS_User resolve a empresa à qual o usuário pertence. O PS_Empresa responde pelo estado da empresa por meio de:
+O PS_User resolve a empresa à qual o usuário pertence. O PS_Login é dono da autenticação e emite o JWT. O PS_Empresa continua dono exclusivamente do domínio Empresa.
+
+O PS_Empresa disponibiliza o estado da empresa por meio de:
 
 `GET /internal/empresas/{empresaId}/status`
-
-Assim cada microsserviço continua dono do seu próprio domínio.
 
 ## Segurança
 
@@ -126,13 +130,23 @@ Rotas `/empresas/**` aceitam JWT no header:
 
 `Authorization: Bearer <token>`
 
-Nesta versão o PS_Empresa valida os tokens HS256 atualmente emitidos pelo PS_Login usando:
+Nesta versão o PS_Empresa valida os tokens HS256 emitidos pelo PS_Login usando:
 
 `JWT_SECRET_KEY`
 
-O contrato atual do PS_Login contém `subject` e `roles`. A inclusão de `userId`/`empresaId` no token deve ser tratada em uma evolução coordenada do fluxo de autenticação.
+O contrato atual do access token contém:
 
-> **Importante para multi-tenant:** autenticação JWT sozinha não resolve isolamento entre empresas. Antes da comercialização, o fluxo de autorização deve garantir que o usuário só consiga acessar a empresa associada a ele. A solução recomendada é o PS_User resolver o vínculo `userId -> empresaId` e o gateway/orchestrator propagar somente chamadas autorizadas, ou evoluir o token para carregar um `empresaId` confiável e validado.
+- `sub = userId`;
+- `empresaId`;
+- `roles`;
+- `iss`;
+- `iat`;
+- `exp`;
+- `jti`.
+
+Enquanto os microsserviços validarem HS256 diretamente, `JWT_SECRET_KEY` precisa ser coordenado com o PS_Login. A direção futura é centralizar a borda no API Gateway e migrar para assinatura assimétrica/JWKS.
+
+> **Importante para multi-tenant:** autenticação JWT sozinha não resolve isolamento entre empresas. O `empresaId` do token fornece contexto confiável somente depois de validada a assinatura, mas cada operação de domínio ainda deve garantir que o recurso acessado pertence ao tenant autorizado. Essa autorização deve ser consolidada antes da comercialização SaaS.
 
 ## Endpoints
 
@@ -179,9 +193,9 @@ Hibernate valida o schema; alterações estruturais devem entrar como migrations
 
 ## Stack
 
-- Java 21
-- Spring Boot 3.5.x
-- Spring Web
+- Java 25 LTS
+- Spring Boot 4.1.1
+- Spring Web MVC
 - Spring Security
 - Spring Data JPA
 - Bean Validation
@@ -189,7 +203,7 @@ Hibernate valida o schema; alterações estruturais devem entrar como migrations
 - Flyway
 - OpenAPI / Swagger
 - Micrometer / Prometheus
-- JUnit 5 / MockMvc / Mockito
+- JUnit / MockMvc / Mockito
 - Maven
 - Docker
 
@@ -197,66 +211,17 @@ Hibernate valida o schema; alterações estruturais devem entrar como migrations
 
 A suíte possui testes de controller, service, mappers, helpers, validação de CNPJ, tratamento de exceções e filtros de segurança.
 
-JaCoCo executa no `verify` e aplica quality gate de cobertura de linhas.
+O pipeline valida:
 
-```bash
-./mvnw clean verify
-```
+- Java 25;
+- Maven/JaCoCo;
+- PostgreSQL/Flyway;
+- Docker;
+- regressões e integrações cross-service aplicáveis.
 
-Além dos unitários, o CI sobe PostgreSQL real e executa a regressão Playwright do `ps_automacao_backend` contra a aplicação iniciada localmente.
+## Próximas evoluções
 
-## Execução local
-
-Variáveis principais:
-
-```text
-DB_URL
-DB_USERNAME
-DB_PASSWORD
-INTERNAL_API_KEY
-JWT_SECRET_KEY
-```
-
-Executar:
-
-```bash
-./mvnw spring-boot:run
-```
-
-Swagger:
-
-`http://localhost:8081/swagger-ui/index.html`
-
-Health:
-
-`http://localhost:8081/actuator/health`
-
-## Produção / Render
-
-Ative explicitamente o profile de produção:
-
-```text
-SPRING_PROFILES_ACTIVE=prod
-```
-
-Configure no serviço:
-
-```text
-DB_URL=jdbc:postgresql://<host>:5432/<database>
-DB_USERNAME=<database-user>
-DB_PASSWORD=<database-password>
-INTERNAL_API_KEY=<shared-internal-secret>
-JWT_SECRET_KEY=<jwt-secret>
-```
-
-`PORT` é lido automaticamente pela aplicação através da variável fornecida pelo Render e não precisa ser fixado manualmente.
-
-Enquanto a autenticação service-to-service por chave estiver em uso, `INTERNAL_API_KEY` deve possuir exatamente o mesmo valor no PS_Empresa e no PS_Contrato.
-
-Para recursos hospedados no mesmo workspace e região do Render, prefira a rede privada para PostgreSQL e comunicação entre microsserviços.
-
-Health check recomendado:
-
-```text
-/actuator/health
-```
+- Onboarding Orchestrator como coordenador oficial de Empresa, User, Contrato e convite no Login;
+- autorização multi-tenant consistente usando `empresaId` autenticado;
+- API Gateway como borda oficial;
+- migração futura de HS256 compartilhado para assinatura assimétrica/JWKS.
