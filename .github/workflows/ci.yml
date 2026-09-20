@@ -79,7 +79,7 @@ jobs:
 
       - name: Start API
         env:
-          INTERNAL_API_KEY: mypetadmin-ci-internal-key
+          INTERNAL_API_KEY: mypetadmin-ci-internal-key-32bytes-minimum
           JWT_SECRET_KEY: mypetadmin-ci-jwt-secret-key-32chars
         run: |
           nohup java -jar target/*.jar --spring.profiles.active=ci > app.log 2>&1 &
@@ -99,7 +99,7 @@ jobs:
 
       - name: Validate idempotent onboarding on PostgreSQL
         env:
-          INTERNAL_API_KEY: mypetadmin-ci-internal-key
+          INTERNAL_API_KEY: mypetadmin-ci-internal-key-32bytes-minimum
           ONBOARDING_ID: 99999999-9999-4999-8999-999999999999
         run: |
           set -euo pipefail
@@ -173,5 +173,5 @@ jobs:
         working-directory: qa-tests
         env:
           PS_EMPRESA_URL: http://localhost:8081
-          PS_EMPRESA_INTERNAL_KEY: mypetadmin-ci-internal-key
+          PS_EMPRESA_INTERNAL_KEY: mypetadmin-ci-internal-key-32bytes-minimum
         run: npm run empresa:regression
