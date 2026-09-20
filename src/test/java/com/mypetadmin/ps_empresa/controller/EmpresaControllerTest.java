@@ -5,6 +5,7 @@ import com.mypetadmin.ps_empresa.dto.PageResponse;
 import com.mypetadmin.ps_empresa.dto.UpdateEmpresaRequestDto;
 import com.mypetadmin.ps_empresa.enums.StatusEmpresa;
 import com.mypetadmin.ps_empresa.exception.EmpresaNaoEncontradaException;
+import com.mypetadmin.ps_empresa.security.TenantAccessGuard;
 import com.mypetadmin.ps_empresa.service.EmpresaService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -22,6 +23,7 @@ import java.util.UUID;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -38,6 +40,9 @@ class EmpresaControllerTest {
 
     @MockitoBean
     private EmpresaService empresaService;
+
+    @MockitoBean
+    private TenantAccessGuard tenantAccessGuard;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -64,7 +69,20 @@ class EmpresaControllerTest {
     }
 
     @Test
-    void getEmpresaByIdRetornaEmpresa() throws Exception {
+    void minhaEmpresaUsaTenantResolvidoPeloGuard() throws Exception {
+        UUID empresaId = UUID.randomUUID();
+        EmpresaResponseDTO response = new EmpresaResponseDTO();
+        response.setId(empresaId);
+        when(tenantAccessGuard.requireEmpresaId(any())).thenReturn(empresaId);
+        when(empresaService.getEmpresaById(empresaId)).thenReturn(response);
+
+        mockMvc.perform(get("/empresas/me"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(empresaId.toString()));
+    }
+
+    @Test
+    void getEmpresaByIdRetornaEmpresaAposValidarTenant() throws Exception {
         UUID empresaId = UUID.randomUUID();
         EmpresaResponseDTO response = new EmpresaResponseDTO();
         response.setId(empresaId);
@@ -76,6 +94,7 @@ class EmpresaControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(empresaId.toString()))
                 .andExpect(jsonPath("$.razaoSocial").value("Pet Shop Teste"));
+        verify(tenantAccessGuard).requireAccess(any(), eq(empresaId));
     }
 
     @Test
@@ -91,12 +110,32 @@ class EmpresaControllerTest {
     }
 
     @Test
-    void deleteEmpresaByIdRetorna204() throws Exception {
+    void deleteEmpresaByIdRetorna204AposValidarTenant() throws Exception {
         UUID empresaId = UUID.randomUUID();
         Mockito.doNothing().when(empresaService).deleteEmpresaById(empresaId);
 
         mockMvc.perform(delete("/empresas/{id}", empresaId))
                 .andExpect(status().isNoContent());
+        verify(tenantAccessGuard).requireAccess(any(), eq(empresaId));
+    }
+
+    @Test
+    void editMinhaEmpresaUsaTenantResolvidoPeloGuard() throws Exception {
+        UUID empresaId = UUID.randomUUID();
+        when(tenantAccessGuard.requireEmpresaId(any())).thenReturn(empresaId);
+
+        UpdateEmpresaRequestDto update = new UpdateEmpresaRequestDto();
+        update.setNomeFantasia("PetShop Atualizado");
+        EmpresaResponseDTO response = new EmpresaResponseDTO();
+        response.setId(empresaId);
+        response.setNomeFantasia("PetShop Atualizado");
+        when(empresaService.editEmpresaById(eq(empresaId), any(UpdateEmpresaRequestDto.class))).thenReturn(response);
+
+        mockMvc.perform(patch("/empresas/me")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(update)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(empresaId.toString()));
     }
 
     @Test
@@ -122,6 +161,7 @@ class EmpresaControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.nomeFantasia").value("PetShop Atualizado"))
                 .andExpect(jsonPath("$.email").value("novoemail@teste.com"));
+        verify(tenantAccessGuard).requireAccess(any(), eq(empresaId));
     }
 
     @Test

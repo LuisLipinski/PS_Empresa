@@ -22,6 +22,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -79,11 +80,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     .parseClaimsJws(token)
                     .getBody();
 
-            String subject = claims.getSubject();
-            if (subject == null || subject.isBlank()) {
-                writeUnauthorized(response, request, "Token de autenticação sem subject.");
-                return;
-            }
+            UUID userId = parseRequiredUuid(claims.getSubject(), "subject");
+            UUID empresaId = parseRequiredUuid(claims.get("empresaId", String.class), "empresaId");
 
             List<?> roles = claims.get("roles", List.class);
             var authorities = roles == null
@@ -93,13 +91,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     .map(SimpleGrantedAuthority::new)
                     .toList();
 
-            var authentication = new UsernamePasswordAuthenticationToken(subject, null, authorities);
+            var principal = new JwtTenantPrincipal(userId, empresaId);
+            var authentication = new UsernamePasswordAuthenticationToken(principal, null, authorities);
             SecurityContextHolder.getContext().setAuthentication(authentication);
             filterChain.doFilter(request, response);
         } catch (JwtException | IllegalArgumentException exception) {
             SecurityContextHolder.clearContext();
-            writeUnauthorized(response, request, "Token de autenticação expirado ou inválido.");
+            writeUnauthorized(response, request, "Token de autenticação expirado, inválido ou sem contexto de tenant.");
         }
+    }
+
+    private UUID parseRequiredUuid(String rawValue, String claimName) {
+        if (rawValue == null || rawValue.isBlank()) {
+            throw new IllegalArgumentException("Claim obrigatório ausente: " + claimName);
+        }
+        return UUID.fromString(rawValue);
     }
 
     private boolean hasValidInternalCredential(HttpServletRequest request) {
